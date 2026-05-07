@@ -82,7 +82,7 @@ export default function LaporanEditor({
 
                     <div className="flex flex-col gap-4 md:flex-row md:items-end md:justify-between">
                         <div className="space-y-1">
-                            <h1 className="text-4xl font-[900] tracking-tighter text-foreground">
+                            <h1 className="text-4xl font-black tracking-tighter text-foreground">
                                 {laporan
                                     ? 'Sunting Laporan'
                                     : 'Penyusunan Laporan'}
@@ -157,7 +157,7 @@ export default function LaporanEditor({
                             />
                         </div>
                         {errors.isi_laporan && (
-                            <p className="mt-2 text-[10px] font-bold tracking-[0.1em] text-destructive uppercase">
+                            <p className="mt-2 text-[10px] font-bold tracking-widest text-destructive uppercase">
                                 {errors.isi_laporan}
                             </p>
                         )}

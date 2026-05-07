@@ -102,7 +102,7 @@ export default function KegiatanIndex({ kegiatan }: Props) {
 
                 <div className="flex flex-col gap-4 md:flex-row md:items-center md:justify-between">
                     <div>
-                        <h1 className="text-3xl font-[900] tracking-tight text-foreground">
+                        <h1 className="text-3xl font-black tracking-tight text-foreground">
                             Agenda Kegiatan
                         </h1>
                         <p className="text-sm font-medium text-muted-foreground">
@@ -319,7 +319,7 @@ export default function KegiatanIndex({ kegiatan }: Props) {
                                                         </button>
                                                     </DropdownMenu.Trigger>
                                                     <DropdownMenu.Portal>
-                                                        <DropdownMenu.Content className="z-50 min-w-[150px] animate-in rounded-lg border border-border bg-popover p-1.5 shadow-xl zoom-in-95 fade-in">
+                                                        <DropdownMenu.Content className="z-50 min-w-37.5 animate-in rounded-lg border border-border bg-popover p-1.5 shadow-xl zoom-in-95 fade-in">
                                                             <DropdownMenu.Item className="flex cursor-pointer items-center gap-2 rounded-md px-3 py-2 text-[10px] font-black tracking-widest uppercase transition-colors outline-none hover:bg-accent">
                                                                 <Edit3 className="h-3.5 w-3.5 text-primary" />{' '}
                                                                 Edit Agenda

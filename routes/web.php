@@ -10,7 +10,7 @@ use Laravel\Fortify\Features;
 Route::inertia('/', 'welcome', [
     'canRegister' => Features::enabled(Features::registration()),
     'profile' => ProfilPerpus::first("*"),
-    'activities' => Kegiatan::latest("updated_at")->take(3)->get()
+    'activities' => Kegiatan::latest("updated_at")->with("laporan")->get()
 ])->name('home');
 
 Route::middleware(['auth', 'verified'])->group(function () {

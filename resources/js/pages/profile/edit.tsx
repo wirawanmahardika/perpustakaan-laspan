@@ -52,7 +52,7 @@ export default function EditProfile({ profile }: { profile: ProfilPerpus }) {
             {/* Container disesuaikan lebarnya agar tidak terlalu sempit di layar besar */}
             <div className="flex flex-col gap-8 p-6 transition-colors duration-300">
                 <div className="border-b border-border pb-6">
-                    <h1 className="text-4xl font-[900] tracking-tighter text-foreground">
+                    <h1 className="text-4xl font-black tracking-tighter text-foreground">
                         Identitas Unit
                     </h1>
                     <p className="text-sm font-medium text-muted-foreground">

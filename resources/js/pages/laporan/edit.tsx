@@ -9,26 +9,25 @@ import {
     Clock,
     Calendar,
     CheckCircle2,
+    Loader2,
 } from 'lucide-react';
 import * as Label from '@radix-ui/react-label';
 import { Kegiatan, Laporan } from '@/types/library';
 
 interface LaporanEditorProps {
     kegiatan: Kegiatan;
-    laporan?: Laporan | null; // Laporan bisa null jika sedang membuat baru
+    laporan?: Laporan | null;
 }
 
 export default function LaporanEditor({
     kegiatan,
     laporan,
 }: LaporanEditorProps) {
-    // State untuk notifikasi lokal
     const [message, setMessage] = useState<{
         type: 'success' | 'error';
         text: string;
     } | null>(null);
 
-    // Inisialisasi useForm
     const { data, setData, post, put, processing, errors } = useForm({
         kegiatan_id: kegiatan.id,
         isi_laporan: laporan?.isi_laporan ?? '',
@@ -43,19 +42,18 @@ export default function LaporanEditor({
             onSuccess: () => {
                 setMessage({
                     type: 'success',
-                    text: 'Laporan berhasil disimpan ke sistem.',
+                    text: 'Laporan berhasil disimpan.',
                 });
                 setTimeout(() => setMessage(null), 4000);
             },
             onError: () => {
                 setMessage({
                     type: 'error',
-                    text: 'Gagal menyimpan. Pastikan semua field terisi.',
+                    text: 'Gagal menyimpan. Periksa kembali.',
                 });
             },
         };
 
-        // Jika laporan memiliki ID, berarti mode EDIT (PUT), jika tidak mode CREATE (POST)
         if (laporan?.id) {
             put(`/laporan/${laporan.id}`, options);
         } else {
@@ -65,53 +63,49 @@ export default function LaporanEditor({
 
     return (
         <>
-            <Head
-                title={`${laporan ? 'Sunting' : 'Tulis'} Laporan - ${kegiatan.nama_kegiatan}`}
-            />
+            <Head title={`${laporan ? 'Sunting' : 'Tulis'} Laporan`} />
 
-            <div className="flex h-full w-full flex-col gap-8 p-6 transition-colors duration-300">
-                {/* Header Area */}
-                <div className="flex flex-col gap-2 border-b border-border pb-6">
+            <div className="mx-auto flex min-h-screen w-full max-w-7xl flex-col gap-5 p-4 text-foreground transition-all md:p-8">
+                {/* Header Area - Lebih Ramping */}
+                <div className="flex flex-col gap-4">
                     <button
                         onClick={() => window.history.back()}
-                        className="group flex w-fit items-center gap-2 text-[10px] font-black tracking-[0.2em] text-muted-foreground uppercase transition-colors hover:text-primary"
+                        className="group flex w-fit items-center gap-2 text-[9px] font-black tracking-[0.2em] text-muted-foreground uppercase transition-colors hover:text-primary"
                     >
                         <ArrowLeft className="h-3 w-3 transition-transform group-hover:-translate-x-1" />
-                        Kembali ke Agenda
+                        Kembali
                     </button>
 
-                    <div className="flex flex-col gap-4 md:flex-row md:items-end md:justify-between">
-                        <div className="space-y-1">
-                            <h1 className="text-4xl font-black tracking-tighter text-foreground">
-                                {laporan
-                                    ? 'Sunting Laporan'
-                                    : 'Penyusunan Laporan'}
-                            </h1>
-                            <div className="flex items-center gap-3 text-sm font-medium text-muted-foreground">
-                                <span className="flex items-center gap-1.5 rounded bg-secondary px-2 py-0.5 text-xs font-bold text-secondary-foreground">
-                                    <Calendar className="h-3.5 w-3.5" />
-                                    {new Date(
-                                        kegiatan.tanggal_kegiatan,
-                                    ).toLocaleDateString('id-ID', {
-                                        dateStyle: 'long',
-                                    })}
-                                </span>
-                                <span className="text-border">|</span>
-                                <span className="font-semibold text-foreground italic">
-                                    {kegiatan.nama_kegiatan}
-                                </span>
-                            </div>
+                    <div className="flex flex-col gap-1">
+                        <h1 className="text-2xl leading-none font-[1000] tracking-tighter uppercase md:text-3xl dark:text-white">
+                            {laporan ? 'Sunting Laporan' : 'Penyusunan Laporan'}
+                        </h1>
+                        <div className="flex flex-wrap items-center gap-2 text-[10px] font-bold tracking-tight text-muted-foreground uppercase">
+                            <span className="flex items-center gap-1.5 rounded-lg bg-primary/10 px-2 py-1 text-primary">
+                                <Calendar className="h-3 w-3" />
+                                {new Date(
+                                    kegiatan.tanggal_kegiatan,
+                                ).toLocaleDateString('id-ID', {
+                                    dateStyle: 'medium',
+                                })}
+                            </span>
+                            <span className="hidden text-border md:block">
+                                •
+                            </span>
+                            <span className="italic dark:text-slate-400">
+                                {kegiatan.nama_kegiatan}
+                            </span>
                         </div>
                     </div>
                 </div>
 
-                {/* Banner Notifikasi */}
+                {/* Banner Notifikasi Floating */}
                 {message && (
                     <div
-                        className={`flex animate-in items-center gap-3 rounded-xl p-4 text-[10px] font-black tracking-widest uppercase fade-in slide-in-from-top-2 ${
+                        className={`flex animate-in items-center gap-3 rounded-xl border p-3 shadow-lg fade-in slide-in-from-top-2 ${
                             message.type === 'success'
-                                ? 'border border-emerald-500/20 bg-emerald-500/10 text-emerald-600'
-                                : 'border border-destructive/20 bg-destructive/10 text-destructive'
+                                ? 'border-emerald-500/20 bg-emerald-500/10 text-emerald-600 dark:text-emerald-400'
+                                : 'border-destructive/20 bg-destructive/10 text-destructive'
                         }`}
                     >
                         {message.type === 'success' ? (
@@ -119,31 +113,33 @@ export default function LaporanEditor({
                         ) : (
                             <AlertCircle className="h-4 w-4" />
                         )}
-                        {message.text}
+                        <span className="text-[9px] font-black tracking-widest uppercase">
+                            {message.text}
+                        </span>
                     </div>
                 )}
 
                 <form
                     onSubmit={submit}
-                    className="grid flex-1 gap-8 lg:grid-cols-12"
+                    className="grid flex-1 gap-5 lg:grid-cols-12"
                 >
-                    {/* Kolom Editor (Kiri) */}
-                    <div className="flex h-full flex-col lg:col-span-8">
+                    {/* Main Editor (Kiri) */}
+                    <div className="flex min-h-[400px] flex-col lg:col-span-8">
                         <div
-                            className={`flex flex-1 flex-col rounded-xl border bg-card shadow-sm transition-all ${
+                            className={`flex flex-1 flex-col overflow-hidden rounded-2xl border bg-card shadow-sm transition-all ${
                                 errors.isi_laporan
-                                    ? 'border-destructive shadow-lg shadow-destructive/5'
+                                    ? 'border-destructive ring-1 ring-destructive/20'
                                     : 'border-border'
                             }`}
                         >
-                            <div className="flex items-center justify-between border-b border-border px-6 py-4">
+                            <div className="flex items-center justify-between border-b border-border bg-muted/30 px-5 py-3">
                                 <Label.Root
-                                    className="text-[10px] font-black tracking-[0.2em] text-muted-foreground uppercase"
+                                    className="text-[9px] font-black tracking-[0.2em] text-muted-foreground uppercase"
                                     htmlFor="isi"
                                 >
-                                    Konten Dokumentasi Utama
+                                    Konten Utama
                                 </Label.Root>
-                                <FileText className="h-4 w-4 text-muted-foreground" />
+                                <FileText className="h-3.5 w-3.5 text-muted-foreground/50" />
                             </div>
 
                             <textarea
@@ -152,76 +148,72 @@ export default function LaporanEditor({
                                 onChange={(e) =>
                                     setData('isi_laporan', e.target.value)
                                 }
-                                className="w-full flex-1 resize-none bg-transparent p-8 text-sm leading-relaxed text-foreground placeholder:text-muted-foreground/30 focus:outline-none"
-                                placeholder="Tuliskan jalannya kegiatan secara mendalam di sini..."
+                                className="w-full flex-1 resize-none bg-transparent p-5 text-sm leading-relaxed focus:outline-none md:p-6 dark:text-slate-200"
+                                placeholder="Tuliskan jalannya kegiatan..."
                             />
                         </div>
                         {errors.isi_laporan && (
-                            <p className="mt-2 text-[10px] font-bold tracking-widest text-destructive uppercase">
+                            <p className="mt-2 ml-2 text-[9px] font-bold tracking-widest text-destructive uppercase">
                                 {errors.isi_laporan}
                             </p>
                         )}
                     </div>
 
-                    {/* Kolom Sidebar (Kanan) */}
-                    <div className="flex flex-col gap-6 lg:col-span-4">
-                        {/* Status Card */}
-                        <div className="rounded-xl border border-border bg-card p-6 shadow-sm">
-                            <h3 className="mb-4 text-[10px] font-black tracking-[0.2em] text-muted-foreground uppercase">
-                                Pengaturan Status
+                    {/* Sidebar (Kanan) */}
+                    <div className="flex flex-col gap-4 lg:col-span-4">
+                        {/* Status Selection */}
+                        <div className="rounded-2xl border border-border bg-card p-5 shadow-sm">
+                            <h3 className="mb-3 text-[9px] font-black tracking-[0.2em] text-muted-foreground uppercase">
+                                Status Publikasi
                             </h3>
-                            <div className="grid grid-cols-1 gap-3">
+                            <div className="grid grid-cols-2 gap-2 lg:grid-cols-1">
                                 {(['Draft', 'Selesai'] as const).map((s) => (
                                     <button
                                         key={s}
                                         type="button"
                                         onClick={() => setData('status', s)}
-                                        className={`flex items-center justify-between rounded-lg border px-5 py-4 text-xs font-bold transition-all active:scale-[0.98] ${
+                                        className={`flex items-center gap-3 rounded-xl border px-4 py-3 text-[10px] font-black tracking-widest uppercase transition-all active:scale-[0.97] ${
                                             data.status === s
-                                                ? 'border-primary bg-primary/5 text-primary ring-1 ring-primary'
-                                                : 'border-border bg-background text-muted-foreground hover:bg-secondary'
+                                                ? 'border-primary bg-primary/10 text-primary ring-1 ring-primary/30'
+                                                : 'border-border bg-muted/20 text-muted-foreground hover:bg-muted/50'
                                         }`}
                                     >
-                                        <div className="flex items-center gap-3">
-                                            {s === 'Draft' ? (
-                                                <Clock className="h-4 w-4" />
-                                            ) : (
-                                                <CheckCircle className="h-4 w-4" />
-                                            )}
-                                            {s}
-                                        </div>
-                                        {data.status === s && (
-                                            <div className="h-2 w-2 rounded-full bg-primary" />
+                                        {s === 'Draft' ? (
+                                            <Clock className="h-3.5 w-3.5" />
+                                        ) : (
+                                            <CheckCircle className="h-3.5 w-3.5" />
                                         )}
+                                        {s}
                                     </button>
                                 ))}
                             </div>
                         </div>
 
-                        {/* Info Warning */}
-                        <div className="rounded-xl border border-destructive/20 bg-destructive/5 p-5">
-                            <div className="flex gap-3 text-destructive">
-                                <AlertCircle className="h-5 w-5 shrink-0" />
-                                <p className="text-[10px] leading-tight font-bold tracking-tight uppercase">
+                        {/* Warnings */}
+                        <div className="rounded-2xl border border-amber-500/20 bg-amber-500/5 p-4">
+                            <div className="flex gap-3 text-amber-600 dark:text-amber-400">
+                                <AlertCircle className="mt-0.5 h-4 w-4 shrink-0" />
+                                <p className="text-[9px] leading-tight font-bold tracking-tight uppercase">
                                     Status{' '}
-                                    <span className="text-foreground underline">
-                                        Selesai
-                                    </span>{' '}
-                                    akan mempublikasikan laporan ke publik.
-                                    Pastikan data valid.
+                                    <span className="underline">Selesai</span>{' '}
+                                    akan menampilkan laporan di portal publik.
                                 </p>
                             </div>
                         </div>
 
-                        {/* Submit Button */}
-                        <div className="mt-auto rounded-xl border border-border bg-secondary/50 p-6">
+                        {/* Submit Action */}
+                        <div className="mt-auto p-2 md:mt-0 lg:p-0">
                             <button
                                 type="submit"
                                 disabled={processing}
-                                className="flex w-full items-center justify-center gap-3 rounded-lg bg-primary py-5 text-[11px] font-black tracking-[0.25em] text-primary-foreground uppercase shadow-xl shadow-primary/20 transition-all hover:opacity-90 active:scale-95 disabled:opacity-50"
+                                className="flex w-full items-center justify-center gap-2 rounded-xl bg-primary py-4 text-[10px] font-black tracking-[0.2em] text-primary-foreground uppercase shadow-lg shadow-primary/20 transition-all hover:brightness-110 active:scale-95 disabled:opacity-50"
                             >
-                                <Save className="h-4 w-4" />
-                                {processing ? 'Memproses...' : 'Simpan Laporan'}
+                                {processing ? (
+                                    <Loader2 className="h-4 w-4 animate-spin" />
+                                ) : (
+                                    <Save className="h-4 w-4" />
+                                )}
+                                {processing ? 'Menyimpan...' : 'Simpan Laporan'}
                             </button>
                         </div>
                     </div>
@@ -234,7 +226,7 @@ export default function LaporanEditor({
 LaporanEditor.layout = (page: React.ReactNode) => ({
     breadcrumbs: [
         { title: 'Dashboard', href: '/dashboard' },
-        { title: 'Penyusunan Laporan', href: '#' },
+        { title: 'Laporan', href: '#' },
     ],
     children: page,
 });

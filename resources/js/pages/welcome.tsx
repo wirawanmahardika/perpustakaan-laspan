@@ -2,14 +2,12 @@ import React, { useState } from 'react';
 import {
     MapPin,
     Phone,
-    Clock,
     Calendar,
     BookOpen,
     FileText,
     CheckCircle2,
     X,
     ArrowRight,
-    LayoutGrid,
     LogIn,
     Quote,
 } from 'lucide-react';
@@ -29,24 +27,40 @@ const Welcome: React.FC<LibraryProfileProps> = ({ profile, activities }) => {
 
     return (
         <div className="min-h-screen bg-[#FDFDFD] font-sans text-slate-900 selection:bg-blue-100">
-            {/* Navigasi - Blur & Floating Effect */}
-            <nav className="sticky top-0 z-50 border-b border-slate-100 bg-white/80 backdrop-blur-md">
-                <div className="mx-auto flex max-w-7xl items-center justify-between px-6 py-4">
-                    <div className="flex items-center gap-3">
-                        <div className="rounded-xl bg-linear-to-br from-blue-600 to-indigo-700 p-2.5 shadow-lg">
-                            <BookOpen className="h-5 w-5 text-white" />
+            {/* Navigasi - Refined & Aesthetic */}
+            <nav className="sticky top-0 z-50 border-b border-slate-100 bg-white/80 backdrop-blur-md transition-all">
+                <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+                    <div className="flex h-16 items-center justify-between md:h-20">
+                        {/* Sisi Kiri: Logo & Nama */}
+                        <div className="flex items-center gap-2 sm:gap-3">
+                            <div className="flex h-8 w-8 shrink-0 items-center justify-center rounded-lg bg-linear-to-br from-blue-600 to-indigo-700 shadow-md sm:h-10 sm:w-10 sm:rounded-xl">
+                                <BookOpen className="h-4 w-4 text-white sm:h-5 sm:w-5" />
+                            </div>
+                            <div className="flex flex-col">
+                                <span className="text-sm leading-none font-black tracking-tighter text-slate-900 uppercase sm:text-base md:text-lg">
+                                    {profile.nama_perpus}
+                                </span>
+                                <span className="hidden text-[8px] font-bold tracking-[0.2em] text-blue-500 uppercase md:block">
+                                    Digital Library Portal
+                                </span>
+                            </div>
                         </div>
-                        <span className="text-lg font-black tracking-tighter text-slate-900 uppercase">
-                            {profile.nama_perpus}
-                        </span>
+
+                        {/* Sisi Kanan: Akses Login */}
+                        <div className="flex items-center">
+                            <a
+                                href="/login"
+                                className="group flex items-center gap-2 rounded-full bg-slate-900 px-4 py-2 text-[10px] font-black tracking-widest text-white shadow-lg shadow-slate-200 transition-all hover:scale-105 hover:bg-blue-600 active:scale-95 sm:px-6 sm:py-2.5 sm:text-[11px]"
+                            >
+                                <LogIn className="h-3 w-3 transition-transform group-hover:translate-x-0.5 sm:h-3.5 sm:w-3.5" />
+                                <span className="xs:block hidden">
+                                    LOGIN PETUGAS
+                                </span>
+                                <span className="xs:hidden">LOGIN</span>{' '}
+                                {/* Teks lebih pendek di HP sangat kecil */}
+                            </a>
+                        </div>
                     </div>
-                    <a
-                        href="/login"
-                        className="group flex items-center gap-2 rounded-full bg-slate-900 px-6 py-2.5 text-[11px] font-black tracking-widest text-white shadow-xl shadow-slate-200 transition-all hover:scale-105 hover:bg-blue-600 active:scale-95"
-                    >
-                        <LogIn className="h-3.5 w-3.5" />
-                        LOGIN PETUGAS
-                    </a>
                 </div>
             </nav>
 
@@ -183,78 +197,87 @@ const Welcome: React.FC<LibraryProfileProps> = ({ profile, activities }) => {
                 </div>
             </main>
 
-            {/* Premium Modal Laporan - Desain Seperti Lembaran Kertas */}
+            {/* Premium Modal Laporan - Mobile-First Fix */}
             {selectedActivity?.laporan && (
-                <div className="fixed inset-0 z-100 flex animate-in items-center justify-center bg-slate-950/60 p-6 backdrop-blur-xl duration-500 fade-in">
-                    <div className="relative w-full max-w-3xl animate-in duration-500 slide-in-from-bottom-12">
-                        <button
-                            onClick={() => setSelectedActivity(null)}
-                            className="absolute -top-16 right-0 flex items-center gap-2 text-[10px] font-black tracking-[0.3em] text-white/60 uppercase hover:text-white"
-                        >
-                            Tutup <X className="h-5 w-5" />
-                        </button>
+                <div className="fixed inset-0 z-[100] flex animate-in flex-col items-center justify-center bg-slate-950/80 backdrop-blur-xl duration-300 fade-in">
+                    {/* Tombol Tutup Floating - Selalu di pojok kanan atas layar, bukan pojok modal */}
+                    <button
+                        onClick={() => setSelectedActivity(null)}
+                        className="fixed top-6 right-6 z-[110] flex h-12 w-12 items-center justify-center rounded-full bg-white/10 text-white backdrop-blur-md transition-all active:scale-90"
+                    >
+                        <X className="h-6 w-6" />
+                    </button>
 
-                        <div className="overflow-hidden rounded-[40px] bg-white shadow-[0_50px_100px_-20px_rgba(0,0,0,0.5)]">
-                            <div className="h-3 bg-linear-to-r from-blue-600 via-indigo-600 to-emerald-600" />
-                            <div className="p-12 md:p-20">
-                                <div className="mb-12 flex items-start justify-between">
-                                    <div className="rounded-3xl bg-slate-50 p-4">
-                                        <FileText className="h-8 w-8 text-blue-600" />
+                    {/* Kontainer Modal */}
+                    <div className="relative flex max-h-[85vh] w-[92%] max-w-3xl animate-in flex-col duration-500 slide-in-from-bottom-8">
+                        {/* Kertas Laporan dengan Scroll Internal */}
+                        <div className="flex flex-col overflow-hidden rounded-[32px] bg-white shadow-2xl">
+                            {/* Header Modal (Sticky/Tetap) */}
+                            <div className="shrink-0">
+                                <div className="h-2 bg-linear-to-r from-blue-600 via-indigo-600 to-emerald-600" />
+                                <div className="flex items-center justify-between px-8 pt-8 pb-4">
+                                    <div className="rounded-xl bg-slate-50 p-3">
+                                        <FileText className="h-6 w-6 text-blue-600" />
                                     </div>
                                     <div className="text-right">
-                                        <div className="mb-1 text-[10px] font-black tracking-[0.2em] text-slate-400 uppercase">
-                                            Status Dokumen
-                                        </div>
-                                        <div className="rounded-full border border-emerald-100 bg-emerald-50 px-3 py-1 text-xs font-bold text-emerald-600">
-                                            TERVALIDASI SISTEM
-                                        </div>
+                                        <span className="rounded-full border border-emerald-100 bg-emerald-50 px-3 py-1 text-[9px] font-black text-emerald-600 uppercase">
+                                            Verified
+                                        </span>
                                     </div>
                                 </div>
+                            </div>
 
-                                <h2 className="mb-4 text-4xl font-[1000] tracking-tighter text-slate-900 uppercase">
+                            {/* Area Konten yang Bisa di-Scroll */}
+                            <div className="scrollbar-thin scrollbar-thumb-slate-200 overflow-y-auto px-8 pb-10 md:px-16 md:pb-16">
+                                <h2 className="mb-4 text-2xl leading-tight font-[1000] tracking-tighter text-slate-900 uppercase md:text-4xl">
                                     {selectedActivity.nama_kegiatan}
                                 </h2>
-                                <div className="mb-12 flex items-center gap-4 border-b border-slate-50 pb-12 text-[10px] font-black tracking-widest text-slate-400 uppercase">
+
+                                <div className="mb-8 flex flex-wrap items-center gap-3 text-[10px] font-black tracking-widest text-slate-400 uppercase">
                                     <span>
                                         {formatDate(
                                             selectedActivity.tanggal_kegiatan,
                                         )}
                                     </span>
-                                    <span className="h-1 w-1 rounded-full bg-slate-300" />
+                                    <span className="h-1 w-1 rounded-full bg-slate-200" />
                                     <span>{selectedActivity.lokasi}</span>
                                 </div>
 
                                 <div className="relative">
-                                    <Quote className="absolute -top-8 -left-8 -z-10 h-16 w-16 text-slate-50" />
-                                    <div className="text-lg leading-[1.8] font-medium text-slate-600 italic first-letter:float-left first-letter:mr-3 first-letter:text-5xl first-letter:font-black first-letter:text-slate-900 md:text-xl">
+                                    <Quote className="absolute -top-4 -left-4 -z-10 h-10 w-10 text-slate-50 opacity-50" />
+                                    <div className="text-base leading-[1.8] font-medium text-slate-600 italic first-letter:text-4xl first-letter:font-black first-letter:text-slate-900 md:text-xl">
                                         {selectedActivity.laporan.isi_laporan}
                                     </div>
                                 </div>
 
-                                <div className="mt-16 flex flex-col justify-between gap-8 border-t border-slate-50 pt-12 md:flex-row">
+                                {/* Footer di dalam area scroll agar tidak memotong layar */}
+                                <div className="mt-12 flex flex-col gap-6 border-t border-slate-50 pt-8 md:flex-row md:items-center md:justify-between">
                                     <div>
-                                        <p className="mb-2 text-[10px] font-black tracking-widest text-slate-400 uppercase">
-                                            Penanggung Jawab
+                                        <p className="text-[9px] font-black text-slate-400 uppercase">
+                                            Unit Pengelola
                                         </p>
-                                        <p className="font-bold tracking-tighter text-slate-900 uppercase">
+                                        <p className="text-sm font-bold text-slate-900">
                                             {profile.nama_perpus}
                                         </p>
                                     </div>
-                                    <div className="flex items-center gap-3 rounded-2xl bg-slate-50 p-4">
+                                    <div className="flex items-center gap-3 rounded-xl border border-slate-100/50 bg-slate-50 p-4">
                                         <CheckCircle2 className="h-5 w-5 text-emerald-500" />
-                                        <div>
-                                            <p className="text-[9px] font-black tracking-widest text-slate-400 uppercase">
-                                                Tanda Tangan Digital
-                                            </p>
-                                            <p className="font-mono text-[10px] font-bold text-slate-600">
-                                                ID-
-                                                {selectedActivity.laporan.id
-                                                    .toString()
-                                                    .padStart(6, '0')}
-                                            </p>
+                                        <div className="font-mono text-[10px] font-bold text-slate-600">
+                                            SIG-ID-
+                                            {selectedActivity.laporan.id
+                                                .toString()
+                                                .padStart(6, '0')}
                                         </div>
                                     </div>
                                 </div>
+
+                                {/* Tombol Tutup Tambahan untuk Mobile di akhir teks */}
+                                <button
+                                    onClick={() => setSelectedActivity(null)}
+                                    className="mt-8 w-full rounded-xl bg-slate-900 py-4 text-[10px] font-black tracking-widest text-white uppercase shadow-lg md:hidden"
+                                >
+                                    Tutup Laporan
+                                </button>
                             </div>
                         </div>
                     </div>

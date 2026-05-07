@@ -1,3 +1,4 @@
+import { useState } from 'react';
 import { Head, useForm } from '@inertiajs/react';
 import {
     FileText,
@@ -7,18 +8,28 @@ import {
     AlertCircle,
     Clock,
     Calendar,
+    CheckCircle2,
 } from 'lucide-react';
 import * as Label from '@radix-ui/react-label';
 import { Kegiatan, Laporan } from '@/types/library';
 
+interface LaporanEditorProps {
+    kegiatan: Kegiatan;
+    laporan?: Laporan | null; // Laporan bisa null jika sedang membuat baru
+}
+
 export default function LaporanEditor({
     kegiatan,
     laporan,
-}: {
-    kegiatan: Kegiatan;
-    laporan: Laporan;
-}) {
-    const { data, setData, processing } = useForm({
+}: LaporanEditorProps) {
+    // State untuk notifikasi lokal
+    const [message, setMessage] = useState<{
+        type: 'success' | 'error';
+        text: string;
+    } | null>(null);
+
+    // Inisialisasi useForm
+    const { data, setData, post, put, processing, errors } = useForm({
         kegiatan_id: kegiatan.id,
         isi_laporan: laporan?.isi_laporan ?? '',
         status: laporan?.status ?? 'Draft',
@@ -26,17 +37,37 @@ export default function LaporanEditor({
 
     const submit = (e: React.FormEvent) => {
         e.preventDefault();
-        // Jika laporan sudah ada (mode edit), gunakan PUT. Jika belum, gunakan POST.
-        // if (laporan?.id) {
-        //     put('/');
-        // } else {
-        //     post('/');
-        // }
+        setMessage(null);
+
+        const options = {
+            onSuccess: () => {
+                setMessage({
+                    type: 'success',
+                    text: 'Laporan berhasil disimpan ke sistem.',
+                });
+                setTimeout(() => setMessage(null), 4000);
+            },
+            onError: () => {
+                setMessage({
+                    type: 'error',
+                    text: 'Gagal menyimpan. Pastikan semua field terisi.',
+                });
+            },
+        };
+
+        // Jika laporan memiliki ID, berarti mode EDIT (PUT), jika tidak mode CREATE (POST)
+        if (laporan?.id) {
+            put(`/laporan/${laporan.id}`, options);
+        } else {
+            post('/laporan', options);
+        }
     };
 
     return (
         <>
-            <Head title={`Laporan - ${kegiatan.nama_kegiatan}`} />
+            <Head
+                title={`${laporan ? 'Sunting' : 'Tulis'} Laporan - ${kegiatan.nama_kegiatan}`}
+            />
 
             <div className="flex h-full w-full flex-col gap-8 p-6 transition-colors duration-300">
                 {/* Header Area */}
@@ -74,13 +105,37 @@ export default function LaporanEditor({
                     </div>
                 </div>
 
+                {/* Banner Notifikasi */}
+                {message && (
+                    <div
+                        className={`flex animate-in items-center gap-3 rounded-xl p-4 text-[10px] font-black tracking-widest uppercase fade-in slide-in-from-top-2 ${
+                            message.type === 'success'
+                                ? 'border border-emerald-500/20 bg-emerald-500/10 text-emerald-600'
+                                : 'border border-destructive/20 bg-destructive/10 text-destructive'
+                        }`}
+                    >
+                        {message.type === 'success' ? (
+                            <CheckCircle2 className="h-4 w-4" />
+                        ) : (
+                            <AlertCircle className="h-4 w-4" />
+                        )}
+                        {message.text}
+                    </div>
+                )}
+
                 <form
                     onSubmit={submit}
                     className="grid flex-1 gap-8 lg:grid-cols-12"
                 >
                     {/* Kolom Editor (Kiri) */}
                     <div className="flex h-full flex-col lg:col-span-8">
-                        <div className="flex flex-1 flex-col rounded-xl border border-border bg-card shadow-sm">
+                        <div
+                            className={`flex flex-1 flex-col rounded-xl border bg-card shadow-sm transition-all ${
+                                errors.isi_laporan
+                                    ? 'border-destructive shadow-lg shadow-destructive/5'
+                                    : 'border-border'
+                            }`}
+                        >
                             <div className="flex items-center justify-between border-b border-border px-6 py-4">
                                 <Label.Root
                                     className="text-[10px] font-black tracking-[0.2em] text-muted-foreground uppercase"
@@ -97,14 +152,20 @@ export default function LaporanEditor({
                                 onChange={(e) =>
                                     setData('isi_laporan', e.target.value)
                                 }
-                                className="w-full flex-1 resize-none bg-transparent p-8 text-sm leading-relaxed text-foreground placeholder:text-muted-foreground/50 focus:outline-none"
+                                className="w-full flex-1 resize-none bg-transparent p-8 text-sm leading-relaxed text-foreground placeholder:text-muted-foreground/30 focus:outline-none"
                                 placeholder="Tuliskan jalannya kegiatan secara mendalam di sini..."
                             />
                         </div>
+                        {errors.isi_laporan && (
+                            <p className="mt-2 text-[10px] font-bold tracking-[0.1em] text-destructive uppercase">
+                                {errors.isi_laporan}
+                            </p>
+                        )}
                     </div>
 
                     {/* Kolom Sidebar (Kanan) */}
                     <div className="flex flex-col gap-6 lg:col-span-4">
+                        {/* Status Card */}
                         <div className="rounded-xl border border-border bg-card p-6 shadow-sm">
                             <h3 className="mb-4 text-[10px] font-black tracking-[0.2em] text-muted-foreground uppercase">
                                 Pengaturan Status
@@ -137,6 +198,7 @@ export default function LaporanEditor({
                             </div>
                         </div>
 
+                        {/* Info Warning */}
                         <div className="rounded-xl border border-destructive/20 bg-destructive/5 p-5">
                             <div className="flex gap-3 text-destructive">
                                 <AlertCircle className="h-5 w-5 shrink-0" />
@@ -146,10 +208,12 @@ export default function LaporanEditor({
                                         Selesai
                                     </span>{' '}
                                     akan mempublikasikan laporan ke publik.
+                                    Pastikan data valid.
                                 </p>
                             </div>
                         </div>
 
+                        {/* Submit Button */}
                         <div className="mt-auto rounded-xl border border-border bg-secondary/50 p-6">
                             <button
                                 type="submit"
@@ -167,9 +231,10 @@ export default function LaporanEditor({
     );
 }
 
-LaporanEditor.layout = {
+LaporanEditor.layout = (page: React.ReactNode) => ({
     breadcrumbs: [
         { title: 'Dashboard', href: '/dashboard' },
         { title: 'Penyusunan Laporan', href: '#' },
     ],
-};
+    children: page,
+});

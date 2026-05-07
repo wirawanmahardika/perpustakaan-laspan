@@ -1,10 +1,23 @@
 import { Head, useForm } from '@inertiajs/react';
-import { Save, Building2, MapPin, Phone, Info } from 'lucide-react';
+import {
+    Save,
+    Building2,
+    MapPin,
+    Phone,
+    Info,
+    CheckCircle2,
+    AlertCircle,
+} from 'lucide-react';
 import * as Label from '@radix-ui/react-label';
 import { ProfilPerpus } from '@/types/library';
+import { profileEditPut } from '@/routes/admin';
+import { useState } from 'react';
 
 export default function EditProfile({ profile }: { profile: ProfilPerpus }) {
-    // Inisialisasi useForm langsung menggunakan data dari PROPS (Data Asli)
+    const [message, setMessage] = useState<{
+        type: 'success' | 'error';
+        text: string;
+    } | null>(null);
     const { data, setData, put, processing, errors } = useForm({
         nama_perpus: profile?.nama_perpus ?? '',
         alamat: profile?.alamat ?? '',
@@ -14,8 +27,22 @@ export default function EditProfile({ profile }: { profile: ProfilPerpus }) {
 
     const submit = (e: React.FormEvent) => {
         e.preventDefault();
-        // Menggunakan helper route() jika tersedia, atau string path
-        put('/admin/profile');
+        put(profileEditPut().url, {
+            onSuccess: () => {
+                setMessage({
+                    type: 'success',
+                    text: 'Profil unit berhasil diperbarui!',
+                });
+                // Sembunyikan pesan setelah 3 detik
+                setTimeout(() => setMessage(null), 3000);
+            },
+            onError: () => {
+                setMessage({
+                    type: 'error',
+                    text: 'Terjadi kesalahan. Silakan periksa kembali form Anda.',
+                });
+            },
+        });
     };
 
     return (
@@ -33,6 +60,24 @@ export default function EditProfile({ profile }: { profile: ProfilPerpus }) {
                         page publik.
                     </p>
                 </div>
+
+                {/* Banner Notifikasi */}
+                {message && (
+                    <div
+                        className={`flex animate-in items-center gap-3 rounded-lg p-4 text-sm font-bold tracking-wider uppercase fade-in slide-in-from-top-4 ${
+                            message.type === 'success'
+                                ? 'border border-emerald-500/20 bg-emerald-500/10 text-emerald-600'
+                                : 'border border-destructive/20 bg-destructive/10 text-destructive'
+                        }`}
+                    >
+                        {message.type === 'success' ? (
+                            <CheckCircle2 className="h-4 w-4" />
+                        ) : (
+                            <AlertCircle className="h-4 w-4" />
+                        )}
+                        {message.text}
+                    </div>
+                )}
 
                 <form onSubmit={submit} className="grid gap-8 lg:grid-cols-12">
                     {/* Grid kiri untuk input form */}

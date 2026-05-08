@@ -233,8 +233,9 @@ const Welcome: React.FC<LibraryProfileProps> = ({ profile, activities }) => {
                                     {selectedActivity.nama_kegiatan}
                                 </h2>
 
-                                <div className="mb-8 flex flex-wrap items-center gap-3 text-[10px] font-black tracking-widest text-slate-400 uppercase">
-                                    <span>
+                                <div className="mb-10 flex flex-wrap items-center gap-3 text-[10px] font-black tracking-widest text-slate-400 uppercase">
+                                    <span className="flex items-center gap-1.5 rounded-md bg-slate-100 px-2 py-1">
+                                        <Calendar className="h-3 w-3" />
                                         {formatDate(
                                             selectedActivity.tanggal_kegiatan,
                                         )}
@@ -243,12 +244,14 @@ const Welcome: React.FC<LibraryProfileProps> = ({ profile, activities }) => {
                                     <span>{selectedActivity.lokasi}</span>
                                 </div>
 
-                                <div className="relative">
-                                    <Quote className="absolute -top-4 -left-4 -z-10 h-10 w-10 text-slate-50 opacity-50" />
-                                    <div className="text-base leading-[1.8] font-medium text-slate-600 italic first-letter:text-4xl first-letter:font-black first-letter:text-slate-900 md:text-xl">
-                                        {selectedActivity.laporan.isi_laporan}
-                                    </div>
-                                </div>
+                                {/* INTEGRASI WYSIWYG CONTENT */}
+                                <div
+                                    className="prose max-w-none prose-slate lg:prose-lg prose-headings:font-black prose-headings:tracking-tight prose-headings:text-slate-900 prose-p:leading-relaxed prose-p:text-slate-600 prose-li:text-slate-600 prose-img:rounded-3xl prose-img:shadow-lg"
+                                    dangerouslySetInnerHTML={{
+                                        __html: selectedActivity.laporan
+                                            .isi_laporan,
+                                    }}
+                                />
 
                                 {/* Footer di dalam area scroll agar tidak memotong layar */}
                                 <div className="mt-12 flex flex-col gap-6 border-t border-slate-50 pt-8 md:flex-row md:items-center md:justify-between">

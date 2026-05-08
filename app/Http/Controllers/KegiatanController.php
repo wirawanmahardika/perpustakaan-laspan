@@ -19,7 +19,7 @@ class KegiatanController extends Controller
     }
 
 
-    function tambahKegiatan(Request $request)
+    function tambahDanEditKegiatan(Request $request,  $id = null)
     {
         $request->validate([
             'nama_kegiatan'     => 'required|string|max:255',
@@ -28,11 +28,14 @@ class KegiatanController extends Controller
             'deskripsi_kegiatan' => 'required|string',
         ]);
 
-        // Ambil profil perpus (asumsi hanya ada satu profil)
-        $profil = ProfilPerpus::first("*");
+        if ($id) {
+            $kegiatan = Kegiatan::findOrFail($id);
+        } else {
+            $profil = ProfilPerpus::first("*");
+            $kegiatan = new Kegiatan();
+            $kegiatan->profil_perpus_id = $profil->id;
+        }
 
-        $kegiatan = new Kegiatan();
-        $kegiatan->profil_perpus_id = $profil->id;
         $kegiatan->nama_kegiatan    = $request->nama_kegiatan;
         $kegiatan->tanggal_kegiatan = $request->tanggal_kegiatan;
         $kegiatan->lokasi           = $request->lokasi;

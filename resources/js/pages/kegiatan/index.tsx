@@ -24,12 +24,32 @@ interface Props {
 
 export default function KegiatanIndex({ kegiatan }: Props) {
     const [isModalOpen, setIsModalOpen] = useState(false);
+    const [editingItem, setEditingItem] = useState<Kegiatan | null>(null);
+
+    const openEditModal = (item: Kegiatan) => {
+        setEditingItem(item);
+        setData({
+            nama_kegiatan: item.nama_kegiatan,
+            tanggal_kegiatan: item.tanggal_kegiatan,
+            lokasi: item.lokasi,
+            deskripsi_kegiatan: item.deskripsi_kegiatan,
+        });
+        setIsModalOpen(true);
+    };
+
+    // Pastikan reset state saat modal ditutup
+    const closeModal = () => {
+        setIsModalOpen(false);
+        setEditingItem(null);
+        reset();
+    };
+
     const [notification, setNotification] = useState<{
         type: 'success' | 'error';
         text: string;
     } | null>(null);
 
-    const { data, setData, post, processing, reset, errors } = useForm({
+    const { data, setData, post, put, processing, reset, errors } = useForm({
         nama_kegiatan: '',
         tanggal_kegiatan: '',
         lokasi: '',
@@ -40,23 +60,30 @@ export default function KegiatanIndex({ kegiatan }: Props) {
         e.preventDefault();
         setNotification(null);
 
-        post('/kegiatan', {
+        const options = {
             onSuccess: () => {
-                reset();
-                setIsModalOpen(false);
+                closeModal();
                 setNotification({
                     type: 'success',
-                    text: 'Agenda berhasil ditambahkan!',
+                    text: editingItem
+                        ? 'Agenda diperbarui!'
+                        : 'Agenda ditambahkan!',
                 });
                 setTimeout(() => setNotification(null), 4000);
             },
             onError: () => {
                 setNotification({
                     type: 'error',
-                    text: 'Gagal menyimpan agenda. Cek kembali form.',
+                    text: 'Terjadi kesalahan. Cek kembali form.',
                 });
             },
-        });
+        };
+
+        if (editingItem) {
+            put(`/kegiatan/${editingItem.id}`, options);
+        } else {
+            post('/kegiatan', options);
+        }
     };
 
     const handleDelete = (id: number) => {
@@ -115,9 +142,16 @@ export default function KegiatanIndex({ kegiatan }: Props) {
                         open={isModalOpen}
                         onOpenChange={(val) => {
                             setIsModalOpen(val);
-                            if (!val) reset();
+                            if (!val) closeModal();
                         }}
                     >
+                        {/* <Dialog.Root
+                        open={isModalOpen}
+                        onOpenChange={(val) => {
+                            setIsModalOpen(val);
+                            if (!val) reset();
+                        }}
+                    > */}
                         <Dialog.Trigger asChild>
                             <button className="flex w-full items-center justify-center gap-2 rounded-xl bg-primary px-6 py-4 text-[10px] font-black tracking-[0.2em] text-primary-foreground uppercase shadow-lg shadow-primary/20 transition-all hover:scale-[1.02] active:scale-95 md:w-auto">
                                 <Plus className="h-4 w-4" />
@@ -130,7 +164,9 @@ export default function KegiatanIndex({ kegiatan }: Props) {
                             <Dialog.Content className="fixed right-0 bottom-0 left-0 z-50 max-h-[90vh] w-full animate-in overflow-y-auto rounded-t-[32px] border border-border bg-card p-6 shadow-2xl duration-300 slide-in-from-bottom-full md:top-[50%] md:bottom-auto md:left-[50%] md:max-w-lg md:translate-x-[-50%] md:translate-y-[-50%] md:rounded-2xl md:p-8 md:zoom-in-95">
                                 <div className="mb-8 flex items-center justify-between">
                                     <Dialog.Title className="text-xl font-black tracking-tight text-foreground uppercase">
-                                        Agenda Baru
+                                        {editingItem
+                                            ? 'Edit Agenda'
+                                            : 'Agenda Baru'}
                                     </Dialog.Title>
                                     <Dialog.Close className="rounded-full bg-muted/50 p-2 text-muted-foreground transition-colors hover:bg-secondary">
                                         <X className="h-5 w-5" />
@@ -215,10 +251,10 @@ export default function KegiatanIndex({ kegiatan }: Props) {
                                         {processing ? (
                                             <Loader2 className="h-4 w-4 animate-spin" />
                                         ) : (
-                                            <Save className="h-4 w-4" />
+                                            <Save className="..." />
                                         )}
-                                        {processing
-                                            ? 'Proses...'
+                                        {editingItem
+                                            ? 'Simpan Perubahan'
                                             : 'Simpan Agenda'}
                                     </button>
                                 </form>
@@ -267,6 +303,11 @@ export default function KegiatanIndex({ kegiatan }: Props) {
                                                             handleDelete={
                                                                 handleDelete
                                                             }
+                                                            onEdit={() =>
+                                                                openEditModal(
+                                                                    item,
+                                                                )
+                                                            }
                                                         />
                                                     </div>
                                                 </div>
@@ -306,9 +347,9 @@ export default function KegiatanIndex({ kegiatan }: Props) {
                                                                 `/laporan/edit/${item.laporan?.id}`,
                                                             )
                                                         }
-                                                        className="flex w-full items-center justify-center gap-2 rounded-xl border border-emerald-500/20 bg-emerald-500/10 px-4 py-3 text-[9px] font-black tracking-tighter text-emerald-600 uppercase md:w-auto md:py-1.5 dark:text-emerald-400"
+                                                        className="flex w-full items-center justify-center gap-2 rounded-xl border border-emerald-500/20 bg-emerald-500/10 px-4 py-3 text-[9px] font-black tracking-tighter text-emerald-600 uppercase transition-all hover:bg-emerald-500/20 md:w-auto md:py-1.5 dark:text-emerald-400"
                                                     >
-                                                        <CheckCircle2 className="h-3.5 w-3.5" />{' '}
+                                                        <CheckCircle2 className="h-3.5 w-3.5" />
                                                         Edit Laporan
                                                     </button>
                                                 ) : (
@@ -318,9 +359,9 @@ export default function KegiatanIndex({ kegiatan }: Props) {
                                                                 `/laporan/create/${item.id}`,
                                                             )
                                                         }
-                                                        className="flex w-full items-center justify-center gap-2 rounded-xl border border-primary/20 bg-primary px-4 py-3 text-[9px] font-black tracking-tighter text-primary uppercase transition-all active:bg-primary/20 md:w-auto md:py-1.5"
+                                                        className="flex w-full items-center justify-center gap-2 rounded-xl bg-primary px-4 py-3 text-[9px] font-black tracking-tighter text-primary-foreground uppercase transition-all hover:brightness-110 active:scale-95 md:w-auto md:py-1.5"
                                                     >
-                                                        <FilePlus className="h-3.5 w-3.5" />{' '}
+                                                        <FilePlus className="h-3.5 w-3.5" />
                                                         Buat Laporan
                                                     </button>
                                                 )}
@@ -331,6 +372,9 @@ export default function KegiatanIndex({ kegiatan }: Props) {
                                                 <ActionDropdown
                                                     item={item}
                                                     handleDelete={handleDelete}
+                                                    onEdit={() =>
+                                                        openEditModal(item)
+                                                    }
                                                 />
                                             </td>
                                         </tr>
@@ -362,9 +406,11 @@ export default function KegiatanIndex({ kegiatan }: Props) {
 function ActionDropdown({
     item,
     handleDelete,
+    onEdit,
 }: {
     item: Kegiatan;
     handleDelete: (id: number) => void;
+    onEdit: () => void;
 }) {
     return (
         <DropdownMenu.Root>
@@ -375,9 +421,11 @@ function ActionDropdown({
             </DropdownMenu.Trigger>
             <DropdownMenu.Portal>
                 <DropdownMenu.Content className="z-[110] min-w-[160px] animate-in rounded-2xl border border-border bg-popover/90 p-2 shadow-2xl backdrop-blur-md duration-200 slide-in-from-top-2">
-                    <DropdownMenu.Item className="flex cursor-pointer items-center gap-3 rounded-xl px-4 py-3 text-[10px] font-black tracking-widest uppercase transition-colors outline-none hover:bg-primary/10 hover:text-primary">
-                        <Edit3 className="h-4 w-4 italic" /> Edit Agenda (Coming
-                        Soon)
+                    <DropdownMenu.Item
+                        onClick={onEdit}
+                        className="flex cursor-pointer items-center gap-3 rounded-xl px-4 py-3 text-[10px] font-black tracking-widest uppercase transition-colors outline-none hover:bg-primary/10 hover:text-primary"
+                    >
+                        <Edit3 className="h-4 w-4" /> Edit Agenda
                     </DropdownMenu.Item>
                     <DropdownMenu.Separator className="my-1 h-px bg-border" />
                     <DropdownMenu.Item

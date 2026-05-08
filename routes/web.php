@@ -16,7 +16,7 @@ Route::middleware(['auth', 'verified'])->group(function () {
     Route::put('/profile', [PerpusProfileController::class, "editProfile"])->name('admin.profile-edit-put');
 
     Route::get('/kegiatan', [KegiatanController::class, "kegiatanView"])->name('admin.kegiatan');
-    Route::post('/kegiatan', [KegiatanController::class, "tambahKegiatan"])->name('admin.kegiatan.store');
+    Route::match(["post", "put"], '/kegiatan/{id?}', [KegiatanController::class, "tambahDanEditKegiatan"])->name('admin.kegiatan.store-or-update');
     Route::delete('/kegiatan/{kegiatan}', [KegiatanController::class, "deleteKegiatan"])->name('admin.kegiatan.destroy');
 
     Route::get('/laporan/create/{kegiatan}', [LaporanController::class, "laporanCreateView"])->name('admin.laporan-create');

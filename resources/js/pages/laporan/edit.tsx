@@ -14,6 +14,11 @@ import {
 import * as Label from '@radix-ui/react-label';
 import { Kegiatan, Laporan } from '@/types/library';
 
+// Tiptap Imports
+import { useEditor, EditorContent } from '@tiptap/react';
+import StarterKit from '@tiptap/starter-kit';
+import { MenuBar } from '@/components/MenuBar';
+
 interface LaporanEditorProps {
     kegiatan: Kegiatan;
     laporan?: Laporan | null;
@@ -32,6 +37,36 @@ export default function LaporanEditor({
         kegiatan_id: kegiatan.id,
         isi_laporan: laporan?.isi_laporan ?? '',
         status: laporan?.status ?? 'Draft',
+    });
+
+    // Inisialisasi Tiptap
+    const editor = useEditor({
+        extensions: [StarterKit],
+        content: data.isi_laporan,
+        editorProps: {
+            attributes: {
+                // Styling untuk Light & Dark Mode
+                class: 'prose prose-sm dark:prose-invert max-w-none focus:outline-none min-h-[400px] p-5 md:p-8 text-foreground transition-colors',
+            },
+
+            handleKeyDown: (view, event) => {
+                const { ctrlKey, metaKey, key } = event;
+                const preventedKey = ['k', 'p', 's', 'b', 'i'];
+
+                // Contoh: Jika user menekan Ctrl+K atau Cmd+S di dalam editor,
+                // hentikan agar tidak memicu shortcut global admin panel
+                if ((ctrlKey || metaKey) && preventedKey.includes(key)) {
+                    console.log(123);
+                    event.stopPropagation();
+                    // Jika ingin shortcut bawaan Tiptap tetap jalan, jangan return true di sini
+                    // kecuali Anda ingin mematikan shortcut itu sepenuhnya.
+                }
+                return false; // Biarkan Tiptap menangani shortcut internalnya sendiri
+            },
+        },
+        onUpdate: ({ editor }) => {
+            setData('isi_laporan', editor.getHTML());
+        },
     });
 
     const submit = (e: React.FormEvent) => {
@@ -65,8 +100,8 @@ export default function LaporanEditor({
         <>
             <Head title={`${laporan ? 'Sunting' : 'Tulis'} Laporan`} />
 
-            <div className="mx-auto flex min-h-screen w-full max-w-7xl flex-col gap-5 p-4 text-foreground transition-all md:p-8">
-                {/* Header Area - Lebih Ramping */}
+            <div className="mx-auto flex min-h-screen w-full max-w-7xl flex-col gap-5 bg-background p-4 text-foreground transition-all md:p-8">
+                {/* Header Area */}
                 <div className="flex flex-col gap-4">
                     <button
                         onClick={() => window.history.back()}
@@ -99,7 +134,7 @@ export default function LaporanEditor({
                     </div>
                 </div>
 
-                {/* Banner Notifikasi Floating */}
+                {/* Notifikasi */}
                 {message && (
                     <div
                         className={`flex animate-in items-center gap-3 rounded-xl border p-3 shadow-lg fade-in slide-in-from-top-2 ${
@@ -124,7 +159,7 @@ export default function LaporanEditor({
                     className="grid flex-1 gap-5 lg:grid-cols-12"
                 >
                     {/* Main Editor (Kiri) */}
-                    <div className="flex min-h-[400px] flex-col lg:col-span-8">
+                    <div className="flex min-h-[500px] flex-col lg:col-span-8">
                         <div
                             className={`flex flex-1 flex-col overflow-hidden rounded-2xl border bg-card shadow-sm transition-all ${
                                 errors.isi_laporan
@@ -132,25 +167,23 @@ export default function LaporanEditor({
                                     : 'border-border'
                             }`}
                         >
-                            <div className="flex items-center justify-between border-b border-border bg-muted/30 px-5 py-3">
-                                <Label.Root
-                                    className="text-[9px] font-black tracking-[0.2em] text-muted-foreground uppercase"
-                                    htmlFor="isi"
-                                >
-                                    Konten Utama
-                                </Label.Root>
-                                <FileText className="h-3.5 w-3.5 text-muted-foreground/50" />
+                            {/* Menu Bar Area */}
+                            <div className="border-b border-border bg-muted/30">
+                                <MenuBar editor={editor} />
                             </div>
 
-                            <textarea
-                                id="isi"
-                                value={data.isi_laporan}
-                                onChange={(e) =>
-                                    setData('isi_laporan', e.target.value)
-                                }
-                                className="w-full flex-1 resize-none bg-transparent p-5 text-sm leading-relaxed focus:outline-none md:p-6 dark:text-slate-200"
-                                placeholder="Tuliskan jalannya kegiatan..."
-                            />
+                            {/* Label & Icon */}
+                            <div className="flex items-center justify-between border-b border-border/50 bg-muted/10 px-5 py-2">
+                                <Label.Root className="text-[8px] font-black tracking-[0.2em] text-muted-foreground uppercase">
+                                    Canvas Laporan
+                                </Label.Root>
+                                <FileText className="h-3 w-3 text-muted-foreground/30" />
+                            </div>
+
+                            {/* Editor Content Area */}
+                            <div className="scrollbar-hide flex-1 overflow-y-auto bg-transparent">
+                                <EditorContent editor={editor} />
+                            </div>
                         </div>
                         {errors.isi_laporan && (
                             <p className="mt-2 ml-2 text-[9px] font-bold tracking-widest text-destructive uppercase">
@@ -161,7 +194,6 @@ export default function LaporanEditor({
 
                     {/* Sidebar (Kanan) */}
                     <div className="flex flex-col gap-4 lg:col-span-4">
-                        {/* Status Selection */}
                         <div className="rounded-2xl border border-border bg-card p-5 shadow-sm">
                             <h3 className="mb-3 text-[9px] font-black tracking-[0.2em] text-muted-foreground uppercase">
                                 Status Publikasi
@@ -189,7 +221,6 @@ export default function LaporanEditor({
                             </div>
                         </div>
 
-                        {/* Warnings */}
                         <div className="rounded-2xl border border-amber-500/20 bg-amber-500/5 p-4">
                             <div className="flex gap-3 text-amber-600 dark:text-amber-400">
                                 <AlertCircle className="mt-0.5 h-4 w-4 shrink-0" />
@@ -201,7 +232,6 @@ export default function LaporanEditor({
                             </div>
                         </div>
 
-                        {/* Submit Action */}
                         <div className="mt-auto p-2 md:mt-0 lg:p-0">
                             <button
                                 type="submit"
@@ -222,11 +252,3 @@ export default function LaporanEditor({
         </>
     );
 }
-
-LaporanEditor.layout = (page: React.ReactNode) => ({
-    breadcrumbs: [
-        { title: 'Dashboard', href: '/dashboard' },
-        { title: 'Laporan', href: '#' },
-    ],
-    children: page,
-});

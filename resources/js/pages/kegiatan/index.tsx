@@ -13,7 +13,6 @@ import {
     AlertCircle,
     Loader2,
     Save,
-    ChevronRight,
 } from 'lucide-react';
 import * as Dialog from '@radix-ui/react-dialog';
 import * as DropdownMenu from '@radix-ui/react-dropdown-menu';

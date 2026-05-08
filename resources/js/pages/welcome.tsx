@@ -71,13 +71,13 @@ const Welcome: React.FC<LibraryProfileProps> = ({ profile, activities }) => {
                     <div className="animate-bounce-slow mb-6 inline-block rounded-full border border-blue-100 bg-blue-50 px-4 py-1.5 text-[10px] font-black tracking-[0.2em] text-blue-600">
                         OFFICIAL REPOSITORY
                     </div>
-                    <h1 className="mb-8 text-6xl font-[1000] tracking-tight text-slate-900 md:text-8xl lg:leading-[0.9]">
+                    <h1 className="mb-8 text-4xl font-[1000] tracking-tight wrap-break-word text-slate-900 sm:text-5xl md:text-8xl lg:leading-[0.9]">
                         {profile.nama_perpus.split(' ').map((word, i) => (
                             <span
                                 key={i}
-                                className={i === 0 ? 'text-blue-600' : ''}
+                                className={`inline-block ${i === 0 ? 'text-blue-600' : ''}`}
                             >
-                                {word}{' '}
+                                {word}&nbsp;
                             </span>
                         ))}
                     </h1>

@@ -1,13 +1,53 @@
 export interface Kegiatan {
     id: number;
     profil_perpus_id: number;
-    nama_kegiatan: string;
-    tanggal_kegiatan: string; // ISO Date string dari backend
-    lokasi: string;
-    deskripsi_kegiatan: string;
+    nama: string;
+
+    // Sesuai dengan enum di migration
+    jenis_kegiatan:
+        | 'layanan'
+        | 'promosi'
+        | 'inovasi'
+        | 'pemberdayaan'
+        | 'kerjasama';
+
+    // Nullable karena hanya diisi jika jenis_kegiatan tertentu dipilih
+    sub_jenis_layanan?:
+        | 'baca_ditempat'
+        | 'sirkulasi'
+        | 'referensi'
+        | 'literasi'
+        | 'membaca_cepat'
+        | 'berbasis_projek'
+        | 'ekstensi'
+        | 'ramah_anak_disabilitas'
+        | 'inklusif'
+        | null;
+
+    media_promosi?:
+        | 'papan_pengumuman'
+        | 'brosur'
+        | 'banner'
+        | 'poster'
+        | 'seminar'
+        | 'lomba'
+        | 'pameran'
+        | 'penyiaran'
+        | 'jumpa_penulis'
+        | 'medsos'
+        | null;
+
+    tanggal_pelaksanaan: string; // ISO Date string (YYYY-MM-DD)
+    deskripsi: string;
+
+    // Field tambahan untuk kolaborasi & dampak
+    pihak_kolaborasi?: string | null;
+    testimoni_masyarakat?: string | null;
+
     created_at?: string;
     updated_at?: string;
-    // Optional relationship
+
+    // Relationship
     laporan?: Laporan;
 }
 

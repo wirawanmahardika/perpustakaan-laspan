@@ -3,21 +3,28 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
-use Illuminate\Database\Eloquent\Relations\BelongsTo;
-use Illuminate\Database\Eloquent\Relations\HasOne;
 
 class Kegiatan extends Model
 {
     protected $table = 'kegiatan';
-    protected $fillable = ['profil_perpus_id', 'nama_kegiatan', 'tanggal_kegiatan', 'lokasi', 'deskripsi_kegiatan'];
+    protected $guarded = [];
 
-    public function profil(): BelongsTo
+    protected $casts = [
+        'tanggal_pelaksanaan' => 'date',
+    ];
+
+    public function profil()
     {
         return $this->belongsTo(ProfilPerpus::class, 'profil_perpus_id');
     }
 
-    public function laporan(): HasOne
+    public function laporan()
     {
         return $this->hasOne(Laporan::class);
     }
+
+    // public function buktiDokumen()
+    // {
+    //     return $this->morphMany(BuktiDokumen::class, 'documentable');
+    // }
 }

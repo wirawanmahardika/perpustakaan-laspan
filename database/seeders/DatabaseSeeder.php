@@ -16,12 +16,16 @@ class DatabaseSeeder extends Seeder
      */
     public function run(): void
     {
-        // User::factory(10)->create();
-
-        $this->call([
-            LibraryProfileSeeder::class,
-            KegiatanSeeder::class,
-            LaporanSeeder::class,
+        User::create([
+            "name" => "wirawan",
+            "email" => "wirawanmahardika10@gmail.com",
+            "password" => bcrypt("wirawan123"),
         ]);
+
+        // $this->call([
+        //     LibraryProfileSeeder::class,
+        //     KegiatanSeeder::class,
+        //     LaporanSeeder::class,
+        // ]);
     }
 }

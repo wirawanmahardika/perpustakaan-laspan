@@ -17,6 +17,7 @@ import { Kegiatan, Laporan } from '@/types/library';
 // Tiptap Imports
 import { useEditor, EditorContent } from '@tiptap/react';
 import StarterKit from '@tiptap/starter-kit';
+import Image from '@tiptap/extension-image';
 import { MenuBar } from '@/components/MenuBar';
 
 interface LaporanEditorProps {
@@ -41,7 +42,20 @@ export default function LaporanEditor({
 
     // Inisialisasi Tiptap
     const editor = useEditor({
-        extensions: [StarterKit],
+        extensions: [
+            StarterKit,
+            Image.configure({
+                allowBase64: true,
+                inline: true,
+                resize: {
+                    enabled: true,
+                    directions: ['top', 'bottom', 'left', 'right'],
+                    minWidth: 50,
+                    minHeight: 50,
+                    alwaysPreserveAspectRatio: true,
+                },
+            }),
+        ],
         content: data.isi_laporan,
         editorProps: {
             attributes: {
@@ -53,15 +67,10 @@ export default function LaporanEditor({
                 const { ctrlKey, metaKey, key } = event;
                 const preventedKey = ['k', 'p', 's', 'b', 'i'];
 
-                // Contoh: Jika user menekan Ctrl+K atau Cmd+S di dalam editor,
-                // hentikan agar tidak memicu shortcut global admin panel
                 if ((ctrlKey || metaKey) && preventedKey.includes(key)) {
-                    console.log(123);
                     event.stopPropagation();
-                    // Jika ingin shortcut bawaan Tiptap tetap jalan, jangan return true di sini
-                    // kecuali Anda ingin mematikan shortcut itu sepenuhnya.
                 }
-                return false; // Biarkan Tiptap menangani shortcut internalnya sendiri
+                return false;
             },
         },
         onUpdate: ({ editor }) => {
@@ -119,7 +128,7 @@ export default function LaporanEditor({
                             <span className="flex items-center gap-1.5 rounded-lg bg-primary/10 px-2 py-1 text-primary">
                                 <Calendar className="h-3 w-3" />
                                 {new Date(
-                                    kegiatan.tanggal_kegiatan,
+                                    kegiatan.tanggal_pelaksanaan,
                                 ).toLocaleDateString('id-ID', {
                                     dateStyle: 'medium',
                                 })}
@@ -128,7 +137,7 @@ export default function LaporanEditor({
                                 •
                             </span>
                             <span className="italic dark:text-slate-400">
-                                {kegiatan.nama_kegiatan}
+                                {kegiatan.nama}
                             </span>
                         </div>
                     </div>

@@ -14,6 +14,7 @@ import {
     Redo,
     Eraser,
     Code2,
+    ImageIcon,
 } from 'lucide-react';
 
 interface MenuButtonProps {
@@ -189,6 +190,21 @@ export const MenuBar = ({ editor }: { editor: Editor | null }) => {
                 <Eraser size={18} />
             </MenuButton>
 
+            <MenuButton
+                onClick={() =>
+                    editor
+                        .chain()
+                        .focus()
+                        .setImage({
+                            src: window.prompt('Masukkan url gambar') ?? '',
+                        })
+                        .run()
+                }
+                title="Image"
+            >
+                <ImageIcon size={18} />
+            </MenuButton>
+
             <div className="grow" />
 
             {/* History */}
@@ -232,6 +248,7 @@ function menuBarStateSelector(ctx: EditorStateSnapshot<Editor>) {
         isHeading4: ctx.editor.isActive('heading', { level: 4 }) ?? false,
         isHeading5: ctx.editor.isActive('heading', { level: 5 }) ?? false,
         isHeading6: ctx.editor.isActive('heading', { level: 6 }) ?? false,
+        isImage: ctx.editor.isActive('image') ?? false,
 
         // Lists and blocks
         isBulletList: ctx.editor.isActive('bulletList') ?? false,

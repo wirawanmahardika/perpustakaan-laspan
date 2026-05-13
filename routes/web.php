@@ -23,6 +23,9 @@ Route::middleware(['auth', 'verified'])->group(function () {
     Route::get('/laporan/create/{kegiatan}', [LaporanController::class, "laporanCreateView"])->name('admin.laporan-create');
     Route::get('/laporan/edit/{laporan}', [LaporanController::class, "laporanEditView"])->name('admin.laporan-edit');
     Route::match(['post', 'put'], '/laporan/{id?}', [LaporanController::class, "tambahAtauEditLaporan"])->name('admin.laporan-store-or-update');
+
+    Route::post('/dokumen', [DocumentController::class, 'store'])->name('admin.dokumen-store');
+    Route::delete('/dokumen/{id}', [DocumentController::class, 'destroy'])->name('admin.dokumen-destroy');
 });
 
 require __DIR__ . '/settings.php';

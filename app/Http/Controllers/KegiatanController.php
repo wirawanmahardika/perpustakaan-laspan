@@ -5,16 +5,19 @@ namespace App\Http\Controllers;
 use App\Models\Kegiatan;
 use App\Models\ProfilPerpus;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Storage;
 
 class KegiatanController extends Controller
 {
     function kegiatanView()
     {
+        $kegiatanData =  Kegiatan::with(['laporan', 'buktiDokumen'])
+            ->latest()
+            ->get();
+
         return inertia('kegiatan/index', [
             // Mengambil semua kegiatan dengan relasi laporan
-            'kegiatan' => Kegiatan::with('laporan')
-                ->latest()
-                ->get()
+            'kegiatan' => $kegiatanData,
         ]);
     }
 

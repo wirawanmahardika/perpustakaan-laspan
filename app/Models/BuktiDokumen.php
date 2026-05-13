@@ -9,6 +9,7 @@ use Illuminate\Support\Facades\Storage;
 class BuktiDokumen extends Model
 {
     protected $table = 'bukti_dokumen';
+    protected $appends = ['file_url'];
 
     /**
      * Kolom yang dapat diisi secara massal.
@@ -36,6 +37,7 @@ class BuktiDokumen extends Model
      */
     public function getFileUrlAttribute(): string
     {
-        return Storage::url($this->file_path);
+        $data = Storage::url($this->file_path);
+        return $data;
     }
 }

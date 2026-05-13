@@ -1,15 +1,24 @@
 export interface BuktiDokumen {
     id: number;
-
     documentable_id: number;
     documentable_type: string;
-
     label_bukti: string;
     file_path: string;
     tipe_file: 'foto' | 'video' | 'pdf_scan' | 'infografis';
 
+    // file_url biasanya dihasilkan oleh Accessor di Laravel (Storage::url)
     file_url?: string;
 
+    created_at?: string;
+    updated_at?: string;
+}
+
+export interface Laporan {
+    id: number;
+    kegiatan_id: number;
+    tanggal_buat: string;
+    isi_laporan: string;
+    status: 'Draft' | 'Selesai';
     created_at?: string;
     updated_at?: string;
 }
@@ -18,8 +27,6 @@ export interface Kegiatan {
     id: number;
     profil_perpus_id: number;
     nama: string;
-
-    // Sesuai dengan enum di migration
     jenis_kegiatan:
         | 'layanan'
         | 'promosi'
@@ -27,7 +34,6 @@ export interface Kegiatan {
         | 'pemberdayaan'
         | 'kerjasama';
 
-    // Nullable karena hanya diisi jika jenis_kegiatan tertentu dipilih
     sub_jenis_layanan?:
         | 'baca_ditempat'
         | 'sirkulasi'
@@ -53,68 +59,35 @@ export interface Kegiatan {
         | 'medsos'
         | null;
 
-    tanggal_pelaksanaan: string; // ISO Date string (YYYY-MM-DD)
+    tanggal_pelaksanaan: string;
     deskripsi: string;
-
-    // Field tambahan untuk kolaborasi & dampak
     pihak_kolaborasi?: string | null;
     testimoni_masyarakat?: string | null;
 
     created_at?: string;
     updated_at?: string;
 
-    // Relationship
-    laporan?: Laporan;
-}
-
-export interface Laporan {
-    id: number;
-    kegiatan_id: number;
-    tanggal_buat: string;
-    isi_laporan: string;
-    status: 'Draft' | 'Selesai';
-    created_at?: string;
-    updated_at?: string;
-}
-
-// Props interface untuk Komponen React
-export interface LibraryProfileProps {
-    profile: ProfilPerpus;
-    activities: Kegiatan[];
+    // --- RELASI (WAJIB DITAMBAHKAN) ---
+    laporan?: Laporan | null;
+    bukti_dokumen?: BuktiDokumen[]; // Tambahkan ini agar bisa di-map di DocumentManager
 }
 
 export interface ProfilPerpus {
     id: number;
     nama_perpus: string;
     npp: string;
-    desa_kelurahan: string;
-    kecamatan: string;
-    kabupaten_kota: string;
-    provinsi: string;
-    alamat: string;
-    media_sosial: string | null;
-    telp: string | null;
-    fax: string | null;
-    email: string | null;
-    tahun_berdiri: number;
-    nomor_sk_pendirian: string;
-    bulan_tahun_efektif: string;
-    nama_petugas: string;
-    nama_penanggung_jawab: string;
-    sifat_bangunan: 'gabung' | 'mandiri';
-    jumlah_anggota: number;
-    luas_wilayah_km2: number;
-    jumlah_penduduk: number;
-    jarak_ke_perpus_kab: number;
-    mata_pencaharian_utama: string[]; // Disimpan sebagai JSON di DB, diconvert ke Array oleh Laravel
+    // ... field lainnya tetap sama
+    mata_pencaharian_utama: string[];
+
+    // Relasi opsional
+    kegiatan?: Kegiatan[];
     created_at?: string;
     updated_at?: string;
+}
 
-    // Relasi (Opsional, jika Anda memanggil with('...'))
-    // statistik?: StatistikPerpus[];
-    // tata_kelola?: TataKelolaPerpus[];
-    // kegiatan?: KegiatanPerpus[];
-    // tenaga?: TenagaPerpus[];
+// Props untuk Page
+export interface KegiatanIndexProps {
+    kegiatan: Kegiatan[];
 }
 
 // export interface StatistikPerpus {

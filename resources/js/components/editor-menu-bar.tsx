@@ -191,15 +191,49 @@ export const MenuBar = ({ editor }: { editor: Editor | null }) => {
             </MenuButton>
 
             <MenuButton
-                onClick={() =>
-                    editor
-                        .chain()
-                        .focus()
-                        .setImage({
-                            src: window.prompt('Masukkan url gambar') ?? '',
-                        })
-                        .run()
-                }
+                onClick={async () => {
+                    const inputFile = document.createElement('input');
+                    inputFile.type = 'file';
+                    inputFile.accept = 'image/*';
+
+                    const getBase64 = () => {
+                        return new Promise<string>((resolve, reject) => {
+                            inputFile.onchange = (e: any) => {
+                                const file = e.target.files[0];
+                                if (!file) return reject('No file selected');
+                                if (!file || !file.type.startsWith('image/')) {
+                                    alert('Mohon pilih file gambar saja!');
+                                    return;
+                                }
+
+                                const reader = new FileReader();
+                                reader.onload = () =>
+                                    resolve(reader.result as string);
+                                reader.onerror = (error) => reject(error);
+                                reader.readAsDataURL(file);
+                            };
+
+                            inputFile.click();
+                        });
+                    };
+
+                    try {
+                        const base64Data = await getBase64();
+
+                        editor
+                            .chain()
+                            .focus()
+                            .setImage({
+                                src: base64Data,
+                            })
+                            .run();
+                    } catch (error) {
+                        console.log(
+                            'User membatalkan atau terjadi error:',
+                            error,
+                        );
+                    }
+                }}
                 title="Image"
             >
                 <ImageIcon size={18} />

@@ -18,7 +18,7 @@ import { Kegiatan, Laporan } from '@/types/library';
 import { useEditor, EditorContent } from '@tiptap/react';
 import StarterKit from '@tiptap/starter-kit';
 import Image from '@tiptap/extension-image';
-import { MenuBar } from '@/components/MenuBar';
+import { MenuBar } from '@/components/editor-menu-bar';
 
 interface LaporanEditorProps {
     kegiatan: Kegiatan;

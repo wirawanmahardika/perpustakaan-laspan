@@ -1,3 +1,19 @@
+export interface BuktiDokumen {
+    id: number;
+
+    documentable_id: number;
+    documentable_type: string;
+
+    label_bukti: string;
+    file_path: string;
+    tipe_file: 'foto' | 'video' | 'pdf_scan' | 'infografis';
+
+    file_url?: string;
+
+    created_at?: string;
+    updated_at?: string;
+}
+
 export interface Kegiatan {
     id: number;
     profil_perpus_id: number;

@@ -23,8 +23,8 @@ class Kegiatan extends Model
         return $this->hasOne(Laporan::class);
     }
 
-    // public function buktiDokumen()
-    // {
-    //     return $this->morphMany(BuktiDokumen::class, 'documentable');
-    // }
+    public function buktiDokumen()
+    {
+        return $this->morphMany(BuktiDokumen::class, 'documentable');
+    }
 }

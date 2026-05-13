@@ -115,7 +115,7 @@ export default function KegiatanIndex({ kegiatan }: Props) {
             <div className="flex min-h-full flex-col gap-6 p-4 text-foreground md:p-8">
                 {/* Notification Banner */}
                 {notification && (
-                    <div className="fixed top-20 right-4 left-4 z-[100] animate-in slide-in-from-right-5 fade-in md:left-auto md:w-96">
+                    <div className="fixed top-20 right-4 left-4 z-100 animate-in slide-in-from-right-5 fade-in md:left-auto md:w-96">
                         <div
                             className={`flex items-center gap-3 rounded-2xl border p-4 shadow-2xl backdrop-blur-md ${notification.type === 'success' ? 'border-emerald-500/20 bg-emerald-500/10 text-emerald-600' : 'border-destructive/20 bg-destructive/10 text-destructive'}`}
                         >
@@ -156,7 +156,7 @@ export default function KegiatanIndex({ kegiatan }: Props) {
 
                         <Dialog.Portal>
                             <Dialog.Overlay className="fixed inset-0 z-50 animate-in bg-slate-950/40 backdrop-blur-sm fade-in" />
-                            <Dialog.Content className="fixed right-0 bottom-0 left-0 z-50 max-h-[95vh] w-full animate-in overflow-y-auto rounded-t-[32px] border border-border bg-card p-6 shadow-2xl slide-in-from-bottom-full md:top-[50%] md:bottom-auto md:left-[50%] md:max-w-2xl md:translate-x-[-50%] md:translate-y-[-50%] md:rounded-2xl md:p-8">
+                            <Dialog.Content className="fixed right-0 bottom-0 left-0 z-50 max-h-[95vh] w-full animate-in overflow-y-auto rounded-t-4xl border border-border bg-card p-6 shadow-2xl slide-in-from-bottom-full md:top-[50%] md:bottom-auto md:left-[50%] md:max-w-2xl md:translate-x-[-50%] md:translate-y-[-50%] md:rounded-2xl md:p-8">
                                 <div className="mb-6 flex items-center justify-between">
                                     <Dialog.Title className="text-xl font-black uppercase">
                                         {editingItem
@@ -340,7 +340,7 @@ export default function KegiatanIndex({ kegiatan }: Props) {
                 </div>
 
                 {/* Table Section */}
-                <div className="overflow-hidden rounded-[24px] border border-border bg-card shadow-sm">
+                <div className="overflow-hidden rounded-3xl border border-border bg-card shadow-sm">
                     <div className="overflow-x-auto">
                         <table className="w-full text-left">
                             <thead className="hidden md:table-header-group">
@@ -474,7 +474,7 @@ function ActionDropdown({
                 </button>
             </DropdownMenu.Trigger>
             <DropdownMenu.Portal>
-                <DropdownMenu.Content className="z-[110] min-w-[140px] animate-in rounded-xl border border-border bg-popover p-1 shadow-xl zoom-in-95 fade-in">
+                <DropdownMenu.Content className="z-110 min-w-35 animate-in rounded-xl border border-border bg-popover p-1 shadow-xl zoom-in-95 fade-in">
                     <DropdownMenu.Item
                         onClick={onEdit}
                         className="flex cursor-pointer items-center gap-2 rounded-lg px-3 py-2 text-[10px] font-bold uppercase transition-colors outline-none hover:bg-primary/10"

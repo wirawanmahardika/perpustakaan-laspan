@@ -168,7 +168,7 @@ export default function LaporanEditor({
                     className="grid flex-1 gap-5 lg:grid-cols-12"
                 >
                     {/* Main Editor (Kiri) */}
-                    <div className="flex min-h-[500px] flex-col lg:col-span-8">
+                    <div className="flex min-h-125 flex-col lg:col-span-8">
                         <div
                             className={`flex flex-1 flex-col overflow-hidden rounded-2xl border bg-card shadow-sm transition-all ${
                                 errors.isi_laporan

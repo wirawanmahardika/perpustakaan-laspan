@@ -3,8 +3,8 @@ import {
     LayoutDashboard,
     CalendarDays,
     Library,
-    FilesIcon,
     FileArchive,
+    ChartAreaIcon,
 } from 'lucide-react';
 import AppLogo from '@/components/app-logo';
 import { NavFooter } from '@/components/nav-footer';
@@ -22,12 +22,18 @@ import {
 import { dashboard, kegiatan, profileEdit } from '@/routes/admin';
 import type { NavItem } from '@/types';
 import { index } from '@/routes/documents';
+import { index as StatsIndex } from '@/routes/stats/index';
 
 const mainNavItems: NavItem[] = [
     {
         title: 'Dashboard',
         href: dashboard(),
         icon: LayoutDashboard,
+    },
+    {
+        title: 'Stats',
+        href: StatsIndex(),
+        icon: ChartAreaIcon,
     },
     {
         title: 'Kegiatan',

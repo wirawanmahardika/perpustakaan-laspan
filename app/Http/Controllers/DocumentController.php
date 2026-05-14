@@ -2,14 +2,6 @@
 
 namespace App\Http\Controllers;
 
-use App\Http\Controllers\Controller;
-use App\Models\BuktiDokumen;
-use App\Models\Document;
-use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Storage;
-
-namespace App\Http\Controllers;
-
 use App\Models\Document;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
@@ -33,7 +25,7 @@ class DocumentController extends Controller
         ]);
 
         if ($request->hasFile('file')) {
-            $path = $request->file('file')->store('documents/' . $request->kategori, 'public');
+            $path = $request->file('file')->storePublicly('documents/' . $request->kategori);
 
             Document::create([
                 'file_path' => $path,
@@ -48,7 +40,7 @@ class DocumentController extends Controller
     public function destroy(int $id)
     {
         $doc = Document::findOrFail($id);
-        Storage::disk('public')->delete($doc->file_path);
+        Storage::delete($doc->file_path);
         $doc->delete();
 
         return back()->with('message', 'Dokumen berhasil dihapus');

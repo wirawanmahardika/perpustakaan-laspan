@@ -12,7 +12,6 @@ import {
     Loader2,
 } from 'lucide-react';
 import { BuktiDokumen } from '@/types/library';
-import { dokumenDestroy } from '@/routes/admin';
 
 interface Props {
     documents: BuktiDokumen[];

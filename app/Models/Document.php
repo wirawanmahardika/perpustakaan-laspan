@@ -9,11 +9,11 @@ class Document extends Model
 {
     protected $fillable = ['file_path', 'keterangan', 'kategori'];
 
-    // Accessor untuk mendapatkan URL lengkap file
     protected $appends = ['file_url'];
 
     public function getFileUrlAttribute()
     {
-        return Storage::url($this->file_path);
+        $data = Storage::url($this->file_path);
+        return $data;
     }
 }

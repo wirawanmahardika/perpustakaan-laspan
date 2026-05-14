@@ -1,13 +1,11 @@
 import { useState } from 'react';
 import { Head, useForm, router } from '@inertiajs/react';
 import {
-    Upload,
     FileText,
-    Trash2,
-    Search,
-    Filter,
     Image as ImageIcon,
-    File,
+    Trash,
+    TrashIcon,
+    X,
 } from 'lucide-react';
 import { Document } from '@/types/library';
 
@@ -141,15 +139,18 @@ export default function DocumentIndex({
                 <div className="grid grid-cols-2 gap-4 md:grid-cols-4 lg:grid-cols-6">
                     {filteredDocs.map((doc) => (
                         <div
+                            onClick={() =>
+                                (window.location.href = doc.file_url)
+                            }
                             key={doc.id}
-                            className="group relative overflow-hidden rounded-xl border border-border bg-card shadow-sm transition-all hover:shadow-md"
+                            className="group relative cursor-pointer overflow-hidden rounded-xl border border-border bg-card shadow-sm transition-all hover:shadow-md"
                         >
                             <div className="flex aspect-square items-center justify-center overflow-hidden bg-muted">
                                 {doc.file_path.endsWith('.pdf') ? (
                                     <FileText className="h-12 w-12 text-muted-foreground" />
                                 ) : (
                                     <img
-                                        src={`/storage/${doc.file_path}`}
+                                        src={`${doc.file_url}`}
                                         className="h-full w-full object-cover"
                                         alt={doc.keterangan}
                                     />
@@ -167,9 +168,9 @@ export default function DocumentIndex({
                                 onClick={() =>
                                     router.delete('/documents/' + doc.id)
                                 }
-                                className="absolute top-2 right-2 rounded-lg bg-destructive p-1.5 text-destructive-foreground opacity-0 transition-opacity group-hover:opacity-100"
+                                className="absolute top-2 right-2 rounded-lg bg-red-600 p-2 opacity-0 transition-opacity group-hover:opacity-100"
                             >
-                                <Trash2 className="h-3 w-3" />
+                                <Trash className="size-5" />
                             </button>
                         </div>
                     ))}

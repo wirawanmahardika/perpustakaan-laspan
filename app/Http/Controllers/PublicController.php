@@ -3,11 +3,8 @@
 namespace App\Http\Controllers;
 
 use App\Models\ActivityLog;
-use App\Models\Kegiatan;
 use App\Models\ProfilPerpus;
 use App\Models\YearlyStat;
-use Inertia\Inertia;
-use Laravel\Fortify\Features;
 
 class PublicController extends Controller
 {

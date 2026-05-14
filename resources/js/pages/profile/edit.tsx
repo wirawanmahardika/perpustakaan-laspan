@@ -1,4 +1,7 @@
 import { Head, useForm } from '@inertiajs/react';
+import * as Label from '@radix-ui/react-label';
+import { ProfilPerpus } from '@/types/library';
+import { useState } from 'react';
 import {
     Save,
     Building2,
@@ -15,16 +18,28 @@ import {
     Maximize,
     Users,
     Globe,
+    Instagram,
+    Facebook,
+    Twitter,
+    Link as LinkIcon,
 } from 'lucide-react';
-import * as Label from '@radix-ui/react-label';
-import { ProfilPerpus } from '@/types/library';
-import { useState } from 'react';
 
 export default function EditProfile({ profile }: { profile: ProfilPerpus }) {
     const [message, setMessage] = useState<{
         type: 'success' | 'error';
         text: string;
     } | null>(null);
+
+    // Parsing data media_sosial dari JSON atau inisialisasi objek kosong
+    const initialMedSos =
+        typeof profile?.media_sosial === 'string'
+            ? JSON.parse(profile.media_sosial)
+            : (profile?.media_sosial ?? {
+                  facebook: '',
+                  instagram: '',
+                  twitter: '',
+                  website: '',
+              });
 
     // Menyesuaikan dengan kolom di migration 'profil_perpus'
     const { data, setData, put, processing, errors } = useForm({
@@ -46,7 +61,15 @@ export default function EditProfile({ profile }: { profile: ProfilPerpus }) {
         jumlah_penduduk: profile?.jumlah_penduduk ?? 0,
         jarak_ke_kabkota: profile?.jarak_ke_kabkota ?? 0,
         mata_pencaharian_utama: profile?.mata_pencaharian_utama ?? [],
+        media_sosial: initialMedSos,
     });
+
+    const handleMedSosChange = (platform: string, value: string) => {
+        setData('media_sosial', {
+            ...data.media_sosial,
+            [platform]: value,
+        });
+    };
 
     const submit = (e: React.FormEvent) => {
         e.preventDefault();
@@ -307,19 +330,73 @@ export default function EditProfile({ profile }: { profile: ProfilPerpus }) {
                                 </div>
                             </div>
                         </Section>
+
+                        <Section title="V. Kehadiran Digital (Media Sosial)">
+                            <p className="-mt-4 mb-4 text-[10px] font-medium text-muted-foreground italic">
+                                * Berdasarkan poin B.8 Instrumen Penilaian: Link
+                                Web/FB/Twitter/IG
+                            </p>
+                            <div className="grid gap-6 md:grid-cols-2">
+                                <FormInput
+                                    label="Facebook"
+                                    icon={
+                                        <Facebook className="h-4 w-4 text-blue-600" />
+                                    }
+                                    value={data.media_sosial.facebook}
+                                    onChange={(v: string) =>
+                                        handleMedSosChange('facebook', v)
+                                    }
+                                    placeholder="Link Profil atau Nama Akun"
+                                />
+                                <FormInput
+                                    label="Instagram"
+                                    icon={
+                                        <Instagram className="h-4 w-4 text-pink-600" />
+                                    }
+                                    value={data.media_sosial.instagram}
+                                    onChange={(v: string) =>
+                                        handleMedSosChange('instagram', v)
+                                    }
+                                    placeholder="@perpustakaan_desa"
+                                />
+                            </div>
+                            <div className="grid gap-6 md:grid-cols-2">
+                                <FormInput
+                                    label="Twitter / X"
+                                    icon={
+                                        <Twitter className="h-4 w-4 text-sky-500" />
+                                    }
+                                    value={data.media_sosial.twitter}
+                                    onChange={(v: string) =>
+                                        handleMedSosChange('twitter', v)
+                                    }
+                                    placeholder="@perpus_desa"
+                                />
+                                <FormInput
+                                    label="Website / Blog"
+                                    icon={
+                                        <LinkIcon className="h-4 w-4 text-emerald-600" />
+                                    }
+                                    value={data.media_sosial.website}
+                                    onChange={(v: string) =>
+                                        handleMedSosChange('website', v)
+                                    }
+                                    placeholder="https://perpus-desa.id"
+                                />
+                            </div>
+                        </Section>
                     </div>
 
                     <div className="space-y-6 lg:col-span-4">
                         <div className="sticky top-6 space-y-6">
-                            <Section title="Kontak & Media">
+                            <Section title="Kontak Utama">
                                 <FormInput
-                                    label="Kontak Digital (Email/WA/Sosmed)"
-                                    icon={<Globe className="h-4 w-4" />}
+                                    label="Telepon / WhatsApp"
+                                    icon={<Phone className="h-4 w-4" />}
                                     value={data.kontak}
                                     onChange={(v: string) =>
                                         setData('kontak', v)
                                     }
-                                    placeholder="Email / IG / Web"
                                 />
                             </Section>
 

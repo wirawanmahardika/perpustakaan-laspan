@@ -27,7 +27,7 @@ return new class extends Migration
             $table->string('nama_petugas')->nullable();
             $table->string('nama_penanggung_jawab')->nullable();
             $table->enum('sifat_bangunan', ['gabung', 'sendiri']);
-
+            $table->json('media_sosial')->nullable();
 
             $table->decimal('luas_wilayah', 12, 2)->nullable();
             $table->integer('jumlah_penduduk')->nullable();

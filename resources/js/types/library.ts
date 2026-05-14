@@ -72,6 +72,7 @@ export interface ProfilPerpus {
     nama_petugas?: string;
     nama_penanggung_jawab?: string;
     sifat_bangunan: 'gabung' | 'sendiri';
+    media_sosial: any[];
 
     // Data Demografi & Geografis
     luas_wilayah?: number;

@@ -60,7 +60,6 @@ const Welcome: React.FC<Props> = ({
 }) => {
     // Media sosial dari JSON profil_perpus
     const socialMedia = profile?.media_sosial || {};
-    const [isMenuOpen, setIsMenuOpen] = useState(false);
     const [selectedDoc, setSelectedDoc] = useState<any>(null);
 
     // Animasi Variants
@@ -94,7 +93,7 @@ const Welcome: React.FC<Props> = ({
     };
 
     return (
-        <div className="min-h-screen bg-[#F8FAFC] font-sans text-slate-900 selection:bg-blue-600 selection:text-white">
+        <div className="min-h-screen overflow-x-hidden bg-[#F8FAFC] font-sans text-slate-900 selection:bg-blue-600 selection:text-white">
             <Head
                 title={`Portal Resmi - ${profile?.nama_perpustakaan || 'Perpustakaan'}`}
             />
@@ -139,7 +138,7 @@ const Welcome: React.FC<Props> = ({
                         <Activity className="h-4 w-4 animate-pulse" />{' '}
                         Monitoring Akreditasi 2026
                     </div>
-                    <h1 className="mx-auto mb-10 max-w-5xl text-6xl font-[1000] tracking-[-0.04em] text-slate-900 sm:text-8xl lg:text-[10rem] lg:leading-[0.85]">
+                    <h1 className="mx-auto mb-10 max-w-5xl text-4xl font-[1000] tracking-[-0.04em] text-slate-900 sm:text-6xl lg:text-[10rem] lg:leading-[0.85]">
                         {profile?.nama_perpustakaan || 'DIGITAL LIBRARY'}
                     </h1>
                 </motion.div>

@@ -25,13 +25,17 @@ Route::middleware(['auth', 'verified'])->group(function () {
     Route::get('/laporan/edit/{laporan}', [LaporanController::class, "laporanEditView"])->name('admin.laporan-edit');
     Route::match(['post', 'put'], '/laporan/{id?}', [LaporanController::class, "tambahAtauEditLaporan"])->name('admin.laporan-store-or-update');
 
-    Route::post('/dokumen', [DocumentController::class, 'store'])->name('admin.dokumen-store');
-    Route::delete('/dokumen/{id}', [DocumentController::class, 'destroy'])->name('admin.dokumen-destroy');
+    // Route::post('/dokumen', [DocumentController::class, 'store'])->name('admin.dokumen-store');
+    // Route::delete('/dokumen/{id}', [DocumentController::class, 'destroy'])->name('admin.dokumen-destroy');
 
     Route::get('/kegiatan', [ActivityLogController::class, 'index'])->name('admin.kegiatan');
     Route::post('/kegiatan', [ActivityLogController::class, 'store'])->name('kegiatan.store');
     Route::put('/kegiatan/{id}', [ActivityLogController::class, 'update'])->name('kegiatan.update');
     Route::delete('/kegiatan/{id}', [ActivityLogController::class, 'destroy'])->name('kegiatan.destroy');
+
+    Route::get('/documents', [DocumentController::class, 'index'])->name('documents.index');
+    Route::post('/documents', [DocumentController::class, 'store'])->name('documents.store');
+    Route::delete('/documents/{id}', [DocumentController::class, 'destroy'])->name('documents.destroy');
 });
 
 require __DIR__ . '/settings.php';

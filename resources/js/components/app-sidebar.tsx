@@ -3,6 +3,7 @@ import {
     LayoutDashboard,
     CalendarDays,
     Library,
+    FilesIcon,
     FileArchive,
 } from 'lucide-react';
 import AppLogo from '@/components/app-logo';
@@ -20,6 +21,7 @@ import {
 } from '@/components/ui/sidebar';
 import { dashboard, kegiatan, profileEdit } from '@/routes/admin';
 import type { NavItem } from '@/types';
+import { index } from '@/routes/documents';
 
 const mainNavItems: NavItem[] = [
     {
@@ -36,6 +38,11 @@ const mainNavItems: NavItem[] = [
         title: 'Info Perpus',
         href: profileEdit(),
         icon: Library,
+    },
+    {
+        title: 'Documents',
+        href: index(),
+        icon: FileArchive,
     },
 ];
 

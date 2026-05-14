@@ -13,6 +13,22 @@ export interface BuktiDokumen {
     updated_at?: string;
 }
 
+export interface Document {
+    id: number;
+    file_path: string;
+    keterangan: string;
+    kategori:
+        | 'koleksi'
+        | 'sarpras'
+        | 'layanan'
+        | 'tenaga'
+        | 'penyelenggaraan'
+        | 'pengelolaan'
+        | 'inovasi'
+        | 'dampak';
+    created_at: string;
+}
+
 export interface Laporan {
     id: number;
     kegiatan_id: number;

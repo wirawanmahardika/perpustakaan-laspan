@@ -4,47 +4,53 @@ namespace App\Http\Controllers;
 
 use App\Http\Controllers\Controller;
 use App\Models\BuktiDokumen;
+use App\Models\Document;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
 
+namespace App\Http\Controllers;
+
+use App\Models\Document;
+use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Storage;
+use Inertia\Inertia;
+
 class DocumentController extends Controller
 {
+    public function index()
+    {
+        return Inertia::render('dokumen/index', [
+            'documents' => Document::orderBy('created_at', 'desc')->get()
+        ]);
+    }
+
     public function store(Request $request)
     {
         $request->validate([
-            'label_bukti'       => 'required|string|max:255',
-            'tipe_file'         => 'required|in:foto,video,pdf_scan,infografis',
-            'file'              => 'required|file|max:10240', // Maksimal 10MB
-            'documentable_id'   => 'required|integer',
-            'documentable_type' => 'required|string',
+            'file' => 'required|file|mimes:jpg,jpeg,png,pdf|max:10240', // Max 10MB
+            'kategori' => 'required|in:koleksi,sarpras,layanan,tenaga,penyelenggaraan,pengelolaan,inovasi,dampak',
+            'keterangan' => 'required|string|max:255',
         ]);
 
-        try {
-            // 1. Proses Upload File
-            $file = $request->file('file');
-            // Simpan ke disk s3 (atau ganti ke 'public' jika lokal)
-            $path = $file->storePublicly('dokumen-perpus');
+        if ($request->hasFile('file')) {
+            $path = $request->file('file')->store('documents/' . $request->kategori, 'public');
 
-            // 2. Simpan ke Database
-            BuktiDokumen::create([
-                'documentable_id'   => $request->documentable_id,
-                'documentable_type' => $request->documentable_type,
-                'label_bukti'       => $request->label_bukti,
-                'tipe_file'         => $request->tipe_file,
-                'file_path'         => $path, // Simpan path-nya saja
+            Document::create([
+                'file_path' => $path,
+                'kategori' => $request->kategori,
+                'keterangan' => $request->keterangan,
             ]);
-
-            return back()->with('message', 'Dokumen berhasil diunggah!');
-        } catch (\Exception $e) {
-            return back()->withErrors(['error' => 'Gagal mengunggah file: ' . $e->getMessage()]);
         }
+
+        return back()->with('message', 'Dokumen berhasil diunggah');
     }
 
     public function destroy(int $id)
     {
-        $dokumen = BuktiDokumen::findOrFail($id);
-        Storage::delete($dokumen->file_path);
-        $dokumen->delete();
-        return back()->with('message', 'Dokumen berhasil dihapus.');
+        $doc = Document::findOrFail($id);
+        Storage::disk('public')->delete($doc->file_path);
+        $doc->delete();
+
+        return back()->with('message', 'Dokumen berhasil dihapus');
     }
 }

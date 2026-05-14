@@ -212,7 +212,7 @@ export default function StatsIndex({ stats }: { stats: any[] }) {
                             onChange={(e) =>
                                 setData('analisis_minat_baca', e.target.value)
                             }
-                            className="min-h-[100px] w-full rounded-xl border-input bg-muted/30 p-4 text-xs focus:ring-primary"
+                            className="min-h-25 w-full rounded-xl border-input bg-muted/30 p-4 text-xs focus:ring-primary"
                             placeholder="Sebutkan kategori buku yang paling sering dipinjam dan alasannya berdasarkan data statistik..."
                         />
                     </div>

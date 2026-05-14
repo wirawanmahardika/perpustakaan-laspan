@@ -26,9 +26,10 @@ class ActivityLogController extends Controller
         $validated = $request->validate([
             'nama_kegiatan'  => 'required|string|max:255',
             'tanggal'        => 'required|date',
-            'tipe'           => 'required|in:promosi,kerjasama,pemberdayaan,layanan_khusus',
+            'tipe'           => 'required|in:promosi,kerjasama,pemberdayaan,layanan_khusus,penghargaan',
             'deskripsi'      => 'required|string',
             'pihak_terlibat' => 'nullable|string|max:255',
+            'testimoni' => 'nullable|string'
         ]);
 
         ActivityLog::create($validated);
@@ -44,9 +45,10 @@ class ActivityLogController extends Controller
         $validated = $request->validate([
             'nama_kegiatan'  => 'required|string|max:255',
             'tanggal'        => 'required|date',
-            'tipe'           => 'required|in:promosi,kerjasama,pemberdayaan,layanan_khusus',
+            'tipe'           => 'required|in:promosi,kerjasama,pemberdayaan,layanan_khusus,penghargaan',
             'deskripsi'      => 'required|string',
             'pihak_terlibat' => 'nullable|string|max:255',
+            'testimoni' => 'nullable|string'
         ]);
 
         $kegiatan = ActivityLog::findOrFail($id);

@@ -13,7 +13,8 @@ class ActivityLog extends Model
         'tanggal',
         'tipe',
         'deskripsi',
-        'pihak_terlibat'
+        'pihak_terlibat',
+        "testimoni"
     ];
 
     protected $casts = [

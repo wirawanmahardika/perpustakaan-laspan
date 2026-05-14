@@ -5,7 +5,6 @@ namespace App\Http\Controllers;
 use App\Models\Kegiatan;
 use App\Models\ProfilPerpus;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Storage;
 
 class KegiatanController extends Controller
 {
@@ -39,7 +38,6 @@ class KegiatanController extends Controller
             if ($id) {
                 $kegiatan = Kegiatan::findOrFail($id);
             } else {
-                // Mengambil ID profil perpus yang aktif
                 $profil = ProfilPerpus::first("*");
 
                 if (!$profil) {

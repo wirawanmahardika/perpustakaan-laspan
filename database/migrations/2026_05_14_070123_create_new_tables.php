@@ -80,9 +80,11 @@ return new class extends Migration
                 'promosi',
                 'kerjasama',
                 'pemberdayaan',
-                'layanan_khusus'
+                'layanan_khusus',
+                "penghargaan"
             ]);
             $table->text('deskripsi');
+            $table->text('testimoni')->nullable();
             $table->string('pihak_terlibat')->nullable();
             $table->timestamps();
         });

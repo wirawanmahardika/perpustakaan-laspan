@@ -30,8 +30,11 @@ export default function KegiatanIndex({ kegiatan }: { kegiatan: Kegiatan[] }) {
         tanggal: '',
         tipe: 'promosi' as any,
         deskripsi: '',
+        testimoni: '',
         pihak_terlibat: '',
     });
+
+    console.log(kegiatan);
 
     const openEditModal = (item: Kegiatan) => {
         setEditingItem(item);
@@ -40,6 +43,7 @@ export default function KegiatanIndex({ kegiatan }: { kegiatan: Kegiatan[] }) {
             tanggal: item.tanggal,
             tipe: item.tipe,
             deskripsi: item.deskripsi,
+            testimoni: item.testimoni ?? '', // Load data testimoni
             pihak_terlibat: item.pihak_terlibat ?? '',
         });
         setIsModalOpen(true);
@@ -81,7 +85,7 @@ export default function KegiatanIndex({ kegiatan }: { kegiatan: Kegiatan[] }) {
 
                 <div className="flex items-center justify-between">
                     <h1 className="text-2xl font-[1000] tracking-tighter uppercase md:text-3xl">
-                        Agenda Kegiatan
+                        Agenda & Inovasi
                     </h1>
                     <button
                         onClick={() => setIsModalOpen(true)}
@@ -95,6 +99,7 @@ export default function KegiatanIndex({ kegiatan }: { kegiatan: Kegiatan[] }) {
                     <table className="w-full text-left">
                         <thead className="bg-muted/30 text-[10px] font-black tracking-widest text-muted-foreground uppercase">
                             <tr>
+                                <th className="p-5">No</th>
                                 <th className="p-5">Kegiatan</th>
                                 <th className="p-5">Waktu</th>
                                 <th className="p-5">Pihak Terlibat</th>
@@ -102,15 +107,31 @@ export default function KegiatanIndex({ kegiatan }: { kegiatan: Kegiatan[] }) {
                             </tr>
                         </thead>
                         <tbody className="divide-y divide-border">
-                            {kegiatan.map((item) => (
+                            {kegiatan.map((item, index) => (
                                 <tr key={item.id} className="hover:bg-muted/30">
+                                    <td className="p-5 text-left text-[10px] font-black text-muted-foreground">
+                                        {index + 1}
+                                    </td>
                                     <td className="p-5">
-                                        <p className="text-sm font-bold uppercase">
+                                        <p className="text-sm leading-tight font-bold uppercase">
                                             {item.nama_kegiatan}
                                         </p>
-                                        <span className="text-[8px] font-black text-primary uppercase">
-                                            {item.tipe}
-                                        </span>
+                                        <div className="mt-1 flex gap-2">
+                                            <span
+                                                className={`rounded-full border px-2 py-0.5 text-[8px] font-black uppercase ${
+                                                    item.tipe === 'penghargaan'
+                                                        ? 'border-amber-500 bg-amber-50 text-amber-600'
+                                                        : 'border-primary bg-primary/5 text-primary'
+                                                }`}
+                                            >
+                                                {item.tipe.replace('_', ' ')}
+                                            </span>
+                                            {item.testimoni && (
+                                                <span className="rounded-full border border-emerald-500 bg-emerald-50 px-2 py-0.5 text-[8px] font-black text-emerald-600 uppercase">
+                                                    Ada Testimoni
+                                                </span>
+                                            )}
+                                        </div>
                                     </td>
                                     <td className="p-5 text-[10px] font-bold uppercase">
                                         <Calendar className="mr-2 inline h-3 w-3" />{' '}
@@ -138,14 +159,18 @@ export default function KegiatanIndex({ kegiatan }: { kegiatan: Kegiatan[] }) {
                 <Dialog.Root open={isModalOpen} onOpenChange={setIsModalOpen}>
                     <Dialog.Portal>
                         <Dialog.Overlay className="fixed inset-0 z-50 bg-slate-950/40 backdrop-blur-sm" />
-                        <Dialog.Content className="fixed top-1/2 left-1/2 z-50 w-full max-w-xl -translate-x-1/2 -translate-y-1/2 rounded-2xl border bg-card p-8 shadow-2xl">
+                        <Dialog.Content className="fixed top-1/2 left-1/2 z-50 max-h-[90vh] w-full max-w-xl -translate-x-1/2 -translate-y-1/2 overflow-y-auto rounded-2xl border bg-card p-8 shadow-2xl">
                             <form onSubmit={submit} className="space-y-5">
+                                <h2 className="border-b pb-4 text-lg font-black tracking-tighter uppercase">
+                                    Formulir Kegiatan & Dampak
+                                </h2>
+
                                 <FormGroup
-                                    label="Nama Kegiatan"
+                                    label="Nama Kegiatan / Penghargaan"
                                     error={errors.nama_kegiatan}
                                 >
                                     <input
-                                        className="w-full rounded-xl border border-input bg-muted/30 px-4 py-3 text-sm"
+                                        className="w-full rounded-xl border border-input bg-muted/30 px-4 py-3 text-sm ring-primary/20 outline-none focus:ring-2"
                                         value={data.nama_kegiatan}
                                         onChange={(e) =>
                                             setData(
@@ -153,13 +178,14 @@ export default function KegiatanIndex({ kegiatan }: { kegiatan: Kegiatan[] }) {
                                                 e.target.value,
                                             )
                                         }
+                                        placeholder="Contoh: Pelatihan Read Aloud atau Juara 1 Perpusdes"
                                     />
                                 </FormGroup>
 
                                 <div className="grid grid-cols-2 gap-4">
-                                    <FormGroup label="Tipe">
+                                    <FormGroup label="Tipe Kegiatan">
                                         <select
-                                            className="w-full rounded-xl border border-input bg-muted/30 px-4 py-3 text-sm"
+                                            className="w-full cursor-pointer appearance-none rounded-xl border border-input bg-muted/30 px-4 py-3 text-sm"
                                             value={data.tipe}
                                             onChange={(e) =>
                                                 setData(
@@ -169,20 +195,23 @@ export default function KegiatanIndex({ kegiatan }: { kegiatan: Kegiatan[] }) {
                                             }
                                         >
                                             <option value="promosi">
-                                                Promosi
+                                                📢 Promosi
                                             </option>
                                             <option value="kerjasama">
-                                                Kerjasama
+                                                🤝 Kerjasama (MoU)
                                             </option>
                                             <option value="pemberdayaan">
-                                                Pemberdayaan
+                                                🌱 Pemberdayaan Masyarakat
                                             </option>
                                             <option value="layanan_khusus">
-                                                Layanan Khusus
+                                                ♿ Layanan Khusus/Inklusif
+                                            </option>
+                                            <option value="penghargaan">
+                                                🏆 Penghargaan/Prestasi
                                             </option>
                                         </select>
                                     </FormGroup>
-                                    <FormGroup label="Tanggal">
+                                    <FormGroup label="Tanggal Pelaksanaan">
                                         <input
                                             type="date"
                                             className="w-full rounded-xl border border-input bg-muted/30 px-4 py-3 text-sm"
@@ -197,7 +226,7 @@ export default function KegiatanIndex({ kegiatan }: { kegiatan: Kegiatan[] }) {
                                     </FormGroup>
                                 </div>
 
-                                <FormGroup label="Pihak Terlibat">
+                                <FormGroup label="Pihak Terlibat / Penyelenggara">
                                     <input
                                         className="w-full rounded-xl border border-input bg-muted/30 px-4 py-3 text-sm"
                                         value={data.pihak_terlibat}
@@ -207,28 +236,48 @@ export default function KegiatanIndex({ kegiatan }: { kegiatan: Kegiatan[] }) {
                                                 e.target.value,
                                             )
                                         }
-                                        placeholder="Instansi/Tokoh"
+                                        placeholder="Instansi, Tokoh Masyarakat, atau CSR"
                                     />
                                 </FormGroup>
 
-                                <FormGroup label="Deskripsi">
+                                <FormGroup label="Deskripsi Kegiatan">
                                     <textarea
                                         rows={3}
-                                        className="w-full rounded-xl border border-input bg-muted/30 px-4 py-3 text-sm"
+                                        className="w-full resize-none rounded-xl border border-input bg-muted/30 px-4 py-3 text-sm"
                                         value={data.deskripsi}
                                         onChange={(e) =>
                                             setData('deskripsi', e.target.value)
                                         }
+                                        placeholder="Jelaskan secara singkat pelaksanaan kegiatan..."
                                     />
+                                </FormGroup>
+
+                                {/* Field Testimoni Baru untuk Dimensi Dampak */}
+                                <FormGroup
+                                    label="Testimoni Penerima Dampak"
+                                    error={errors.testimoni}
+                                >
+                                    <textarea
+                                        rows={2}
+                                        className="w-full resize-none rounded-xl border border-emerald-500/20 bg-emerald-500/5 px-4 py-3 text-sm italic"
+                                        value={data.testimoni}
+                                        onChange={(e) =>
+                                            setData('testimoni', e.target.value)
+                                        }
+                                        placeholder="Kutipan langsung dari masyarakat atau tokoh terkait manfaat kegiatan ini..."
+                                    />
+                                    <span className="text-[8px] font-bold tracking-widest text-emerald-600 uppercase">
+                                        Penting untuk Dimensi Dampak{' '}
+                                    </span>
                                 </FormGroup>
 
                                 <button
                                     disabled={processing}
-                                    className="w-full rounded-xl bg-primary py-4 text-[11px] font-black tracking-widest text-primary-foreground uppercase shadow-lg"
+                                    className="w-full rounded-xl bg-primary py-4 text-[11px] font-black tracking-widest text-primary-foreground uppercase shadow-lg transition-transform active:scale-[0.98]"
                                 >
                                     {processing
-                                        ? 'MEMPROSES...'
-                                        : 'SIMPAN DATA'}
+                                        ? 'SEDANG MENYIMPAN...'
+                                        : 'SIMPAN DATA KEGIATAN'}
                                 </button>
                             </form>
                         </Dialog.Content>

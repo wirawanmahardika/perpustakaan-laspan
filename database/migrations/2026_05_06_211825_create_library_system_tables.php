@@ -8,33 +8,6 @@ return new class extends Migration
 {
     public function up(): void
     {
-        Schema::create('profil_perpus', function (Blueprint $table) {
-            $table->id();
-            $table->string('nama_perpus');
-            $table->text('alamat'); // Pastikan ini 'alamat' sesuai error SQLite sebelumnya atau 'alamat_lengkap'
-            $table->string('npp')->unique();
-            $table->string('desa_kelurahan');
-            $table->string('kecamatan');
-            $table->string('kabupaten_kota');
-            $table->string('provinsi');
-            $table->string('media_sosial')->nullable();
-            $table->string('telp')->nullable();
-            $table->string('fax')->nullable();
-            $table->string('email')->nullable();
-            $table->year('tahun_berdiri');
-            $table->string('nomor_sk_pendirian');
-            $table->string('bulan_tahun_efektif');
-            $table->string('nama_petugas');
-            $table->string('nama_penanggung_jawab');
-            $table->enum('sifat_bangunan', ['gabung', 'mandiri']);
-            $table->integer('jumlah_anggota')->default(0);
-            $table->decimal('luas_wilayah_km2', 10, 2);
-            $table->integer('jumlah_penduduk');
-            $table->decimal('jarak_ke_perpus_kab', 8, 2);
-            $table->json('mata_pencaharian_utama');
-            $table->timestamps();
-        });
-
         Schema::create('kegiatan', function (Blueprint $table) {
             $table->id();
             $table->foreignId('profil_perpus_id')->constrained('profil_perpus')->onDelete('cascade');
@@ -74,6 +47,10 @@ return new class extends Migration
         Schema::dropIfExists('bukti_dokumen');
         Schema::dropIfExists('laporan');
         Schema::dropIfExists('kegiatan');
+
         Schema::dropIfExists('profil_perpus');
+        Schema::dropIfExists('yearly_stats');
+        Schema::dropIfExists('activity_logs');
+        Schema::dropIfExists('documents');
     }
 };

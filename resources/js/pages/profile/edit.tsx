@@ -15,12 +15,9 @@ import {
     Maximize,
     Users,
     Globe,
-    Mail,
-    Printer,
 } from 'lucide-react';
 import * as Label from '@radix-ui/react-label';
 import { ProfilPerpus } from '@/types/library';
-import { profileEditPut } from '@/routes/admin';
 import { useState } from 'react';
 
 export default function EditProfile({ profile }: { profile: ProfilPerpus }) {
@@ -29,48 +26,43 @@ export default function EditProfile({ profile }: { profile: ProfilPerpus }) {
         text: string;
     } | null>(null);
 
+    // Menyesuaikan dengan kolom di migration 'profil_perpus'
     const { data, setData, put, processing, errors } = useForm({
-        id: profile?.id ?? '',
-        nama_perpus: profile?.nama_perpus ?? '',
+        nama_perpustakaan: profile?.nama_perpustakaan ?? '',
         npp: profile?.npp ?? '',
+        alamat: profile?.alamat ?? '',
         desa_kelurahan: profile?.desa_kelurahan ?? '',
         kecamatan: profile?.kecamatan ?? '',
         kabupaten_kota: profile?.kabupaten_kota ?? '',
         provinsi: profile?.provinsi ?? '',
-        alamat: profile?.alamat ?? '',
-        media_sosial: profile?.media_sosial ?? '',
-        telp: profile?.telp ?? '',
-        fax: profile?.fax ?? '',
-        email: profile?.email ?? '',
+        kontak: profile?.kontak ?? '',
         tahun_berdiri: profile?.tahun_berdiri ?? new Date().getFullYear(),
-        nomor_sk_pendirian: profile?.nomor_sk_pendirian ?? '',
-        bulan_tahun_efektif: profile?.bulan_tahun_efektif ?? '',
+        nomor_sk: profile?.nomor_sk ?? '',
+        tanggal_operasi_efektif: profile?.tanggal_operasi_efektif ?? '',
         nama_petugas: profile?.nama_petugas ?? '',
         nama_penanggung_jawab: profile?.nama_penanggung_jawab ?? '',
-        sifat_bangunan: profile?.sifat_bangunan ?? 'mandiri',
-        jumlah_anggota: profile?.jumlah_anggota ?? 0,
-        luas_wilayah_km2: profile?.luas_wilayah_km2 ?? 0,
+        sifat_bangunan: profile?.sifat_bangunan ?? 'sendiri',
+        luas_wilayah: profile?.luas_wilayah ?? 0,
         jumlah_penduduk: profile?.jumlah_penduduk ?? 0,
-        jarak_ke_perpus_kab: profile?.jarak_ke_perpus_kab ?? 0,
-        // Karena mata_pencaharian_utama adalah array, kita handle perubahannya secara khusus
+        jarak_ke_kabkota: profile?.jarak_ke_kabkota ?? 0,
         mata_pencaharian_utama: profile?.mata_pencaharian_utama ?? [],
     });
 
     const submit = (e: React.FormEvent) => {
         e.preventDefault();
-        put(profileEditPut().url, {
+        // Endpoint disesuaikan dengan route singleton perpustakaan Anda
+        put('/profile', {
             onSuccess: () => {
                 setMessage({
                     type: 'success',
-                    text: 'Profil berhasil disimpan!',
+                    text: 'Data profil perpustakaan berhasil diperbarui!',
                 });
                 setTimeout(() => setMessage(null), 3000);
             },
-            onError: (err) => {
-                console.log(err);
+            onError: () => {
                 setMessage({
                     type: 'error',
-                    text: 'Gagal menyimpan. Periksa kembali form.',
+                    text: 'Terjadi kesalahan. Mohon periksa kembali inputan Anda.',
                 });
             },
         });
@@ -79,19 +71,16 @@ export default function EditProfile({ profile }: { profile: ProfilPerpus }) {
     return (
         <>
             <Head title="Edit Profil Perpustakaan" />
-
             <div className="mx-auto w-full max-w-6xl p-4 md:p-8">
-                {/* Header */}
                 <div className="mb-8 border-b border-border pb-5">
                     <h1 className="text-2xl font-[1000] tracking-tighter uppercase md:text-3xl">
                         Identitas Unit
                     </h1>
                     <p className="text-[10px] font-bold tracking-widest text-muted-foreground uppercase">
-                        Sesuai Instrumen Akreditasi Perpustakaan
+                        Sesuai Instrumen Penilaian Perpustakaan 2025
                     </p>
                 </div>
 
-                {/* Notifikasi */}
                 {message && (
                     <div
                         className={`mb-6 flex items-center gap-3 rounded-xl border p-4 shadow-sm ${message.type === 'success' ? 'border-emerald-500/20 bg-emerald-500/10 text-emerald-600' : 'border-destructive/20 bg-destructive/10 text-destructive'}`}
@@ -109,76 +98,75 @@ export default function EditProfile({ profile }: { profile: ProfilPerpus }) {
 
                 <form onSubmit={submit} className="grid gap-8 lg:grid-cols-12">
                     <div className="space-y-8 lg:col-span-8">
-                        {/* SECTION 1: Identitas Utama */}
                         <Section title="I. Identitas Dasar">
                             <div className="grid gap-6 md:grid-cols-2">
                                 <FormInput
                                     label="Nama Resmi Perpustakaan"
-                                    icon={<Building2 />}
-                                    value={data.nama_perpus}
-                                    onChange={(v: any) =>
-                                        setData('nama_perpus', v)
+                                    icon={<Building2 className="h-4 w-4" />}
+                                    value={data.nama_perpustakaan}
+                                    onChange={(v: string) =>
+                                        setData('nama_perpustakaan', v)
                                     }
-                                    error={errors.nama_perpus}
+                                    error={errors.nama_perpustakaan}
                                 />
                                 <FormInput
                                     label="NPP (Nomor Pokok Perpustakaan)"
-                                    icon={<Hash />}
+                                    icon={<Hash className="h-4 w-4" />}
                                     value={data.npp}
-                                    onChange={(v: any) => setData('npp', v)}
+                                    onChange={(v: string) => setData('npp', v)}
                                     error={errors.npp}
                                 />
                             </div>
                             <div className="grid gap-6 md:grid-cols-2">
                                 <FormInput
                                     label="Nama Petugas"
-                                    icon={<User />}
+                                    icon={<User className="h-4 w-4" />}
                                     value={data.nama_petugas}
-                                    onChange={(v: any) =>
+                                    onChange={(v: string) =>
                                         setData('nama_petugas', v)
                                     }
                                 />
                                 <FormInput
-                                    label="Nama Penanggung Jawab (Kepala)"
-                                    icon={<User />}
+                                    label="Penanggung Jawab (Kepala)"
+                                    icon={<User className="h-4 w-4" />}
                                     value={data.nama_penanggung_jawab}
-                                    onChange={(v: any) =>
+                                    onChange={(v: string) =>
                                         setData('nama_penanggung_jawab', v)
                                     }
                                 />
                             </div>
                         </Section>
 
-                        {/* SECTION 2: Legalitas */}
                         <Section title="II. Legalitas & Operasional">
                             <div className="grid gap-6 md:grid-cols-2">
                                 <FormInput
-                                    label="Nomor SK Pendirian"
-                                    icon={<FileText />}
-                                    value={data.nomor_sk_pendirian}
-                                    onChange={(v: any) =>
-                                        setData('nomor_sk_pendirian', v)
+                                    label="Nomor SK"
+                                    icon={<FileText className="h-4 w-4" />}
+                                    value={data.nomor_sk}
+                                    onChange={(v: string) =>
+                                        setData('nomor_sk', v)
                                     }
+                                    error={errors.nomor_sk}
                                 />
                                 <FormInput
                                     label="Tahun Berdiri"
-                                    icon={<Calendar />}
+                                    icon={<Calendar className="h-4 w-4" />}
                                     type="number"
                                     value={data.tahun_berdiri}
-                                    onChange={(v: any) =>
-                                        setData('tahun_berdiri', v)
+                                    onChange={(v: string) =>
+                                        setData('tahun_berdiri', parseInt(v))
                                     }
                                 />
                             </div>
                             <div className="grid gap-6 md:grid-cols-2">
                                 <FormInput
-                                    label="Bulan & Tahun Efektif"
-                                    icon={<Calendar />}
-                                    value={data.bulan_tahun_efektif}
-                                    onChange={(v: any) =>
-                                        setData('bulan_tahun_efektif', v)
+                                    label="Tanggal Operasi Efektif"
+                                    icon={<Calendar className="h-4 w-4" />}
+                                    type="date"
+                                    value={data.tanggal_operasi_efektif}
+                                    onChange={(v: string) =>
+                                        setData('tanggal_operasi_efektif', v)
                                     }
-                                    placeholder="Contoh: Januari 2024"
                                 />
                                 <div className="grid gap-2">
                                     <Label.Root className="text-[9px] font-black tracking-widest text-muted-foreground uppercase">
@@ -191,12 +179,12 @@ export default function EditProfile({ profile }: { profile: ProfilPerpus }) {
                                                 'sifat_bangunan',
                                                 e.target.value as
                                                     | 'gabung'
-                                                    | 'mandiri',
+                                                    | 'sendiri',
                                             )
                                         }
                                         className="w-full rounded-xl border border-input bg-muted/20 px-4 py-3 text-sm outline-none focus:border-primary"
                                     >
-                                        <option value="mandiri">
+                                        <option value="sendiri">
                                             Mandiri / Berdiri Sendiri
                                         </option>
                                         <option value="gabung">
@@ -207,22 +195,21 @@ export default function EditProfile({ profile }: { profile: ProfilPerpus }) {
                             </div>
                         </Section>
 
-                        {/* SECTION 3: Alamat & Lokasi */}
                         <Section title="III. Lokasi & Wilayah">
                             <div className="grid gap-4 md:grid-cols-2">
                                 <FormInput
                                     label="Provinsi"
-                                    icon={<MapPin />}
+                                    icon={<MapPin className="h-4 w-4" />}
                                     value={data.provinsi}
-                                    onChange={(v: any) =>
+                                    onChange={(v: string) =>
                                         setData('provinsi', v)
                                     }
                                 />
                                 <FormInput
                                     label="Kabupaten / Kota"
-                                    icon={<MapPin />}
+                                    icon={<MapPin className="h-4 w-4" />}
                                     value={data.kabupaten_kota}
-                                    onChange={(v: any) =>
+                                    onChange={(v: string) =>
                                         setData('kabupaten_kota', v)
                                     }
                                 />
@@ -230,27 +217,27 @@ export default function EditProfile({ profile }: { profile: ProfilPerpus }) {
                             <div className="grid gap-4 md:grid-cols-2">
                                 <FormInput
                                     label="Kecamatan"
-                                    icon={<MapPin />}
+                                    icon={<MapPin className="h-4 w-4" />}
                                     value={data.kecamatan}
-                                    onChange={(v: any) =>
+                                    onChange={(v: string) =>
                                         setData('kecamatan', v)
                                     }
                                 />
                                 <FormInput
                                     label="Desa / Kelurahan"
-                                    icon={<MapPin />}
+                                    icon={<MapPin className="h-4 w-4" />}
                                     value={data.desa_kelurahan}
-                                    onChange={(v: any) =>
+                                    onChange={(v: string) =>
                                         setData('desa_kelurahan', v)
                                     }
                                 />
                             </div>
                             <div className="grid gap-2">
                                 <Label.Root className="text-[9px] font-black tracking-widest text-muted-foreground uppercase">
-                                    Alamat Lengkap (Jl, No. Rumah, RT/RW)
+                                    Alamat Lengkap
                                 </Label.Root>
                                 <textarea
-                                    className="min-h-[100px] w-full rounded-xl border border-input bg-muted/20 px-4 py-3 text-sm outline-none focus:border-primary"
+                                    className="min-h-[80px] w-full rounded-xl border border-input bg-muted/20 px-4 py-3 text-sm outline-none focus:border-primary"
                                     value={data.alamat}
                                     onChange={(e) =>
                                         setData('alamat', e.target.value)
@@ -259,108 +246,80 @@ export default function EditProfile({ profile }: { profile: ProfilPerpus }) {
                             </div>
                         </Section>
 
-                        {/* SECTION 4: Data Geografis & Demografis */}
-                        <Section title="IV. Statistik Geografis & Sosio-Ekonomi">
+                        <Section title="IV. Data Geografis & Sosio-Ekonomi">
                             <div className="grid gap-6 md:grid-cols-2">
                                 <FormInput
-                                    label="Luas Wilayah (KM2)"
-                                    icon={<Maximize />}
+                                    label="Luas Wilayah"
+                                    icon={<Maximize className="h-4 w-4" />}
                                     type="number"
                                     step="0.01"
-                                    value={data.luas_wilayah_km2}
-                                    onChange={(v: any) =>
-                                        setData('luas_wilayah_km2', v)
+                                    value={data.luas_wilayah}
+                                    onChange={(v: string) =>
+                                        setData('luas_wilayah', parseFloat(v))
                                     }
                                 />
                                 <FormInput
-                                    label="Jarak ke Perpus Kab (KM)"
-                                    icon={<MapPin />}
+                                    label="Jarak ke Kab/Kota (KM)"
+                                    icon={<MapPin className="h-4 w-4" />}
                                     type="number"
                                     step="0.1"
-                                    value={data.jarak_ke_perpus_kab}
-                                    onChange={(v: any) =>
-                                        setData('jarak_ke_perpus_kab', v)
+                                    value={data.jarak_ke_kabkota}
+                                    onChange={(v: string) =>
+                                        setData(
+                                            'jarak_ke_kabkota',
+                                            parseFloat(v),
+                                        )
                                     }
                                 />
                             </div>
                             <div className="grid gap-6 md:grid-cols-2">
                                 <FormInput
-                                    label="Jumlah Penduduk (Jiwa)"
-                                    icon={<Users />}
+                                    label="Jumlah Penduduk"
+                                    icon={<Users className="h-4 w-4" />}
                                     type="number"
                                     value={data.jumlah_penduduk}
-                                    onChange={(v: any) =>
-                                        setData('jumlah_penduduk', v)
+                                    onChange={(v: string) =>
+                                        setData('jumlah_penduduk', parseInt(v))
                                     }
                                 />
-                                <FormInput
-                                    label="Jumlah Anggota Aktif"
-                                    icon={<Users />}
-                                    type="number"
-                                    value={data.jumlah_anggota}
-                                    onChange={(v: any) =>
-                                        setData('jumlah_anggota', v)
-                                    }
-                                />
-                            </div>
-                            <div className="grid gap-2">
-                                <Label.Root className="text-[9px] font-black tracking-widest text-muted-foreground uppercase">
-                                    Mata Pencaharian Utama (Pisahkan dengan
-                                    koma, Maks 5)
-                                </Label.Root>
-                                <div className="group relative">
-                                    <Info className="absolute top-1/2 left-4 h-4 w-4 -translate-y-1/2 text-muted-foreground group-focus-within:text-primary" />
-                                    <input
-                                        className="w-full rounded-xl border border-input bg-muted/20 px-11 py-3 text-sm outline-none focus:border-primary"
-                                        value={data.mata_pencaharian_utama.join(
-                                            ', ',
-                                        )}
-                                        onChange={(e) =>
-                                            setData(
-                                                'mata_pencaharian_utama',
-                                                e.target.value
-                                                    .split(',')
-                                                    .map((s) => s.trim()),
-                                            )
-                                        }
-                                        placeholder="Petani, Buruh, PNS..."
-                                    />
+                                <div className="grid gap-2">
+                                    <Label.Root className="text-[9px] font-black tracking-widest text-muted-foreground uppercase">
+                                        Mata Pencaharian Utama (Pisahkan Koma)
+                                    </Label.Root>
+                                    <div className="group relative">
+                                        <Info className="absolute top-1/2 left-4 h-4 w-4 -translate-y-1/2 text-muted-foreground group-focus-within:text-primary" />
+                                        <input
+                                            className="w-full rounded-xl border border-input bg-muted/20 px-11 py-3 text-sm outline-none focus:border-primary"
+                                            value={data.mata_pencaharian_utama.join(
+                                                ', ',
+                                            )}
+                                            onChange={(e) =>
+                                                setData(
+                                                    'mata_pencaharian_utama',
+                                                    e.target.value
+                                                        .split(',')
+                                                        .map((s) => s.trim()),
+                                                )
+                                            }
+                                            placeholder="Tani, Dagang, Buruh..."
+                                        />
+                                    </div>
                                 </div>
                             </div>
                         </Section>
                     </div>
 
-                    {/* SIDEBAR: Kontak & Aksi */}
                     <div className="space-y-6 lg:col-span-4">
                         <div className="sticky top-6 space-y-6">
                             <Section title="Kontak & Media">
                                 <FormInput
-                                    label="Email Unit"
-                                    icon={<Mail />}
-                                    type="email"
-                                    value={data.email}
-                                    onChange={(v: any) => setData('email', v)}
-                                />
-                                <FormInput
-                                    label="No. Telepon / WhatsApp"
-                                    icon={<Phone />}
-                                    value={data.telp}
-                                    onChange={(v: any) => setData('telp', v)}
-                                />
-                                <FormInput
-                                    label="Nomor Fax"
-                                    icon={<Printer />}
-                                    value={data.fax}
-                                    onChange={(v: any) => setData('fax', v)}
-                                />
-                                <FormInput
-                                    label="Web / Blog / Sosial Media"
-                                    icon={<Globe />}
-                                    value={data.media_sosial}
-                                    onChange={(v: any) =>
-                                        setData('media_sosial', v)
+                                    label="Kontak Digital (Email/WA/Sosmed)"
+                                    icon={<Globe className="h-4 w-4" />}
+                                    value={data.kontak}
+                                    onChange={(v: string) =>
+                                        setData('kontak', v)
                                     }
-                                    placeholder="https://..."
+                                    placeholder="Email / IG / Web"
                                 />
                             </Section>
 
@@ -376,8 +335,8 @@ export default function EditProfile({ profile }: { profile: ProfilPerpus }) {
                                         <Save className="h-4 w-4" />
                                     )}
                                     {processing
-                                        ? 'Proses Simpan...'
-                                        : 'Simpan Data Profil'}
+                                        ? 'Menyimpan...'
+                                        : 'Perbarui Profil'}
                                 </button>
                             </div>
                         </div>
@@ -388,7 +347,8 @@ export default function EditProfile({ profile }: { profile: ProfilPerpus }) {
     );
 }
 
-// Sub-komponen Section untuk wrapping group input
+// Sub-komponen tetap sama seperti sebelumnya (Section, FormInput)
+
 function Section({
     title,
     children,

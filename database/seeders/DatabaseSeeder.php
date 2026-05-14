@@ -2,10 +2,12 @@
 
 namespace Database\Seeders;
 
+use App\Models\ActivityLog;
 use App\Models\Kegiatan;
 use App\Models\Laporan;
 use App\Models\ProfilPerpus;
 use App\Models\User;
+use App\Models\YearlyStat;
 use Carbon\Carbon;
 use Database\Seeders\LibraryProfileSeeder;
 use Database\Seeders\KegiatanSeeder;
@@ -27,24 +29,38 @@ class DatabaseSeeder extends Seeder
         ]);
 
         $profil = ProfilPerpus::create([
-            'nama_perpus' => 'Perpustakaan Desa Cerdas',
-            'alamat' => 'Jl. Pendidikan No. 123',
-            'npp' => '3271012345678',
+            'nama_perpustakaan' => 'Perpustakaan Desa Bina Ilmu',
+            'npp' => '327301210001',
+            'alamat' => 'Jl. Pendidikan No. 45',
             'desa_kelurahan' => 'Sukamaju',
             'kecamatan' => 'Cibeunying',
             'kabupaten_kota' => 'Bandung',
             'provinsi' => 'Jawa Barat',
+            'kontak' => 'Email: perpus@sukamaju.desa.id',
             'tahun_berdiri' => 2020,
-            'nomor_sk_pendirian' => 'SK/2020/001',
-            'bulan_tahun_efektif' => 'Januari 2020',
-            'nama_petugas' => 'Budi Santoso',
-            'nama_penanggung_jawab' => 'Siti Aminah',
-            'sifat_bangunan' => 'mandiri',
-            'jumlah_anggota' => 150,
-            'luas_wilayah_km2' => 5.5,
-            'jumlah_penduduk' => 2500,
-            'jarak_ke_perpus_kab' => 12.5,
-            'mata_pencaharian_utama' => ['Petani', 'Buruh', 'Pedagang'],
+            'nomor_sk' => '411.1/SK-02/2020',
+            'sifat_bangunan' => 'sendiri',
+            'mata_pencaharian_utama' => ['Pertanian', 'Dagang']
+        ]);
+
+        // Data 3 Tahun Terakhir [cite: 55, 158]
+        foreach ([2023, 2024, 2025] as $index => $year) {
+            YearlyStat::create([
+                'tahun' => $year,
+                'jumlah_koleksi' => 1000 + ($index * 200),
+                'penambahan_koleksi' => 200,
+                'jumlah_anggota' => 100 + ($index * 50),
+                'jumlah_pengunjung' => 1000 + ($index * 300),
+                'jumlah_peminjaman' => 500 + ($index * 100),
+            ]);
+        }
+
+        // Contoh Log Kegiatan [cite: 96, 163]
+        ActivityLog::create([
+            'nama_kegiatan' => 'Bimtek Literasi Masyarakat',
+            'tanggal' => now(),
+            'tipe' => 'pemberdayaan',
+            'deskripsi' => 'Pelatihan keterampilan masyarakat berbasis literasi.'
         ]);
 
         // 2. Seed Kegiatan

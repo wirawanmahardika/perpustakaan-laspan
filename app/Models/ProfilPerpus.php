@@ -3,53 +3,44 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
-use Illuminate\Database\Eloquent\Relations\HasMany;
-use Illuminate\Database\Eloquent\Relations\MorphMany;
 
 class ProfilPerpus extends Model
 {
     protected $table = 'profil_perpus';
 
-    // Menggunakan guarded empty agar semua kolom bisa diisi (mass assignment)
-    protected $guarded = ['id']; 
-
-    // Jika ingin tetap menggunakan fillable, pastikan semua kolom masuk:
-    // protected $fillable = ['nama_perpus', 'npp', 'desa_kelurahan', 'kecamatan', ...];
-
-    /**
-     * Cast kolom JSON agar otomatis menjadi array saat diakses di PHP
-     */
-    protected $casts = [
-        'mata_pencaharian_utama' => 'array',
+    protected $fillable = [
+        'nama_perpustakaan',
+        'npp',
+        'alamat',
+        'desa_kelurahan',
+        'kecamatan',
+        'kabupaten_kota',
+        'provinsi',
+        'kontak',
+        'tahun_berdiri',
+        'nomor_sk',
+        'tanggal_operasi_efektif',
+        'nama_petugas',
+        'nama_penanggung_jawab',
+        'sifat_bangunan',
+        'luas_wilayah',
+        'jumlah_penduduk',
+        'jarak_ke_kabkota',
+        'mata_pencaharian_utama'
     ];
 
-    // --- RELASI ---
+    protected $casts = [
+        'mata_pencaharian_utama' => 'array', // Otomatis konversi JSON ke Array
+        'tanggal_operasi_efektif' => 'date',
+    ];
 
-    // public function statistik(): HasMany
-    // {
-    //     return $this->hasMany(StatistikPerpus::class, 'profil_perpus_id');
-    // }
-
-    // public function tataKelola(): HasMany
-    // {
-    //     return $this->hasMany(TataKelolaPerpus::class, 'profil_perpus_id');
-    // }
-
-    // public function kegiatan(): HasMany
-    // {
-    //     return $this->hasMany(KegiatanPerpus::class, 'profil_perpus_id');
-    // }
-
-    // public function tenaga(): HasMany
-    // {
-    //     return $this->hasMany(TenagaPerpus::class, 'profil_perpus_id');
-    // }
-
-    // /**
-    //  * Relasi ke tabel bukti_dokumen menggunakan Polymorphic
-    //  */
-    // public function buktiDokumen(): MorphMany
-    // {
-    //     return $this->morphMany(BuktiDokumen::class, 'documentable');
-    // }
+    /**
+     * Mendapatkan data profil tunggal.
+     */
+    public static function getSingleton()
+    {
+        return self::firstOrCreate(['id' => 1], [
+            'nama_perpustakaan' => 'Perpustakaan Desa Default'
+        ]);
+    }
 }

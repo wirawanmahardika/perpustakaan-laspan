@@ -4,7 +4,6 @@ import {
     MapPin,
     Phone,
     BookOpen,
-    ArrowRight,
     LogIn,
     Users,
     Activity,
@@ -379,9 +378,9 @@ const Welcome: React.FC<Props> = ({
                                                 Pihak:{' '}
                                                 {act.pihak_terlibat || 'Lokal'}
                                             </p>
-                                            <div className="flex h-10 w-10 items-center justify-center rounded-full bg-slate-950 text-white transition-all group-hover:scale-110 group-hover:bg-blue-600">
+                                            {/* <div className="flex h-10 w-10 items-center justify-center rounded-full bg-slate-950 text-white transition-all group-hover:scale-110 group-hover:bg-blue-600">
                                                 <ArrowRight className="h-5 w-5" />
-                                            </div>
+                                            </div> */}
                                         </div>
                                     </div>
                                 ))}

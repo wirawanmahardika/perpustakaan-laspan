@@ -15,7 +15,11 @@ class YearlyStat extends Model
         'jumlah_anggota',
         'jumlah_pengunjung',
         'jumlah_peminjaman',
-        'buku_dibaca'
+        'buku_dibaca',
+        'koleksi_fiksi',
+        'koleksi_nonfiksi',
+        'koleksi_digital',
+        'analisis_minat_baca'
     ];
 
     // Mengurutkan secara otomatis berdasarkan tahun terbaru

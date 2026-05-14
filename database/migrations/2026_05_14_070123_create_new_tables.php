@@ -46,6 +46,10 @@ return new class extends Migration
             $table->integer('jumlah_pengunjung')->default(0);
             $table->integer('jumlah_peminjaman')->default(0);
             $table->integer('buku_dibaca')->default(0);
+            $table->integer('koleksi_fiksi')->default(0);
+            $table->integer('koleksi_nonfiksi')->default(0);
+            $table->integer('koleksi_digital')->default(0);
+            $table->text('analisis_minat_baca')->nullable();
             $table->timestamps();
         });
 

@@ -3,16 +3,9 @@
 namespace Database\Seeders;
 
 use App\Models\ActivityLog;
-use App\Models\Kegiatan;
-use App\Models\Laporan;
 use App\Models\ProfilPerpus;
 use App\Models\User;
 use App\Models\YearlyStat;
-use Carbon\Carbon;
-use Database\Seeders\LibraryProfileSeeder;
-use Database\Seeders\KegiatanSeeder;
-use Database\Seeders\LaporanSeeder;
-// use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
 
 class DatabaseSeeder extends Seeder
@@ -28,7 +21,8 @@ class DatabaseSeeder extends Seeder
             "password" => bcrypt("wirawan123"),
         ]);
 
-        $profil = ProfilPerpus::create([
+        // $profil = ProfilPerpus::create([
+        ProfilPerpus::create([
             'nama_perpustakaan' => 'Perpustakaan Desa Bina Ilmu',
             'npp' => '327301210001',
             'alamat' => 'Jl. Pendidikan No. 45',
@@ -64,22 +58,22 @@ class DatabaseSeeder extends Seeder
         ]);
 
         // 2. Seed Kegiatan
-        $kegiatan = Kegiatan::create([
-            'profil_perpus_id' => $profil->id,
-            'nama' => 'Pelatihan Komputer Dasar',
-            'jenis_kegiatan' => 'layanan',
-            'sub_jenis_layanan' => 'literasi',
-            'tanggal_pelaksanaan' => Carbon::now()->subDays(5),
-            'deskripsi' => 'Pelatihan untuk remaja desa agar melek teknologi.',
-            'pihak_kolaborasi' => 'Karang Taruna',
-        ]);
+        // $kegiatan = Kegiatan::create([
+        //     'profil_perpus_id' => $profil->id,
+        //     'nama' => 'Pelatihan Komputer Dasar',
+        //     'jenis_kegiatan' => 'layanan',
+        //     'sub_jenis_layanan' => 'literasi',
+        //     'tanggal_pelaksanaan' => Carbon::now()->subDays(5),
+        //     'deskripsi' => 'Pelatihan untuk remaja desa agar melek teknologi.',
+        //     'pihak_kolaborasi' => 'Karang Taruna',
+        // ]);
 
-        // 3. Seed Laporan
-        Laporan::create([
-            'kegiatan_id' => $kegiatan->id,
-            'tanggal_buat' => Carbon::now(),
-            'isi_laporan' => 'Kegiatan berjalan lancar, dihadiri oleh 20 peserta.',
-            'status' => 'Selesai',
-        ]);
+        // // 3. Seed Laporan
+        // Laporan::create([
+        //     'kegiatan_id' => $kegiatan->id,
+        //     'tanggal_buat' => Carbon::now(),
+        //     'isi_laporan' => 'Kegiatan berjalan lancar, dihadiri oleh 20 peserta.',
+        //     'status' => 'Selesai',
+        // ]);
     }
 }

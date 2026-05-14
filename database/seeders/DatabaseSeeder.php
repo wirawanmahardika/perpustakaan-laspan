@@ -7,6 +7,7 @@ use App\Models\ProfilPerpus;
 use App\Models\User;
 use App\Models\YearlyStat;
 use Illuminate\Database\Seeder;
+use Illuminate\Support\Facades\Hash;
 
 class DatabaseSeeder extends Seeder
 {
@@ -16,9 +17,29 @@ class DatabaseSeeder extends Seeder
     public function run(): void
     {
         User::create([
-            "name" => "wirawan",
+            "name" => "Wirawan",
             "email" => "wirawanmahardika10@gmail.com",
-            "password" => bcrypt("wirawan123"),
+            "password" => Hash::make("wirawan123"), // Menggunakan Hash::make lebih disarankan di Laravel terbaru
+
+            // Kolom tambahan sesuai kebutuhan instrumen penilaian
+            "jabatan" => "Kepala Perpustakaan",
+            "pendidikan_terakhir" => "S1 Perpustakaan", // Contoh kualifikasi (Dimensi 4)
+            "role" => "admin", // Memberikan akses penuh untuk monitoring user lain
+            "kreativitas_karya" => "Penulis artikel literasi desa di media massa.",
+
+            // sertifikat_kompetensi_path dibiarkan null atau diisi default
+            "sertifikat_kompetensi_path" => null,
+        ]);
+
+        // Contoh menambahkan satu akun petugas untuk simulasi monitoring
+        User::create([
+            "name" => "Petugas Perpus",
+            "email" => "petugas@desa.id",
+            "password" => Hash::make("petugas123"),
+            "jabatan" => "Staf Layanan",
+            "pendidikan_terakhir" => "SMA",
+            "role" => "petugas",
+            "sertifikat_kompetensi_path" => null,
         ]);
 
         // $profil = ProfilPerpus::create([

@@ -5,6 +5,7 @@ import {
     Library,
     FileArchive,
     ChartAreaIcon,
+    User,
 } from 'lucide-react';
 import AppLogo from '@/components/app-logo';
 import { NavFooter } from '@/components/nav-footer';
@@ -19,7 +20,7 @@ import {
     SidebarMenuButton,
     SidebarMenuItem,
 } from '@/components/ui/sidebar';
-import { dashboard, kegiatan, profileEdit } from '@/routes/admin';
+import { dashboard, kegiatan, profileEdit, users } from '@/routes/admin';
 import type { NavItem } from '@/types';
 import { index } from '@/routes/documents';
 import { index as StatsIndex } from '@/routes/stats/index';
@@ -49,6 +50,11 @@ const mainNavItems: NavItem[] = [
         title: 'Documents',
         href: index(),
         icon: FileArchive,
+    },
+    {
+        title: 'Operator',
+        href: users(),
+        icon: User,
     },
 ];
 

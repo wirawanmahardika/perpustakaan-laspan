@@ -17,6 +17,13 @@ return new class extends Migration
             $table->string('email')->unique();
             $table->timestamp('email_verified_at')->nullable();
             $table->string('password');
+
+            $table->string('jabatan')->nullable();
+            $table->string('pendidikan_terakhir')->nullable();
+            $table->string('sertifikat_kompetensi_path')->nullable();
+            $table->text('kreativitas_karya')->nullable();
+            $table->enum('role', ['admin', 'petugas'])->default('petugas');
+
             $table->rememberToken();
             $table->timestamps();
         });

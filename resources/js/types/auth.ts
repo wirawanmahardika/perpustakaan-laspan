@@ -8,6 +8,12 @@ export type User = {
     created_at: string;
     updated_at: string;
     [key: string]: unknown;
+
+    jabatan: string | null;
+    pendidikan_terakhir: string | null;
+    sertifikat_kompetensi_path: string | null;
+    kreativitas_karya: string | null;
+    role: 'admin' | 'petugas';
 };
 
 export type Auth = {

@@ -10,10 +10,10 @@ use App\Http\Controllers\PublicController;
 use App\Http\Controllers\YearlyStatController;
 use Illuminate\Support\Facades\Route;
 
-Route::get('/', [PublicController::class, "welcomeView"])->name('home');
+Route::get('/', [PublicController::class, "index"])->name('home');
 
 Route::middleware(['auth', 'verified'])->group(function () {
-    Route::get('/dashboard', [DashboardController::class, "dashboard"])->name('admin.dashboard');
+    Route::get('/dashboard', [DashboardController::class, "index"])->name('admin.dashboard');
 
     Route::get('/profile/edit', [PerpusProfileController::class, "editView"])->name('admin.profile-edit');
     Route::put('/profile', [PerpusProfileController::class, "editProfile"])->name('admin.profile-edit-put');

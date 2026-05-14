@@ -35,6 +35,7 @@ interface Props {
     activities: any[];
     latest_stats?: any;
     documents: any[];
+    officers: any[];
 }
 
 // Registrasi komponen Chart.js
@@ -55,6 +56,7 @@ const Welcome: React.FC<Props> = ({
     activities,
     latest_stats,
     documents,
+    officers,
 }) => {
     // Media sosial dari JSON profil_perpus
     const socialMedia = profile?.media_sosial || {};
@@ -143,70 +145,6 @@ const Welcome: React.FC<Props> = ({
                 </motion.div>
             </header>
 
-            <section className="mx-auto mb-32 max-w-7xl px-6">
-                <div className="mb-12">
-                    <h2 className="text-4xl leading-none font-[1000] tracking-tighter uppercase italic">
-                        Evidence Repository
-                    </h2>
-                    <p className="mt-2 text-[10px] font-black tracking-widest text-slate-400 uppercase">
-                        Dokumentasi Bukti Fisik Akreditasi
-                    </p>
-                </div>
-
-                <motion.div
-                    variants={containerVariants}
-                    initial="hidden"
-                    whileInView="visible"
-                    viewport={{ once: true }}
-                    className="grid grid-cols-2 gap-4 md:grid-cols-4"
-                >
-                    {documents.map((doc) => (
-                        <motion.div
-                            key={doc.id}
-                            variants={itemVariants}
-                            whileHover={{ y: -5 }}
-                            onClick={() => setSelectedDoc(doc)}
-                            className="group cursor-pointer overflow-hidden rounded-[2rem] border border-slate-200 bg-white p-4 shadow-sm transition-all hover:border-blue-600"
-                        >
-                            <div className="relative mb-4 flex aspect-square items-center justify-center overflow-hidden rounded-2xl bg-slate-100 text-slate-400">
-                                {doc.file_path.match(
-                                    /\.(jpeg|jpg|png|gif)$/,
-                                ) ? (
-                                    <img
-                                        src={`${doc.file_url}`}
-                                        className="h-full w-full object-cover transition-transform group-hover:scale-110"
-                                        alt={doc.keterangan}
-                                    />
-                                ) : (
-                                    <FileText
-                                        size={48}
-                                        className="opacity-20"
-                                    />
-                                )}
-                                <div className="absolute inset-0 bg-blue-600/0 transition-colors group-hover:bg-blue-600/10" />
-                            </div>
-                            <p className="mb-1 text-[10px] font-black text-blue-600 uppercase">
-                                {doc.kategori}
-                            </p>
-                            <p className="truncate text-sm font-bold tracking-tight uppercase">
-                                {doc.keterangan}
-                            </p>
-                            <span
-                                className={`mb-2 inline-block rounded-full px-2 py-0.5 text-[8px] font-black ${
-                                    doc.kategori === 'inovasi'
-                                        ? 'bg-amber-100 text-amber-700'
-                                        : doc.kategori === 'layanan'
-                                          ? 'bg-blue-100 text-blue-700'
-                                          : 'bg-slate-100 text-slate-700'
-                                }`}
-                            >
-                                {doc.kategori.toUpperCase()}
-                            </span>
-                        </motion.div>
-                    ))}
-                </motion.div>
-            </section>
-
             {/* Stats Bar */}
             <section className="mx-auto mb-24 max-w-7xl px-6">
                 <div className="grid grid-cols-2 gap-4 md:grid-cols-4">
@@ -230,6 +168,51 @@ const Welcome: React.FC<Props> = ({
                         label="Koleksi Digital"
                         value={latest_stats?.koleksi_digital || 0}
                     />
+                </div>
+            </section>
+
+            <section className="mx-auto mb-32 max-w-7xl px-6">
+                <div className="mb-12">
+                    <h2 className="text-4xl leading-none font-[1000] tracking-tighter uppercase italic">
+                        Pengelola Unit
+                    </h2>
+                    <p className="mt-2 text-[10px] font-black tracking-widest text-slate-400 uppercase">
+                        Sumber Daya Manusia Kompeten
+                    </p>
+                </div>
+
+                <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
+                    {officers.map((user) => (
+                        <motion.div
+                            key={user.id}
+                            whileHover={{ y: -5 }}
+                            className="flex items-center gap-6 rounded-[2.5rem] border border-slate-200 bg-white p-6 shadow-sm"
+                        >
+                            {/* Avatar Bulat / Inisial */}
+                            <div className="flex h-20 w-20 shrink-0 items-center justify-center rounded-full bg-blue-600 text-2xl font-black text-white shadow-lg shadow-blue-100">
+                                {user.name.charAt(0)}
+                            </div>
+
+                            <div className="min-w-0">
+                                <p className="text-[10px] font-black tracking-widest text-blue-600 uppercase">
+                                    {user.jabatan}
+                                </p>
+                                <h4 className="truncate text-xl font-[1000] tracking-tight text-slate-900 uppercase">
+                                    {user.name}
+                                </h4>
+                                <div className="mt-2 flex items-center gap-2">
+                                    <span className="rounded-md bg-slate-100 px-2 py-0.5 text-[9px] font-bold text-slate-500 uppercase">
+                                        {user.pendidikan_terakhir}
+                                    </span>
+                                    {user.kreativitas_karya && (
+                                        <span className="rounded-md bg-emerald-50 px-2 py-0.5 text-[9px] font-bold text-emerald-600 uppercase">
+                                            Inovatif
+                                        </span>
+                                    )}
+                                </div>
+                            </div>
+                        </motion.div>
+                    ))}
                 </div>
             </section>
 
@@ -462,6 +445,70 @@ const Welcome: React.FC<Props> = ({
                     </div>
                 </main>
             </motion.div>
+
+            <section className="mx-auto mb-32 max-w-7xl px-6">
+                <div className="mb-12">
+                    <h2 className="text-4xl leading-none font-[1000] tracking-tighter uppercase italic">
+                        Evidence Repository
+                    </h2>
+                    <p className="mt-2 text-[10px] font-black tracking-widest text-slate-400 uppercase">
+                        Dokumentasi Bukti Fisik Akreditasi
+                    </p>
+                </div>
+
+                <motion.div
+                    variants={containerVariants}
+                    initial="hidden"
+                    whileInView="visible"
+                    viewport={{ once: true }}
+                    className="grid grid-cols-2 gap-4 md:grid-cols-4"
+                >
+                    {documents.map((doc) => (
+                        <motion.div
+                            key={doc.id}
+                            variants={itemVariants}
+                            whileHover={{ y: -5 }}
+                            onClick={() => setSelectedDoc(doc)}
+                            className="group cursor-pointer overflow-hidden rounded-[2rem] border border-slate-200 bg-white p-4 shadow-sm transition-all hover:border-blue-600"
+                        >
+                            <div className="relative mb-4 flex aspect-square items-center justify-center overflow-hidden rounded-2xl bg-slate-100 text-slate-400">
+                                {doc.file_path.match(
+                                    /\.(jpeg|jpg|png|gif)$/,
+                                ) ? (
+                                    <img
+                                        src={`${doc.file_url}`}
+                                        className="h-full w-full object-cover transition-transform group-hover:scale-110"
+                                        alt={doc.keterangan}
+                                    />
+                                ) : (
+                                    <FileText
+                                        size={48}
+                                        className="opacity-20"
+                                    />
+                                )}
+                                <div className="absolute inset-0 bg-blue-600/0 transition-colors group-hover:bg-blue-600/10" />
+                            </div>
+                            <p className="mb-1 text-[10px] font-black text-blue-600 uppercase">
+                                {doc.kategori}
+                            </p>
+                            <p className="truncate text-sm font-bold tracking-tight uppercase">
+                                {doc.keterangan}
+                            </p>
+                            <span
+                                className={`mb-2 inline-block rounded-full px-2 py-0.5 text-[8px] font-black ${
+                                    doc.kategori === 'inovasi'
+                                        ? 'bg-amber-100 text-amber-700'
+                                        : doc.kategori === 'layanan'
+                                          ? 'bg-blue-100 text-blue-700'
+                                          : 'bg-slate-100 text-slate-700'
+                                }`}
+                            >
+                                {doc.kategori.toUpperCase()}
+                            </span>
+                        </motion.div>
+                    ))}
+                </motion.div>
+            </section>
 
             <AnimatePresence>
                 {selectedDoc && (

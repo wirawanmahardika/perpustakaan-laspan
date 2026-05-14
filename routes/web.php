@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\DashboardController;
+use App\Http\Controllers\ActivityLogController;
 use App\Http\Controllers\DocumentController;
 use App\Http\Controllers\KegiatanController;
 use App\Http\Controllers\LaporanController;
@@ -16,9 +17,9 @@ Route::middleware(['auth', 'verified'])->group(function () {
     Route::get('/profile/edit', [PerpusProfileController::class, "editView"])->name('admin.profile-edit');
     Route::put('/profile', [PerpusProfileController::class, "editProfile"])->name('admin.profile-edit-put');
 
-    Route::get('/kegiatan', [KegiatanController::class, "kegiatanView"])->name('admin.kegiatan');
-    Route::match(["post", "put"], '/kegiatan/{id?}', [KegiatanController::class, "tambahDanEditKegiatan"])->name('admin.kegiatan.store-or-update');
-    Route::delete('/kegiatan/{kegiatan}', [KegiatanController::class, "deleteKegiatan"])->name('admin.kegiatan.destroy');
+    // Route::get('/kegiatan', [KegiatanController::class, "kegiatanView"])->name('admin.kegiatan');
+    // Route::match(["post", "put"], '/kegiatan/{id?}', [KegiatanController::class, "tambahDanEditKegiatan"])->name('admin.kegiatan.store-or-update');
+    // Route::delete('/kegiatan/{kegiatan}', [KegiatanController::class, "deleteKegiatan"])->name('admin.kegiatan.destroy');
 
     Route::get('/laporan/create/{kegiatan}', [LaporanController::class, "laporanCreateView"])->name('admin.laporan-create');
     Route::get('/laporan/edit/{laporan}', [LaporanController::class, "laporanEditView"])->name('admin.laporan-edit');
@@ -26,6 +27,11 @@ Route::middleware(['auth', 'verified'])->group(function () {
 
     Route::post('/dokumen', [DocumentController::class, 'store'])->name('admin.dokumen-store');
     Route::delete('/dokumen/{id}', [DocumentController::class, 'destroy'])->name('admin.dokumen-destroy');
+
+    Route::get('/kegiatan', [ActivityLogController::class, 'index'])->name('admin.kegiatan');
+    Route::post('/kegiatan', [ActivityLogController::class, 'store'])->name('kegiatan.store');
+    Route::put('/kegiatan/{id}', [ActivityLogController::class, 'update'])->name('kegiatan.update');
+    Route::delete('/kegiatan/{id}', [ActivityLogController::class, 'destroy'])->name('kegiatan.destroy');
 });
 
 require __DIR__ . '/settings.php';

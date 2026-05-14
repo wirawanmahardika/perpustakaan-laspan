@@ -25,51 +25,12 @@ export interface Laporan {
 
 export interface Kegiatan {
     id: number;
-    profil_perpus_id: number;
-    nama: string;
-    jenis_kegiatan:
-        | 'layanan'
-        | 'promosi'
-        | 'inovasi'
-        | 'pemberdayaan'
-        | 'kerjasama';
-
-    sub_jenis_layanan?:
-        | 'baca_ditempat'
-        | 'sirkulasi'
-        | 'referensi'
-        | 'literasi'
-        | 'membaca_cepat'
-        | 'berbasis_projek'
-        | 'ekstensi'
-        | 'ramah_anak_disabilitas'
-        | 'inklusif'
-        | null;
-
-    media_promosi?:
-        | 'papan_pengumuman'
-        | 'brosur'
-        | 'banner'
-        | 'poster'
-        | 'seminar'
-        | 'lomba'
-        | 'pameran'
-        | 'penyiaran'
-        | 'jumpa_penulis'
-        | 'medsos'
-        | null;
-
-    tanggal_pelaksanaan: string;
+    nama_kegiatan: string;
+    tanggal: string;
+    tipe: 'promosi' | 'kerjasama' | 'pemberdayaan' | 'layanan_khusus';
     deskripsi: string;
-    pihak_kolaborasi?: string | null;
-    testimoni_masyarakat?: string | null;
-
+    pihak_terlibat?: string;
     created_at?: string;
-    updated_at?: string;
-
-    // --- RELASI (WAJIB DITAMBAHKAN) ---
-    laporan?: Laporan | null;
-    bukti_dokumen?: BuktiDokumen[]; // Tambahkan ini agar bisa di-map di DocumentManager
 }
 
 export interface ProfilPerpus {

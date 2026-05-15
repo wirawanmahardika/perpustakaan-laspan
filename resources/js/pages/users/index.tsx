@@ -367,7 +367,7 @@ function ActionDropdown({ onEdit, onDelete }: any) {
                 <MoreVertical className="mx-auto h-4 w-4" />
             </DropdownMenu.Trigger>
             <DropdownMenu.Portal>
-                <DropdownMenu.Content className="z-[110] min-w-[140px] animate-in rounded-xl border bg-popover p-1 shadow-xl duration-100 zoom-in-95 fade-in">
+                <DropdownMenu.Content className="z-110 min-w-35 animate-in rounded-xl border bg-popover p-1 shadow-xl duration-100 zoom-in-95 fade-in">
                     <DropdownMenu.Item
                         onClick={onEdit}
                         className="flex cursor-pointer items-center gap-2 rounded-lg px-3 py-2 text-[10px] font-bold uppercase outline-none hover:bg-primary/10"

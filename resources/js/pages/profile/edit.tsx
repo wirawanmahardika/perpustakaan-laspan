@@ -260,7 +260,7 @@ export default function EditProfile({ profile }: { profile: ProfilPerpus }) {
                                     Alamat Lengkap
                                 </Label.Root>
                                 <textarea
-                                    className="min-h-[80px] w-full rounded-xl border border-input bg-muted/20 px-4 py-3 text-sm outline-none focus:border-primary"
+                                    className="min-h-20 w-full rounded-xl border border-input bg-muted/20 px-4 py-3 text-sm outline-none focus:border-primary"
                                     value={data.alamat}
                                     onChange={(e) =>
                                         setData('alamat', e.target.value)

@@ -18,13 +18,17 @@ class YearlyStatController extends Controller
     public function updateOrCreate(Request $request)
     {
         $validated = $request->validate([
-            'tahun'               => 'required|digits:4',
-            'jumlah_koleksi'      => 'required|integer|min:0',
-            'penambahan_koleksi'  => 'required|integer|min:0',
-            'jumlah_anggota'      => 'required|integer|min:0',
-            'jumlah_pengunjung'   => 'required|integer|min:0',
-            'jumlah_peminjaman'   => 'required|integer|min:0',
-            'buku_dibaca'         => 'required|integer|min:0',
+            'tahun'                => 'required|digits:4',
+            'jumlah_koleksi'       => 'required|integer|min:0',
+            'penambahan_koleksi'   => 'required|integer|min:0', // Pastikan nama kolom di DB sama
+            'jumlah_anggota'       => 'required|integer|min:0',
+            'jumlah_pengunjung'    => 'required|integer|min:0',
+            'jumlah_peminjaman'    => 'required|integer|min:0',
+            'buku_dibaca'          => 'required|integer|min:0',
+            'koleksi_fiksi'        => 'required|integer|min:0',
+            'koleksi_nonfiksi'     => 'required|integer|min:0',
+            'koleksi_digital'      => 'required|integer|min:0',
+            'analisis_minat_baca'  => 'nullable|string',
         ]);
 
         $dataToSave = collect($validated)->map(function ($value) {

@@ -27,6 +27,15 @@ interface DashboardProps {
         total_pengunjung: number; // Dari yearly_stats terbaru
         total_anggota: number; // Dari yearly_stats terbaru
         koleksi_digital: number; // Dari yearly_stats terbaru
+        doc_by_category: {
+            koleksi: number;
+            sarpras: number;
+            layanan: number;
+            tenaga: number;
+            penyelenggaraan: number;
+            pengelolaan: number;
+            dampak: number;
+        };
     };
     activities: Activity[];
     profile_status: boolean;
@@ -118,7 +127,7 @@ export default function Dashboard({
                 {/* Section 2: Secondary Stats & Activities */}
                 <div className="grid grid-cols-1 gap-6 lg:grid-cols-12">
                     {/* Log Kegiatan (activity_logs) */}
-                    <div className="flex flex-col overflow-hidden rounded-[24px] border border-border bg-card shadow-sm lg:col-span-8">
+                    <div className="flex flex-col overflow-hidden rounded-3xl border border-border bg-card shadow-sm lg:col-span-8">
                         <div className="flex items-center justify-between border-b border-border bg-muted/20 p-5">
                             <div className="flex items-center gap-3">
                                 <TrendingUp className="h-5 w-5 text-primary" />
@@ -178,14 +187,33 @@ export default function Dashboard({
                             <div className="space-y-3">
                                 <ProgressItem
                                     label="Koleksi"
-                                    count={stats.total_dokumen}
+                                    count={stats.doc_by_category?.koleksi || 0}
                                 />
-                                <ProgressItem label="Sarpras" count={0} />
+                                <ProgressItem
+                                    label="Sarpras"
+                                    count={stats.doc_by_category?.sarpras || 0}
+                                />
                                 <ProgressItem
                                     label="Layanan"
-                                    count={stats.total_kegiatan}
+                                    count={stats.doc_by_category?.layanan || 0}
                                 />
-                                <ProgressItem label="Tenaga" count={0} />
+                                <ProgressItem
+                                    label="Tenaga"
+                                    count={stats.doc_by_category?.tenaga || 0}
+                                />
+                                <ProgressItem
+                                    label="Dampak"
+                                    count={stats.doc_by_category?.dampak || 0}
+                                />
+                                <ProgressItem
+                                    label="Tata Kelola"
+                                    count={
+                                        (stats.doc_by_category
+                                            ?.penyelenggaraan || 0) +
+                                        (stats.doc_by_category?.pengelolaan ||
+                                            0)
+                                    }
+                                />
                             </div>
                             <Link
                                 href="/documents"

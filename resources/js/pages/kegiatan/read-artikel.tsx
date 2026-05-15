@@ -83,7 +83,7 @@ const ReadArtikel: React.FC<Props> = ({ activity }) => {
                             }}
                         />
                     ) : (
-                        <div className="rounded-[2rem] border-2 border-dashed border-slate-100 py-24 text-center">
+                        <div className="rounded-4xl border-2 border-dashed border-slate-100 py-24 text-center">
                             <p className="font-black tracking-widest text-slate-300 uppercase italic">
                                 Narasi artikel sedang dalam proses penyusunan...
                             </p>

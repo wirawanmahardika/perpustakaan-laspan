@@ -39,8 +39,7 @@ export default function StatsIndex({ stats }: { stats: any[] }) {
                         Statistik Perkembangan
                     </h1>
                     <p className="text-[10px] font-bold tracking-widest text-muted-foreground uppercase">
-                        Data Pertumbuhan Perpustakaan 3 Tahun Terakhir [cite:
-                        53, 55, 59]
+                        Data Pertumbuhan Perpustakaan 3 Tahun Terakhir
                     </p>
                 </div>
 
@@ -98,14 +97,14 @@ export default function StatsIndex({ stats }: { stats: any[] }) {
                     className="space-y-6 rounded-3xl border border-border bg-card p-8"
                 >
                     <h2 className="border-l-4 border-primary pl-3 text-sm font-black uppercase italic">
-                        Input Data Instrumen Penilaian [cite: 47]
+                        Input Data Instrumen Penilaian
                     </h2>
 
                     <div className="grid grid-cols-1 gap-8 md:grid-cols-2">
                         {/* Kolom Kiri: Anggota & Kunjungan */}
                         <div className="space-y-4">
                             <h3 className="text-[10px] font-black text-primary uppercase">
-                                Data Pemanfaatan & Anggota [cite: 59, 88]
+                                Data Pemanfaatan & Anggota
                             </h3>
                             <div className="grid grid-cols-2 gap-4">
                                 <FormInput
@@ -152,7 +151,7 @@ export default function StatsIndex({ stats }: { stats: any[] }) {
                         {/* Kolom Kanan: Detail Koleksi */}
                         <div className="space-y-4">
                             <h3 className="text-[10px] font-black text-primary uppercase">
-                                Detail Keberagaman Koleksi [cite: 51, 52]
+                                Detail Keberagaman Koleksi
                             </h3>
                             <div className="grid grid-cols-2 gap-4">
                                 <FormInput

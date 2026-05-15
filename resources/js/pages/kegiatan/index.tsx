@@ -74,7 +74,7 @@ export default function KegiatanIndex({ kegiatan }: { kegiatan: Kegiatan[] }) {
             <Head title="Manajemen Kegiatan" />
             <div className="flex flex-col gap-6 p-4 md:p-8">
                 {notification && (
-                    <div className="fixed top-20 right-4 z-[100] w-72 rounded-2xl border border-emerald-500/20 bg-emerald-500/10 p-4 text-emerald-600 shadow-2xl backdrop-blur-md">
+                    <div className="fixed top-20 right-4 z-100 w-72 rounded-2xl border border-emerald-500/20 bg-emerald-500/10 p-4 text-emerald-600 shadow-2xl backdrop-blur-md">
                         <span className="text-[10px] font-black uppercase">
                             {notification.text}
                         </span>
@@ -333,7 +333,7 @@ function ActionDropdown({ onEdit, onDelete }: any) {
                 <MoreVertical className="mx-auto h-4 w-4" />
             </DropdownMenu.Trigger>
             <DropdownMenu.Portal>
-                <DropdownMenu.Content className="z-[110] min-w-[140px] rounded-xl border bg-popover p-1 shadow-xl">
+                <DropdownMenu.Content className="z-110 min-w-35 rounded-xl border bg-popover p-1 shadow-xl">
                     <DropdownMenu.Item
                         onClick={onEdit}
                         className="flex cursor-pointer items-center gap-2 rounded-lg px-3 py-2 text-[10px] font-bold uppercase outline-none hover:bg-primary/10"

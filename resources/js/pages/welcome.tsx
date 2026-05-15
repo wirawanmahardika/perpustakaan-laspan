@@ -103,12 +103,14 @@ const Welcome: React.FC<Props> = ({
             <nav className="sticky top-0 z-50 border-b border-slate-200/60 bg-white/70 backdrop-blur-xl">
                 <div className="mx-auto max-w-7xl px-6">
                     <div className="flex h-20 items-center justify-between">
-                        <div className="flex items-center gap-4">
-                            <div className="flex h-12 w-12 items-center justify-center rounded-2xl bg-blue-600 shadow-lg shadow-blue-200">
-                                <BookOpen className="h-6 w-6 text-white" />
-                            </div>
+                        <div className="flex items-center gap-3">
+                            <img
+                                src="/logo-noname.png"
+                                className="w-12 text-white"
+                                alt="logo"
+                            />
                             <div className="flex flex-col">
-                                <span className="text-xl leading-none font-[1000] tracking-tighter text-slate-900 uppercase">
+                                <span className="leading-none font-[1000] tracking-tighter text-slate-900 uppercase sm:text-xl">
                                     {profile?.nama_perpustakaan ||
                                         'Sistem Perpustakaan'}
                                 </span>
@@ -232,7 +234,7 @@ const Welcome: React.FC<Props> = ({
                         </p>
 
                         {/* Perkecil max-width pada mobile agar tidak menekan padding */}
-                        <div className="relative mx-auto aspect-square max-w-[220px] md:max-w-[280px]">
+                        <div className="relative mx-auto aspect-square max-w-55 md:max-w-70">
                             <Doughnut
                                 data={collectionData}
                                 options={{
@@ -326,7 +328,7 @@ const Welcome: React.FC<Props> = ({
                     <div className="grid gap-12 lg:grid-cols-12 lg:gap-16">
                         {/* Log Agenda Section */}
                         <div className="lg:col-span-8">
-                            <div className="mb-8 flex items-end justify-between border-b-[4px] border-slate-950 pb-4 md:mb-12 md:border-b-[6px] md:pb-6">
+                            <div className="mb-8 flex items-end justify-between border-b-4 border-slate-950 pb-4 md:mb-12 md:border-b-[6px] md:pb-6">
                                 <div>
                                     <h2 className="text-3xl leading-none font-[1000] tracking-tighter uppercase italic md:text-4xl">
                                         Log Agenda
@@ -353,7 +355,7 @@ const Welcome: React.FC<Props> = ({
                                     return (
                                         <div
                                             key={act.id}
-                                            className="group relative flex flex-col rounded-[2rem] border border-slate-200 bg-white p-6 transition-all hover:border-blue-600 hover:shadow-2xl hover:shadow-blue-100 md:rounded-[2.5rem] md:p-10"
+                                            className="group relative flex flex-col rounded-4xl border border-slate-200 bg-white p-6 transition-all hover:border-blue-600 hover:shadow-2xl hover:shadow-blue-100 md:rounded-[2.5rem] md:p-10"
                                         >
                                             <div className="mb-4 flex items-center justify-between md:mb-6">
                                                 <span className="rounded-full bg-blue-50 px-3 py-1 text-[8px] font-black tracking-widest text-blue-600 uppercase md:px-4 md:py-1.5 md:text-[9px]">
@@ -402,7 +404,7 @@ const Welcome: React.FC<Props> = ({
                         {/* Sidebar */}
                         <aside className="space-y-6 md:space-y-8 lg:col-span-4">
                             {/* Info Perpus - Penyesuaian Padding Mobile */}
-                            <div className="rounded-[2rem] bg-slate-950 p-8 text-white shadow-2xl md:rounded-[3rem] md:p-12">
+                            <div className="rounded-4xl bg-slate-950 p-8 text-white shadow-2xl md:rounded-[3rem] md:p-12">
                                 <h3 className="mb-8 text-[9px] font-black tracking-[0.3em] text-blue-400 uppercase opacity-60 md:mb-10 md:text-[10px] md:tracking-[0.4em]">
                                     IDENTITAS UNIT
                                 </h3>
@@ -451,7 +453,7 @@ const Welcome: React.FC<Props> = ({
                             </div>
 
                             {/* Demografi Card */}
-                            <div className="rounded-[2rem] border border-slate-200 bg-white p-8 shadow-sm md:p-10">
+                            <div className="rounded-4xl border border-slate-200 bg-white p-8 shadow-sm md:p-10">
                                 <h4 className="mb-6 text-[9px] font-black tracking-widest text-slate-400 uppercase md:text-[10px]">
                                     Kondisi Wilayah
                                 </h4>
@@ -503,7 +505,7 @@ const Welcome: React.FC<Props> = ({
                                 variants={itemVariants}
                                 whileHover={{ y: -5 }}
                                 onClick={() => setSelectedDoc(doc)}
-                                className="group cursor-pointer overflow-hidden rounded-[2rem] border border-slate-200 bg-white p-4 shadow-sm transition-all hover:border-blue-600"
+                                className="group cursor-pointer overflow-hidden rounded-4xl border border-slate-200 bg-white p-4 shadow-sm transition-all hover:border-blue-600"
                             >
                                 <div className="relative mb-4 flex aspect-square items-center justify-center overflow-hidden rounded-2xl bg-slate-100 text-slate-400">
                                     {doc.file_path.match(
@@ -529,12 +531,18 @@ const Welcome: React.FC<Props> = ({
                                     {doc.keterangan}
                                 </p>
                                 <span
-                                    className={`mb-2 inline-block rounded-full px-2 py-0.5 text-[8px] font-black ${
+                                    className={`mb-2 inline-block rounded-full px-2 py-0.5 text-[8px] font-black uppercase ${
                                         doc.kategori === 'inovasi'
                                             ? 'bg-amber-100 text-amber-700'
-                                            : doc.kategori === 'layanan'
-                                              ? 'bg-blue-100 text-blue-700'
-                                              : 'bg-slate-100 text-slate-700'
+                                            : doc.kategori === 'dampak'
+                                              ? 'bg-purple-100 text-purple-700'
+                                              : doc.kategori === 'layanan'
+                                                ? 'bg-blue-100 text-blue-700'
+                                                : doc.kategori === 'tenaga'
+                                                  ? 'bg-rose-100 text-rose-700'
+                                                  : doc.kategori === 'sarpras'
+                                                    ? 'bg-indigo-100 text-indigo-700'
+                                                    : 'bg-slate-100 text-slate-700'
                                     }`}
                                 >
                                     {doc.kategori.toUpperCase()}
@@ -569,7 +577,7 @@ const Welcome: React.FC<Props> = ({
                         initial={{ opacity: 0 }}
                         animate={{ opacity: 1 }}
                         exit={{ opacity: 0 }}
-                        className="fixed inset-0 z-[100] flex items-center justify-center bg-slate-950/90 p-6 backdrop-blur-md"
+                        className="fixed inset-0 z-100 flex items-center justify-center bg-slate-950/90 p-6 backdrop-blur-md"
                     >
                         <motion.div
                             initial={{ scale: 0.9, opacity: 0 }}
@@ -632,8 +640,8 @@ const Welcome: React.FC<Props> = ({
             <footer className="bg-slate-950 py-20 text-white">
                 <div className="mx-auto flex max-w-7xl flex-col items-center justify-between gap-8 px-6 md:flex-row">
                     <div className="flex items-center gap-4">
-                        <div className="flex h-10 w-10 items-center justify-center rounded-lg bg-blue-600">
-                            <BookOpen size={20} />
+                        <div className="flex h-10 w-10 items-center justify-center rounded-lg">
+                            <img src="/logo-noname.png" alt="logo" sizes="20" />
                         </div>
                         <span className="font-[1000] tracking-tighter uppercase">
                             {profile?.nama_perpustakaan}
@@ -651,7 +659,7 @@ const Welcome: React.FC<Props> = ({
 
 // Sub-components dengan Styling Padat
 const StatBox = ({ icon, label, value }: any) => (
-    <div className="group flex items-center gap-3 rounded-[1.5rem] border border-slate-200 bg-white p-4 shadow-sm transition-all hover:border-blue-600/30 md:gap-5 md:rounded-[2rem] md:p-8">
+    <div className="group flex items-center gap-3 rounded-3xl border border-slate-200 bg-white p-4 shadow-sm transition-all hover:border-blue-600/30 md:gap-5 md:rounded-4xl md:p-8">
         {/* Kontainer Icon yang Responsif */}
         <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl bg-slate-50 text-lg transition-colors group-hover:bg-blue-50 md:h-14 md:w-14 md:rounded-2xl md:text-2xl">
             {/* Solusi Error: Gunakan div pembungkus atau casting icon ke ReactElement dengan className */}

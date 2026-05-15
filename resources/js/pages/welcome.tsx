@@ -138,7 +138,7 @@ const Welcome: React.FC<Props> = ({
                         <Activity className="h-4 w-4 animate-pulse" />{' '}
                         Monitoring Akreditasi 2026
                     </div>
-                    <h1 className="mx-auto mb-10 max-w-5xl text-4xl font-[1000] tracking-[-0.04em] text-slate-900 sm:text-6xl lg:text-[10rem] lg:leading-[0.85]">
+                    <h1 className="mx-auto mb-10 max-w-5xl text-4xl font-[1000] tracking-[-0.04em] text-slate-900 sm:text-7xl lg:text-9xl lg:leading-[0.85]">
                         {profile?.nama_perpustakaan || 'DIGITAL LIBRARY'}
                     </h1>
                 </motion.div>

@@ -34,8 +34,6 @@ export default function KegiatanIndex({ kegiatan }: { kegiatan: Kegiatan[] }) {
         pihak_terlibat: '',
     });
 
-    console.log(kegiatan);
-
     const openEditModal = (item: Kegiatan) => {
         setEditingItem(item);
         setData({

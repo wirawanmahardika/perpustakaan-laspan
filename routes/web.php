@@ -12,6 +12,8 @@ use App\Http\Controllers\YearlyStatController;
 use Illuminate\Support\Facades\Route;
 
 Route::get('/', [PublicController::class, "index"])->name('home');
+Route::get('/aktivitas', [PublicController::class, 'aktivitas'])->name("aktivitas");
+Route::get('/kegiatan/{id}/read/artikel', [ActivityLogController::class, 'readArtikel'])->name('readArtikel');
 
 Route::middleware(['auth', 'verified'])->group(function () {
     Route::get('/dashboard', [DashboardController::class, "index"])->name('admin.dashboard');
@@ -28,6 +30,8 @@ Route::middleware(['auth', 'verified'])->group(function () {
     Route::match(['post', 'put'], '/laporan/{id?}', [LaporanController::class, "tambahAtauEditLaporan"])->name('admin.laporan-store-or-update');
 
     Route::get('/kegiatan', [ActivityLogController::class, 'index'])->name('admin.kegiatan');
+    Route::get('/kegiatan/{id}/artikel', [ActivityLogController::class, 'artikelEditor'])->name('kegiatan.artikel-editor');
+    Route::put('/kegiatan/{id}/artikel', [ActivityLogController::class, 'artikelUpdate'])->name('kegiatan.artikel-edit');
     Route::post('/kegiatan', [ActivityLogController::class, 'store'])->name('kegiatan.store');
     Route::put('/kegiatan/{id}', [ActivityLogController::class, 'update'])->name('kegiatan.update');
     Route::delete('/kegiatan/{id}', [ActivityLogController::class, 'destroy'])->name('kegiatan.destroy');

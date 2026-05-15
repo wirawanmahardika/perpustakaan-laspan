@@ -53,6 +53,7 @@ export interface Kegiatan {
     deskripsi: string;
     testimoni?: string;
     pihak_terlibat?: string;
+    artikel?: string;
     created_at?: string;
 }
 

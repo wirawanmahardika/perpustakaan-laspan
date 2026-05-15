@@ -18,11 +18,6 @@ class Kegiatan extends Model
         return $this->belongsTo(ProfilPerpus::class, 'profil_perpus_id');
     }
 
-    public function laporan()
-    {
-        return $this->hasOne(Laporan::class);
-    }
-
     public function buktiDokumen()
     {
         return $this->morphMany(BuktiDokumen::class, 'documentable');

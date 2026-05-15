@@ -22,8 +22,6 @@ export default function Login({
     canResetPassword,
     canRegister,
 }: Props) {
-    console.log(status);
-
     return (
         <>
             <Head title="Log in" />

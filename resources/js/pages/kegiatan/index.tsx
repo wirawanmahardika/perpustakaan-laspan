@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { Head, router, useForm } from '@inertiajs/react';
+import { Head, Link, router, useForm } from '@inertiajs/react';
 import {
     Calendar,
     Plus,
@@ -101,6 +101,7 @@ export default function KegiatanIndex({ kegiatan }: { kegiatan: Kegiatan[] }) {
                                 <th className="p-5">Kegiatan</th>
                                 <th className="p-5">Waktu</th>
                                 <th className="p-5">Pihak Terlibat</th>
+                                <th className="p-5">Artikel</th>
                                 <th className="p-5 text-right">Opsi</th>
                             </tr>
                         </thead>
@@ -137,6 +138,29 @@ export default function KegiatanIndex({ kegiatan }: { kegiatan: Kegiatan[] }) {
                                     </td>
                                     <td className="p-5 text-xs text-muted-foreground">
                                         {item.pihak_terlibat || '-'}
+                                    </td>
+                                    <td className="p-5 text-xs text-muted-foreground">
+                                        {item.artikel ? (
+                                            <Link
+                                                href={`/kegiatan/${item.id}/artikel`}
+                                                className="group flex items-center gap-2 text-[10px] font-black tracking-widest text-emerald-600 uppercase transition-all hover:text-emerald-700"
+                                            >
+                                                <div className="flex h-7 w-7 items-center justify-center rounded-lg bg-emerald-50 transition-colors group-hover:bg-emerald-100">
+                                                    <Edit3 className="h-3 w-3" />
+                                                </div>
+                                                EDIT ARTIKEL
+                                            </Link>
+                                        ) : (
+                                            <Link
+                                                href={`/kegiatan/${item.id}/artikel`}
+                                                className="group flex items-center gap-2 text-[10px] font-black tracking-widest text-blue-600 uppercase transition-all hover:text-blue-700"
+                                            >
+                                                <div className="flex h-7 w-7 items-center justify-center rounded-lg bg-blue-50 transition-colors group-hover:bg-blue-100">
+                                                    <Plus className="h-3 w-3" />
+                                                </div>
+                                                TULIS ARTIKEL
+                                            </Link>
+                                        )}
                                     </td>
                                     <td className="p-5 text-right">
                                         <ActionDropdown

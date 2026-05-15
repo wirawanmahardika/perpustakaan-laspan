@@ -14,6 +14,7 @@ import {
     ExternalLink,
     FileText,
     X,
+    ArrowRight,
 } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
 import {
@@ -324,7 +325,7 @@ const Welcome: React.FC<Props> = ({
                     <div className="grid gap-16 lg:grid-cols-12">
                         {/* Log Agenda Section */}
                         <div className="lg:col-span-8">
-                            <div className="mb-12 flex items-center justify-between border-b-[6px] border-slate-950 pb-6">
+                            <div className="mb-12 flex items-end justify-between border-b-[6px] border-slate-950 pb-6">
                                 <div>
                                     <h2 className="text-4xl leading-none font-[1000] tracking-tighter uppercase italic">
                                         Log Agenda
@@ -333,39 +334,71 @@ const Welcome: React.FC<Props> = ({
                                         Arsip Kegiatan & Dokumentasi
                                     </p>
                                 </div>
+                                {/* TOMBOL DISINI */}
+                                <Link
+                                    href="/aktivitas"
+                                    className="group flex items-center gap-2 rounded-full border-2 border-slate-950 px-5 py-2 text-[10px] font-black tracking-widest uppercase transition-all hover:bg-slate-950 hover:text-white"
+                                >
+                                    Lihat Semua{' '}
+                                    <ArrowRight className="h-3 w-3 transition-transform group-hover:translate-x-1" />
+                                </Link>
                             </div>
 
                             <div className="grid gap-8 sm:grid-cols-2">
-                                {activities.map((act) => (
-                                    <div
-                                        key={act.id}
-                                        className="group relative flex flex-col rounded-[2.5rem] border border-slate-200 bg-white p-10 transition-all hover:border-blue-600 hover:shadow-2xl hover:shadow-blue-100"
-                                    >
-                                        <div className="mb-6 flex items-center justify-between">
-                                            <span className="rounded-full bg-blue-50 px-4 py-1.5 text-[9px] font-black tracking-widest text-blue-600 uppercase">
-                                                {act.tipe}
-                                            </span>
-                                            <span className="text-[10px] font-bold text-slate-400">
-                                                {act.tanggal}
-                                            </span>
-                                        </div>
-                                        <h3 className="mb-5 text-2xl font-[1000] tracking-tight text-slate-950 uppercase transition-colors group-hover:text-blue-600">
-                                            {act.nama_kegiatan}
-                                        </h3>
-                                        <p className="mb-10 line-clamp-4 text-sm leading-relaxed font-medium text-slate-500 italic">
-                                            "{act.deskripsi}"
-                                        </p>
-                                        <div className="mt-auto flex items-center justify-between border-t border-slate-100 pt-8">
-                                            <p className="text-[10px] font-black text-slate-400 uppercase">
-                                                Pihak:{' '}
-                                                {act.pihak_terlibat || 'Lokal'}
+                                {activities.map((act) => {
+                                    const hasArticle =
+                                        act.artikel &&
+                                        act.artikel.trim() !== '';
+
+                                    return (
+                                        <div
+                                            key={act.id}
+                                            className="group relative flex flex-col rounded-[2.5rem] border border-slate-200 bg-white p-10 transition-all hover:border-blue-600 hover:shadow-2xl hover:shadow-blue-100"
+                                        >
+                                            <div className="mb-6 flex items-center justify-between">
+                                                <span className="rounded-full bg-blue-50 px-4 py-1.5 text-[9px] font-black tracking-widest text-blue-600 uppercase">
+                                                    {act.tipe}
+                                                </span>
+                                                <span className="text-[10px] font-bold text-slate-400">
+                                                    {act.tanggal}
+                                                </span>
+                                            </div>
+
+                                            <h3 className="mb-5 text-2xl font-[1000] tracking-tight text-slate-950 uppercase italic transition-colors group-hover:text-blue-600">
+                                                {act.nama_kegiatan}
+                                            </h3>
+
+                                            <p className="mb-10 line-clamp-4 text-sm leading-relaxed font-medium text-slate-500 italic">
+                                                "{act.deskripsi}"
                                             </p>
-                                            {/* <div className="flex h-10 w-10 items-center justify-center rounded-full bg-slate-950 text-white transition-all group-hover:scale-110 group-hover:bg-blue-600">
-                                                <ArrowRight className="h-5 w-5" />
-                                            </div> */}
+
+                                            <div className="mt-auto flex items-center justify-between border-t border-slate-100 pt-8">
+                                                <div className="flex flex-col">
+                                                    <p className="text-[10px] font-black text-slate-400 uppercase">
+                                                        Pihak:{' '}
+                                                        {act.pihak_terlibat ||
+                                                            'Lokal'}
+                                                    </p>
+                                                </div>
+
+                                                {/* LOGIKA TOMBOL STRATEGIS */}
+                                                {hasArticle ? (
+                                                    <Link
+                                                        href={`/kegiatan/${act.id}/read/artikel`}
+                                                        className="flex items-center gap-3 rounded-full bg-slate-950 px-6 py-3 text-[9px] font-black tracking-widest text-white uppercase shadow-lg shadow-slate-200 transition-all hover:scale-105 hover:bg-blue-600"
+                                                    >
+                                                        Baca Narasi{' '}
+                                                        <ArrowRight className="h-3 w-3" />
+                                                    </Link>
+                                                ) : (
+                                                    <div className="flex items-center gap-2 rounded-full border border-slate-100 bg-slate-50 px-6 py-3 text-[9px] font-black tracking-widest text-slate-400 uppercase">
+                                                        Agenda Selesai
+                                                    </div>
+                                                )}
+                                            </div>
                                         </div>
-                                    </div>
-                                ))}
+                                    );
+                                })}
                             </div>
                         </div>
 

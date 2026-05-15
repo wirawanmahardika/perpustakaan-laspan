@@ -86,6 +86,7 @@ return new class extends Migration
             $table->text('deskripsi');
             $table->text('testimoni')->nullable();
             $table->string('pihak_terlibat')->nullable();
+            $table->longText('artikel')->nullable();
             $table->timestamps();
         });
     }

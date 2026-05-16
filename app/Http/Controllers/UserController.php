@@ -67,10 +67,14 @@ class UserController extends Controller
     /**
      * Menghapus petugas.
      */
-    public function destroy(User $user)
+    public function destroy(Request $request, User $user)
     {
         if ($user->role === "admin") {
-            return Redirect::back()->with('error', 'Anda tidak dapat menghapus akun Anda sendiri.');
+            return Redirect::back()->with('error', 'Anda tidak dapat menghapus akun admin');
+        }
+
+        if ($request->user()->role === "petugas") {
+            return Redirect::back()->with('error', 'Anda tidak memiliki otoritas');
         }
         $user->delete(null);
         return Redirect::back()->with('message', 'Petugas berhasil dihapus.');

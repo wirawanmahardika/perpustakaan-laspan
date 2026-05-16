@@ -25,10 +25,6 @@ Route::middleware(['auth', 'verified'])->group(function () {
     Route::get('/profile/edit', [PerpusProfileController::class, "editView"])->name('admin.profile-edit');
     Route::put('/profile', [PerpusProfileController::class, "editProfile"])->name('admin.profile-edit-put');
 
-    Route::get('/laporan/create/{kegiatan}', [LaporanController::class, "laporanCreateView"])->name('admin.laporan-create');
-    Route::get('/laporan/edit/{laporan}', [LaporanController::class, "laporanEditView"])->name('admin.laporan-edit');
-    Route::match(['post', 'put'], '/laporan/{id?}', [LaporanController::class, "tambahAtauEditLaporan"])->name('admin.laporan-store-or-update');
-
     Route::get('/kegiatan', [ActivityLogController::class, 'index'])->name('admin.kegiatan');
     Route::get('/kegiatan/{id}/artikel', [ActivityLogController::class, 'artikelEditor'])->name('kegiatan.artikel-editor');
     Route::put('/kegiatan/{id}/artikel', [ActivityLogController::class, 'artikelUpdate'])->name('kegiatan.artikel-edit');

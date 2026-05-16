@@ -33,8 +33,6 @@ class ActivityLogController extends Controller
 
     public function artikelUpdate(Request $request, int $id)
     {
-
-        // 1. Validasi dengan pesan kustom (opsional)
         $request->validate([
             "artikel" => "required|string|min:10",
         ], [
@@ -42,11 +40,7 @@ class ActivityLogController extends Controller
             "artikel.min" => "Isi artikel terlalu pendek untuk standar akreditasi."
         ]);
 
-        // 2. Update menggunakan method update() yang lebih ringkas
-        $activity = ActivityLog::where("id", "=", $id, null)->update(['artikel' => $request->artikel]);
-
-        // 3. Kembalikan Redirect (Standar Inertia)
-        // back() akan memicu onSuccess di frontend dan memperbarui props data
+        ActivityLog::where("id", "=", $id, null)->update(['artikel' => $request->artikel]);
         return redirect()->back()->with('message', 'Artikel berhasil diperbarui secara permanen.');
     }
 

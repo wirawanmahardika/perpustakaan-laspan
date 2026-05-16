@@ -159,9 +159,10 @@ export default function DocumentIndex({
                                 </p>
                             </div>
                             <button
-                                onClick={() =>
-                                    router.delete('/documents/' + doc.id)
-                                }
+                                onClick={(e) => {
+                                    e.stopPropagation();
+                                    router.delete('/documents/' + doc.id);
+                                }}
                                 className="absolute top-2 right-2 rounded-lg bg-red-600 p-2 opacity-0 transition-opacity group-hover:opacity-100"
                             >
                                 <Trash className="size-5" />

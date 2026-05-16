@@ -1,6 +1,7 @@
 import React from 'react';
 import { Head, Link, router } from '@inertiajs/react';
 import { ArrowLeft, Search, ArrowRight } from 'lucide-react';
+import { formatHumanDate } from '@/lib/utils';
 
 interface Props {
     activities: {
@@ -124,7 +125,7 @@ const Index: React.FC<Props> = ({ activities, filters }) => {
                                             {act.tipe}
                                         </span>
                                         <span className="text-[10px] font-bold text-slate-400">
-                                            {act.tanggal}
+                                            {formatHumanDate(act.tanggal)}
                                         </span>
                                     </div>
 

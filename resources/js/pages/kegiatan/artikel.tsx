@@ -19,6 +19,7 @@ import StarterKit from '@tiptap/starter-kit';
 import Image from '@tiptap/extension-image';
 import { MenuBar } from '@/components/editor-menu-bar';
 import { Kegiatan } from '@/types/my-type/kegiatan';
+import { formatHumanDate } from '@/lib/utils';
 
 interface ArtikelEditorProps {
     kegiatan: Kegiatan;
@@ -110,12 +111,7 @@ export default function ArtikelEditor({ kegiatan }: ArtikelEditorProps) {
                         <div className="flex flex-wrap items-center gap-2 text-[10px] font-bold tracking-tight text-muted-foreground uppercase">
                             <span className="flex items-center gap-1.5 rounded-lg bg-primary/10 px-2 py-1 text-primary">
                                 <Calendar className="h-3 w-3" />
-                                {new Date(kegiatan.tanggal).toLocaleDateString(
-                                    'id-ID',
-                                    {
-                                        dateStyle: 'medium',
-                                    },
-                                )}
+                                {formatHumanDate(kegiatan.tanggal)}
                             </span>
                             <span className="hidden text-border md:block">
                                 •

@@ -3,6 +3,7 @@ import { Head, Link } from '@inertiajs/react';
 import { ArrowLeft, Calendar, User, Share2, Tag, BookOpen } from 'lucide-react';
 import { motion } from 'framer-motion';
 import { Kegiatan } from '@/types/my-type/kegiatan';
+import { formatHumanDate } from '@/lib/utils';
 
 interface Props {
     activity: Kegiatan;
@@ -56,7 +57,7 @@ const ReadArtikel: React.FC<Props> = ({ activity }) => {
                         <MetaInfo
                             icon={<Calendar size={14} />}
                             label="Tanggal Pelaksanaan"
-                            value={activity.tanggal}
+                            value={formatHumanDate(activity.tanggal)}
                         />
                         <MetaInfo
                             icon={<User size={14} />}

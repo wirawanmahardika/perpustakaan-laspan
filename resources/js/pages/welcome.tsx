@@ -38,6 +38,7 @@ import { ProfilPerpus } from '@/types/my-type/profil-perpus';
 import { Stat } from '@/types/my-type/stat';
 import { Document } from '@/types/my-type/document';
 import { Kegiatan } from '@/types/my-type/kegiatan';
+import { formatHumanDate } from '@/lib/utils';
 
 interface Props {
     profile: ProfilPerpus;
@@ -355,7 +356,9 @@ const Welcome: React.FC<Props> = ({
                                                     {act.tipe}
                                                 </span>
                                                 <span className="text-[9px] font-bold text-slate-400 md:text-[10px]">
-                                                    {act.tanggal}
+                                                    {formatHumanDate(
+                                                        act.tanggal,
+                                                    )}
                                                 </span>
                                             </div>
 

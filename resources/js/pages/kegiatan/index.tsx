@@ -15,6 +15,7 @@ import {
 import * as Dialog from '@radix-ui/react-dialog';
 import * as DropdownMenu from '@radix-ui/react-dropdown-menu';
 import { Kegiatan } from '@/types/my-type/kegiatan';
+import { formatHumanDate } from '@/lib/utils';
 
 export default function KegiatanIndex({ kegiatan }: { kegiatan: Kegiatan[] }) {
     const [isModalOpen, setIsModalOpen] = useState(false);
@@ -134,7 +135,7 @@ export default function KegiatanIndex({ kegiatan }: { kegiatan: Kegiatan[] }) {
                                     </td>
                                     <td className="p-5 text-[10px] font-bold uppercase">
                                         <Calendar className="mr-2 inline h-3 w-3" />{' '}
-                                        {item.tanggal}
+                                        {formatHumanDate(item.tanggal)}
                                     </td>
                                     <td className="p-5 text-xs text-muted-foreground">
                                         {item.pihak_terlibat || '-'}

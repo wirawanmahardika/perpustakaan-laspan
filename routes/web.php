@@ -3,10 +3,9 @@
 use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\ActivityLogController;
 use App\Http\Controllers\DocumentController;
-use App\Http\Controllers\KegiatanController;
-use App\Http\Controllers\LaporanController;
 use App\Http\Controllers\PerpusProfileController;
 use App\Http\Controllers\PublicController;
+use App\Http\Controllers\SertifikatUserController;
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\YearlyStatController;
 use Illuminate\Support\Facades\Route;
@@ -21,6 +20,10 @@ Route::middleware(['auth', 'verified'])->group(function () {
     Route::post('/users', [UserController::class, 'store'])->name('admin.users.store');
     Route::put('/users/{user}', [UserController::class, 'update'])->name('admin.users.update');
     Route::delete('/users/{user}', [UserController::class, 'destroy'])->name('admin.users.destroy');
+
+    Route::get('/users/{user}/sertifikat', [SertifikatUserController::class, 'createSertifikat'])->name('users.sertifikat.create');
+    Route::post('/users/{user}/sertifikat', [SertifikatUserController::class, 'storeSertifikat'])->name('users.sertifikat.store');
+    Route::delete('/sertifikat/{sertifikat}', [SertifikatUserController::class, 'destroySertifikat'])->name('sertifikat.destroy');
 
     Route::get('/profile/edit', [PerpusProfileController::class, "editView"])->name('admin.profile-edit');
     Route::put('/profile', [PerpusProfileController::class, "editProfile"])->name('admin.profile-edit-put');

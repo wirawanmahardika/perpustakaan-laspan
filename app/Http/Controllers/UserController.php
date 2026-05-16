@@ -10,9 +10,6 @@ use Illuminate\Validation\Rules;
 
 class UserController extends Controller
 {
-    /**
-     * Menampilkan halaman monitoring user.
-     */
     public function index()
     {
         return inertia('users/index', [
@@ -20,9 +17,6 @@ class UserController extends Controller
         ]);
     }
 
-    /**
-     * Menyimpan petugas baru.
-     */
     public function store(Request $request)
     {
         $validated = $request->validate([
@@ -46,9 +40,6 @@ class UserController extends Controller
         return Redirect::back()->with('message', 'Petugas berhasil ditambahkan.');
     }
 
-    /**
-     * Memperbarui data petugas.
-     */
     public function update(Request $request, User $user)
     {
         $validated = $request->validate([
@@ -60,7 +51,6 @@ class UserController extends Controller
         ]);
 
         $user->update($validated);
-
         return Redirect::back()->with('message', 'Data petugas berhasil diperbarui.');
     }
 

@@ -186,6 +186,11 @@ export default function UserIndex({ users }: { users: User[] }) {
                                         <ActionDropdown
                                             onEdit={() => openEditModal(user)}
                                             onDelete={() => deleteUser(user.id)}
+                                            onManageSertifikat={() => {
+                                                router.get(
+                                                    `/users/${user.id}/sertifikat`,
+                                                );
+                                            }}
                                         />
                                     </td>
                                 </tr>
@@ -358,8 +363,8 @@ function StatCard({ label, value, icon }: any) {
         </div>
     );
 }
-
-function ActionDropdown({ onEdit, onDelete }: any) {
+// UBAH bagian parameter untuk menerima properti onManageSertifikat
+function ActionDropdown({ onEdit, onDelete, onManageSertifikat }: any) {
     return (
         <DropdownMenu.Root>
             <DropdownMenu.Trigger className="h-8 w-8 rounded-lg bg-muted/50 transition-colors hover:bg-muted">
@@ -367,6 +372,16 @@ function ActionDropdown({ onEdit, onDelete }: any) {
             </DropdownMenu.Trigger>
             <DropdownMenu.Portal>
                 <DropdownMenu.Content className="z-110 min-w-35 animate-in rounded-xl border bg-popover p-1 shadow-xl duration-100 zoom-in-95 fade-in">
+                    {/* TOMBOL BARU YANG DITAMBAHKAN */}
+                    <DropdownMenu.Item
+                        onClick={onManageSertifikat}
+                        className="flex cursor-pointer items-center gap-2 rounded-lg px-3 py-2 text-[10px] font-bold text-emerald-600 uppercase outline-none hover:bg-primary/10"
+                    >
+                        <FileBadge className="h-3 w-3" /> Kelola Sertifikat
+                    </DropdownMenu.Item>
+
+                    <DropdownMenu.Separator className="my-1 h-px bg-muted" />
+
                     <DropdownMenu.Item
                         onClick={onEdit}
                         className="flex cursor-pointer items-center gap-2 rounded-lg px-3 py-2 text-[10px] font-bold uppercase outline-none hover:bg-primary/10"

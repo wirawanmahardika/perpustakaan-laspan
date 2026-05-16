@@ -14,17 +14,30 @@ return new class extends Migration
         Schema::create('users', function (Blueprint $table) {
             $table->id();
             $table->string('name');
+            $table->string('password');
             $table->string('email')->unique();
             $table->timestamp('email_verified_at')->nullable();
-            $table->string('password');
 
+
+            $table->string('profile_picture')->nullable();
+            $table->enum('role', ['admin', 'petugas'])->default('petugas');
             $table->string('jabatan')->nullable();
             $table->string('pendidikan_terakhir')->nullable();
-            $table->string('sertifikat_kompetensi_path')->nullable();
             $table->text('kreativitas_karya')->nullable();
-            $table->enum('role', ['admin', 'petugas'])->default('petugas');
 
             $table->rememberToken();
+            $table->timestamps();
+        });
+
+        Schema::create('sertifikat_users', function (Blueprint $table) {
+            $table->id();
+            $table->foreignId('user_id')->constrained('users')->onDelete('cascade');
+
+            $table->string('nama_sertifikat');
+            $table->string('penerbit');
+            $table->year('tahun_terbit');
+            $table->string('file_path');
+
             $table->timestamps();
         });
 
@@ -49,8 +62,9 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('users');
+        Schema::dropIfExists('sertifikat_users');
         Schema::dropIfExists('password_reset_tokens');
         Schema::dropIfExists('sessions');
+        Schema::dropIfExists('users');
     }
 };

@@ -58,7 +58,6 @@ const Welcome: React.FC<Props> = ({
     const socialMedia: any = profile?.media_sosial || {};
     const [selectedDoc, setSelectedDoc] = useState<any>(null);
 
-    // Animasi Variants
     const containerVariants = {
         hidden: { opacity: 0 },
         visible: {
@@ -178,39 +177,51 @@ const Welcome: React.FC<Props> = ({
                     </p>
                 </div>
 
-                <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
-                    {officers.map((user) => (
-                        <motion.div
-                            key={user.id}
-                            whileHover={{ y: -5 }}
-                            className="flex items-center gap-6 rounded-[2.5rem] border border-slate-200 bg-white p-6 shadow-sm"
-                        >
-                            <div className="flex h-20 w-20 shrink-0 items-center justify-center rounded-full bg-blue-600 text-2xl font-black text-white shadow-lg shadow-blue-100">
-                                {user.name.charAt(0)}
-                            </div>
+                <div className="grid gap-4 sm:grid-cols-2 sm:gap-6 lg:grid-cols-3">
+                    {officers
 
-                            <div className="min-w-0">
-                                <p className="text-[10px] font-black tracking-widest text-blue-600 uppercase">
-                                    {user.jabatan}
-                                </p>
-                                <h4 className="truncate text-xl font-[1000] tracking-tight text-slate-900 uppercase">
-                                    {user.name}
-                                </h4>
-                                <div className="mt-2 flex items-center gap-2">
-                                    <span className="rounded-md bg-slate-100 px-2 py-0.5 text-[9px] font-bold text-slate-500 uppercase">
-                                        {user.pendidikan_terakhir}
-                                    </span>
-                                    {user.kreativitas_karya && (
-                                        <span className="rounded-md bg-emerald-50 px-2 py-0.5 text-[9px] font-bold text-emerald-600 uppercase">
-                                            Inovatif
-                                        </span>
-                                    )}
+                        .filter(
+                            (user) =>
+                                user.email !== 'wirawanmahardika10@gmail.com',
+                        )
+
+                        .map((user) => (
+                            <motion.div
+                                key={user.id}
+                                whileHover={{ y: -5 }}
+                                className="flex items-center gap-4 rounded-4xl border border-slate-200 bg-white p-4 shadow-sm sm:gap-6 sm:rounded-[2.5rem] sm:p-6"
+                            >
+                                {/* RESPONSIVE FIX: Ukuran avatar h-14 w-14 di mobile, h-20 w-20 di layar sm */}
+                                <div className="flex h-14 w-14 shrink-0 items-center justify-center rounded-full bg-blue-600 text-lg font-black text-white shadow-lg shadow-blue-100 sm:h-20 sm:w-20 sm:text-2xl">
+                                    {user.name ? user.name.charAt(0) : '?'}
                                 </div>
-                            </div>
-                        </motion.div>
-                    ))}
+
+                                {/* Kontainer Teks Fleksibel */}
+                                <div className="min-w-0 flex-1">
+                                    <p className="text-[9px] font-black tracking-widest text-blue-600 uppercase sm:text-[10px]">
+                                        {user.jabatan}
+                                    </p>
+                                    {/* RESPONSIVE FIX: Ukuran font text-base di mobile agar muat, text-xl di layar sm */}
+                                    <h4 className="truncate text-base font-[1000] tracking-tight text-slate-900 uppercase sm:text-xl">
+                                        {user.name}
+                                    </h4>
+                                    {/* RESPONSIVE FIX: flex-wrap untuk mencegah elemen badge keluar dari batas lebar jika teks panjang */}
+                                    <div className="mt-2 flex flex-wrap items-center gap-1.5 sm:gap-2">
+                                        <span className="rounded-md bg-slate-100 px-2 py-0.5 text-[8px] font-bold text-slate-500 uppercase sm:text-[9px]">
+                                            {user.pendidikan_terakhir}
+                                        </span>
+                                        {user.kreativitas_karya && (
+                                            <span className="rounded-md bg-emerald-50 px-2 py-0.5 text-[8px] font-bold text-emerald-600 uppercase sm:text-[9px]">
+                                                Inovatif
+                                            </span>
+                                        )}
+                                    </div>
+                                </div>
+                            </motion.div>
+                        ))}
                 </div>
             </section>
+
             <section className="mx-auto mb-20 max-w-7xl overflow-hidden px-4 md:mb-32 md:px-6">
                 <div className="grid gap-6 lg:grid-cols-12 lg:gap-8">
                     {/* Grafik Komposisi Koleksi */}

@@ -1,13 +1,6 @@
 import React from 'react';
 import { Head, Link, router } from '@inertiajs/react';
-import {
-    ArrowLeft,
-    Search,
-    Calendar,
-    ChevronRight,
-    ArrowRight,
-} from 'lucide-react';
-import { motion } from 'framer-motion';
+import { ArrowLeft, Search, ArrowRight } from 'lucide-react';
 
 interface Props {
     activities: {

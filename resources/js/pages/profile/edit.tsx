@@ -1,6 +1,5 @@
 import { Head, useForm } from '@inertiajs/react';
 import * as Label from '@radix-ui/react-label';
-import { ProfilPerpus } from '@/types/library';
 import { useState } from 'react';
 import {
     Save,
@@ -23,6 +22,7 @@ import {
     Twitter,
     Link as LinkIcon,
 } from 'lucide-react';
+import { ProfilPerpus } from '@/types/my-type/profil-perpus';
 
 export default function EditProfile({ profile }: { profile: ProfilPerpus }) {
     const [message, setMessage] = useState<{

@@ -1,13 +1,7 @@
 import { useState } from 'react';
 import { Head, useForm, router } from '@inertiajs/react';
-import {
-    FileText,
-    Image as ImageIcon,
-    Trash,
-    TrashIcon,
-    X,
-} from 'lucide-react';
-import { Document } from '@/types/library';
+import { FileText, Trash } from 'lucide-react';
+import { Document } from '@/types/my-type/document';
 
 export default function DocumentIndex({
     documents,

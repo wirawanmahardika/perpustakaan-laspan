@@ -12,13 +12,13 @@ import {
     Loader2,
 } from 'lucide-react';
 import * as Label from '@radix-ui/react-label';
-import { Kegiatan } from '@/types/library';
 
 // Tiptap Imports
 import { useEditor, EditorContent } from '@tiptap/react';
 import StarterKit from '@tiptap/starter-kit';
 import Image from '@tiptap/extension-image';
 import { MenuBar } from '@/components/editor-menu-bar';
+import { Kegiatan } from '@/types/my-type/kegiatan';
 
 interface ArtikelEditorProps {
     kegiatan: Kegiatan;

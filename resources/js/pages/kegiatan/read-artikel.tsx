@@ -2,7 +2,7 @@ import React from 'react';
 import { Head, Link } from '@inertiajs/react';
 import { ArrowLeft, Calendar, User, Share2, Tag, BookOpen } from 'lucide-react';
 import { motion } from 'framer-motion';
-import { Kegiatan } from '@/types/library';
+import { Kegiatan } from '@/types/my-type/kegiatan';
 
 interface Props {
     activity: Kegiatan;

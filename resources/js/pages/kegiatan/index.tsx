@@ -14,7 +14,7 @@ import {
 } from 'lucide-react';
 import * as Dialog from '@radix-ui/react-dialog';
 import * as DropdownMenu from '@radix-ui/react-dropdown-menu';
-import { Kegiatan } from '@/types/library';
+import { Kegiatan } from '@/types/my-type/kegiatan';
 
 export default function KegiatanIndex({ kegiatan }: { kegiatan: Kegiatan[] }) {
     const [isModalOpen, setIsModalOpen] = useState(false);

@@ -3,7 +3,6 @@ import { Head, Link } from '@inertiajs/react';
 import {
     MapPin,
     Phone,
-    BookOpen,
     LogIn,
     Users,
     Activity,
@@ -30,27 +29,23 @@ import {
     ArcElement,
 } from 'chart.js';
 import { Doughnut } from 'react-chartjs-2';
+import { StatBox } from '@/components/my-components/stat-box';
+import { ContactItem } from '@/components/my-components/contact-item';
+import { SocialIcon } from '@/components/my-components/social-icon';
+import { LegendItem } from '@/components/my-components/legend-item';
+import { User } from '@/types';
+import { ProfilPerpus } from '@/types/my-type/profil-perpus';
+import { Stat } from '@/types/my-type/stat';
+import { Document } from '@/types/my-type/document';
+import { Kegiatan } from '@/types/my-type/kegiatan';
 
 interface Props {
-    profile: any;
-    activities: any[];
-    latest_stats?: any;
-    documents: any[];
-    officers: any[];
+    profile: ProfilPerpus;
+    activities: Kegiatan[];
+    latest_stats?: Stat;
+    documents: Document[];
+    officers: User[];
 }
-
-// Registrasi komponen Chart.js
-ChartJS.register(
-    CategoryScale,
-    LinearScale,
-    PointElement,
-    LineElement,
-    BarElement,
-    ArcElement,
-    Title,
-    Tooltip,
-    Legend,
-);
 
 const Welcome: React.FC<Props> = ({
     profile,
@@ -59,8 +54,7 @@ const Welcome: React.FC<Props> = ({
     documents,
     officers,
 }) => {
-    // Media sosial dari JSON profil_perpus
-    const socialMedia = profile?.media_sosial || {};
+    const socialMedia: any = profile?.media_sosial || {};
     const [selectedDoc, setSelectedDoc] = useState<any>(null);
 
     // Animasi Variants
@@ -190,7 +184,6 @@ const Welcome: React.FC<Props> = ({
                             whileHover={{ y: -5 }}
                             className="flex items-center gap-6 rounded-[2.5rem] border border-slate-200 bg-white p-6 shadow-sm"
                         >
-                            {/* Avatar Bulat / Inisial */}
                             <div className="flex h-20 w-20 shrink-0 items-center justify-center rounded-full bg-blue-600 text-2xl font-black text-white shadow-lg shadow-blue-100">
                                 {user.name.charAt(0)}
                             </div>
@@ -657,65 +650,16 @@ const Welcome: React.FC<Props> = ({
     );
 };
 
-// Sub-components dengan Styling Padat
-const StatBox = ({ icon, label, value }: any) => (
-    <div className="group flex items-center gap-3 rounded-3xl border border-slate-200 bg-white p-4 shadow-sm transition-all hover:border-blue-600/30 md:gap-5 md:rounded-4xl md:p-8">
-        {/* Kontainer Icon yang Responsif */}
-        <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl bg-slate-50 text-lg transition-colors group-hover:bg-blue-50 md:h-14 md:w-14 md:rounded-2xl md:text-2xl">
-            {/* Solusi Error: Gunakan div pembungkus atau casting icon ke ReactElement dengan className */}
-            {React.isValidElement(icon)
-                ? React.cloneElement(icon as React.ReactElement<any>, {
-                      className:
-                          'h-5 w-5 md:h-7 md:w-7 transition-transform group-hover:scale-110',
-                  })
-                : icon}
-        </div>
-
-        <div className="min-w-0 flex-1">
-            {/* Label yang lebih kecil dan rapat di mobile */}
-            <p className="mb-0.5 truncate text-[8px] font-black tracking-[0.15em] text-slate-400 uppercase md:mb-1 md:text-[10px]">
-                {label}
-            </p>
-            {/* Angka yang menyesuaikan ukuran layar agar tidak terpotong */}
-            <p className="text-xl leading-none font-[1000] tracking-tighter text-slate-900 italic md:text-3xl">
-                {value.toLocaleString('id-ID')}
-            </p>
-        </div>
-    </div>
+ChartJS.register(
+    CategoryScale,
+    LinearScale,
+    PointElement,
+    LineElement,
+    BarElement,
+    ArcElement,
+    Title,
+    Tooltip,
+    Legend,
 );
 
-const ContactItem = ({ icon, label, value }: any) => (
-    <div className="flex gap-6">
-        <div className="flex h-12 w-12 shrink-0 items-center justify-center rounded-2xl bg-white/5 text-blue-400">
-            {icon}
-        </div>
-        <div className="flex flex-col justify-center">
-            <p className="mb-1 text-[9px] font-black tracking-[0.2em] text-slate-500 uppercase">
-                {label}
-            </p>
-            <p className="text-base leading-tight font-bold">{value || '-'}</p>
-        </div>
-    </div>
-);
-
-const SocialIcon = ({ href, icon }: { href: string; icon: any }) => (
-    <a
-        href={href}
-        target="_blank"
-        className="flex h-12 w-12 items-center justify-center rounded-2xl bg-white/5 text-white transition-all hover:-translate-y-1 hover:bg-blue-600"
-    >
-        {React.cloneElement(icon, { size: 20 })}
-    </a>
-);
-const LegendItem = ({ color, label, value }: any) => (
-    <div className="flex items-center justify-between border-b border-slate-50 pb-2">
-        <div className="flex items-center gap-3">
-            <div className={`h-3 w-3 rounded-full ${color}`} />
-            <span className="text-[10px] font-black text-slate-500 uppercase">
-                {label}
-            </span>
-        </div>
-        <span className="text-xs font-bold">{value?.toLocaleString()} eks</span>
-    </div>
-);
 export default Welcome;

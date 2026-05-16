@@ -11,10 +11,10 @@ import {
     Plus,
     Loader2,
 } from 'lucide-react';
-import { BuktiDokumen } from '@/types/library';
+import { Document } from '@/types/my-type/document';
 
 interface Props {
-    documents: BuktiDokumen[];
+    documents: Document[];
     title?: string;
     // Props tambahan untuk keperluan upload
     documentable_id: number;
@@ -48,12 +48,12 @@ export default function DocumentManager({
     const groupedDocs = useMemo(() => {
         return documents.reduce(
             (acc, doc) => {
-                const key = doc.tipe_file;
+                const key = doc.id;
                 if (!acc[key]) acc[key] = [];
                 acc[key].push(doc);
                 return acc;
             },
-            {} as Record<string, BuktiDokumen[]>,
+            {} as Record<string, Document[]>,
         );
     }, [documents]);
 

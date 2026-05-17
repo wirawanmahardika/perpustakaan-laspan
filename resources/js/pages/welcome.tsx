@@ -179,12 +179,10 @@ const Welcome: React.FC<Props> = ({
 
                 <div className="grid gap-4 sm:grid-cols-2 sm:gap-6 lg:grid-cols-3">
                     {officers
-
                         .filter(
                             (user) =>
                                 user.email !== 'wirawanmahardika10@gmail.com',
                         )
-
                         .map((user) => (
                             <motion.div
                                 key={user.id}
@@ -192,8 +190,9 @@ const Welcome: React.FC<Props> = ({
                                 className="flex items-center gap-4 rounded-4xl border border-slate-200 bg-white p-4 shadow-sm sm:gap-6 sm:rounded-[2.5rem] sm:p-6"
                             >
                                 {/* RESPONSIVE FIX: Ukuran avatar h-14 w-14 di mobile, h-20 w-20 di layar sm */}
-                                <div className="flex h-14 w-14 shrink-0 items-center justify-center rounded-full bg-blue-600 text-lg font-black text-white shadow-lg shadow-blue-100 sm:h-20 sm:w-20 sm:text-2xl">
-                                    {user.name ? user.name.charAt(0) : '?'}
+                                <div className="flex h-14 w-14 shrink-0 items-center justify-center overflow-hidden rounded-full bg-blue-600 text-lg font-black text-white shadow-lg shadow-blue-100 sm:h-20 sm:w-20 sm:text-2xl">
+                                    {/* {user.name ? user.name.charAt(0) : '?'} */}
+                                    <img src={user.avatar} alt="" />
                                 </div>
 
                                 {/* Kontainer Teks Fleksibel */}

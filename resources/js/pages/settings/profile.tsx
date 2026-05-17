@@ -1,4 +1,6 @@
 import { Form, Head, Link, usePage } from '@inertiajs/react';
+import React, { useState, useEffect } from 'react';
+import { Camera } from 'lucide-react';
 import ProfileController from '@/actions/App/Http/Controllers/Settings/ProfileController';
 import DeleteUser from '@/components/delete-user';
 import Heading from '@/components/heading';
@@ -17,6 +19,29 @@ export default function Profile({
     status?: string;
 }) {
     const { auth } = usePage().props;
+    const [avatarPreview, setAvatarPreview] = useState<string | null>(
+        auth.user.avatar || null,
+    );
+
+    console.log(auth.user.avatar);
+
+    const handleAvatarChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+        const file = e.target.files?.[0];
+        if (file) {
+            // Membuat URL temporer untuk pratinjau visual sebelum diunggah
+            const previewUrl = URL.createObjectURL(file);
+            setAvatarPreview(previewUrl);
+        }
+    };
+
+    // Bersihkan objek URL saat komponen dibongkar untuk mencegah kebocoran memori
+    useEffect(() => {
+        return () => {
+            if (avatarPreview && avatarPreview.startsWith('blob:')) {
+                URL.revokeObjectURL(avatarPreview);
+            }
+        };
+    }, [avatarPreview]);
 
     return (
         <>
@@ -28,7 +53,7 @@ export default function Profile({
                 <Heading
                     variant="small"
                     title="Profile information"
-                    description="Update your name and email address"
+                    description="Update your profile picture, name and email address"
                 />
 
                 <Form
@@ -40,6 +65,54 @@ export default function Profile({
                 >
                     {({ processing, errors }) => (
                         <>
+                            {/* FIELD: Profile Picture */}
+                            <div className="space-y-2">
+                                <Label>Profile Picture</Label>
+                                <div className="flex items-center gap-6">
+                                    <div className="group relative h-20 w-20 shrink-0 overflow-hidden rounded-full border border-neutral-200 bg-neutral-100 dark:border-neutral-800 dark:bg-neutral-900">
+                                        {avatarPreview ? (
+                                            <img
+                                                src={avatarPreview}
+                                                alt="Avatar preview"
+                                                className="h-full w-full object-cover"
+                                            />
+                                        ) : (
+                                            <div className="flex h-full w-full items-center justify-center text-xl font-bold text-neutral-400">
+                                                {auth.user.name
+                                                    ?.charAt(0)
+                                                    .toUpperCase()}
+                                            </div>
+                                        )}
+                                        <label
+                                            htmlFor="avatar"
+                                            className="absolute inset-0 flex cursor-pointer items-center justify-center bg-black/40 opacity-0 transition-opacity group-hover:opacity-100"
+                                        >
+                                            <Camera className="h-5 w-5 text-white" />
+                                        </label>
+                                    </div>
+
+                                    <div className="flex flex-col gap-1.5">
+                                        <Input
+                                            id="avatar"
+                                            type="file"
+                                            name="avatar"
+                                            accept="image/*"
+                                            className="max-w-xs cursor-pointer text-xs"
+                                            onChange={handleAvatarChange}
+                                        />
+                                        <p className="text-[11px] text-muted-foreground">
+                                            Format yang diterima: JPG, PNG, atau
+                                            WEBP. Maksimal ukuran 2MB.
+                                        </p>
+                                    </div>
+                                </div>
+                                <InputError
+                                    className="mt-2"
+                                    message={errors.avatar}
+                                />
+                            </div>
+
+                            {/* FIELD: Name */}
                             <div className="grid gap-2">
                                 <Label htmlFor="name">Name</Label>
 
@@ -59,6 +132,7 @@ export default function Profile({
                                 />
                             </div>
 
+                            {/* FIELD: Email Address */}
                             <div className="grid gap-2">
                                 <Label htmlFor="email">Email address</Label>
 

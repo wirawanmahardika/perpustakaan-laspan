@@ -11,6 +11,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Inertia\Inertia;
 use Inertia\Response;
+use Illuminate\Support\Facades\Storage;
 
 class ProfileController extends Controller
 {
@@ -30,15 +31,28 @@ class ProfileController extends Controller
      */
     public function update(ProfileUpdateRequest $request): RedirectResponse
     {
-        $request->user()->fill($request->validated());
-
-        if ($request->user()->isDirty('email')) {
-            $request->user()->email_verified_at = null;
+        $user = $request->user();
+        $validatedData = $request->validated();
+        if ($request->hasFile('avatar')) {
+            if ($user->avatar_path && Storage::exists($user->avatar_path)) {
+                Storage::delete($user->avatar_path);
+            }
+            $path = $request->file('avatar')->storePublicly('avatars');
+            $pathUrl = Storage::url($path);
+            $validatedData['avatar_path'] = $path;
+            $validatedData['avatar'] = $pathUrl;
         }
 
-        $request->user()->save();
+        $user->fill($validatedData);
+        if ($user->isDirty('email')) {
+            $user->email_verified_at = null;
+        }
 
-        Inertia::flash('toast', ['type' => 'success', 'message' => __('Profile updated.')]);
+        $user->save();
+        Inertia::flash('toast', [
+            'type' => 'success',
+            'message' => $validatedData['avatar']
+        ]);
 
         return to_route('profile.edit');
     }
@@ -49,10 +63,12 @@ class ProfileController extends Controller
     public function destroy(ProfileDeleteRequest $request): RedirectResponse
     {
         $user = $request->user();
+        if ($user->avatar_path && Storage::exists($user->avatar_path)) {
+            Storage::delete($user->avatar_path);
+        }
 
         Auth::logout();
-
-        $user->delete();
+        $user->delete(null);
 
         $request->session()->invalidate();
         $request->session()->regenerateToken();

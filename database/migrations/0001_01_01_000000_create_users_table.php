@@ -18,12 +18,12 @@ return new class extends Migration
             $table->string('email')->unique();
             $table->timestamp('email_verified_at')->nullable();
 
-
-            $table->string('profile_picture')->nullable();
             $table->enum('role', ['admin', 'petugas'])->default('petugas');
             $table->string('jabatan')->nullable();
             $table->string('pendidikan_terakhir')->nullable();
             $table->text('kreativitas_karya')->nullable();
+            $table->string('avatar')->nullable();
+            $table->string('avatar_path')->nullable();
 
             $table->rememberToken();
             $table->timestamps();

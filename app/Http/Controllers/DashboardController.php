@@ -6,20 +6,18 @@ use App\Models\ActivityLog;
 use App\Models\Document;
 use App\Models\YearlyStat;
 use App\Models\ProfilPerpus;
+use Illuminate\Http\Request;
 use Inertia\Inertia;
 
 class DashboardController extends Controller
 {
-    public function index()
+    public function index(Request $request)
     {
-        // Mengambil data statistik tahun terbaru
         $latestStat = YearlyStat::orderBy('tahun', 'desc')->first();
         $docStats = Document::selectRaw('kategori, count(*) as total')
             ->groupBy('kategori')
             ->pluck('total', 'kategori');
 
-        // Mengecek kelengkapan profil (syarat minimal akreditasi)
-        // Profil dianggap lengkap jika sudah ada record dan kolom mandatory terisi
         $profile = ProfilPerpus::first("*");
         $isProfileComplete = $profile && $profile->nama_perpustakaan && $profile->npp;
 
@@ -43,7 +41,6 @@ class DashboardController extends Controller
                 ]
             ],
 
-            // Mengambil 5 aktivitas terbaru untuk log di dashboard
             'activities' => ActivityLog::orderBy('tanggal', 'desc')
                 ->take(5)
                 ->get()

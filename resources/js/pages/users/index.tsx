@@ -106,10 +106,10 @@ export default function UserIndex({ users }: { users: User[] }) {
                     />
                     <StatCard
                         label="Tersertifikasi"
-                        value={
-                            users.filter((u) => u.sertifikat_kompetensi_path)
-                                .length
-                        }
+                        value={users.reduce(
+                            (p, c) => p + (c.sertifikats?.length || 0),
+                            0,
+                        )}
                         icon={<FileBadge className="text-emerald-500" />}
                     />
                     <StatCard

@@ -13,7 +13,7 @@ class UserController extends Controller
     public function index()
     {
         return inertia('users/index', [
-            'users' => User::orderBy('role', 'asc')->get()
+            'users' => User::with("sertifikats")->orderBy('role', 'asc')->get()
         ]);
     }
 

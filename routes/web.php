@@ -11,12 +11,9 @@ use App\Http\Controllers\YearlyStatController;
 use Illuminate\Support\Facades\Route;
 
 
-// Rute Publik Portal Resmi Desa
-// Route::get('/activities', [PublicController::class, 'activities'])->name('public.activities');
-
 Route::get('/', [PublicController::class, "index"])->name('home');
 Route::get('/about', [PublicController::class, 'about'])->name('public.about');
-Route::get('/aktivitas', [PublicController::class, 'aktivitas'])->name("aktivitas");
+Route::get('/activities', [PublicController::class, 'aktivitas'])->name("aktivitas");
 Route::get('/kontak', [PublicController::class, 'contact'])->name('public.contact');
 Route::get('/dokumen', [PublicController::class, 'documents'])->name('public.documents');
 Route::get('/kegiatan/{id}/read/artikel', [ActivityLogController::class, 'readArtikel'])->name('readArtikel');

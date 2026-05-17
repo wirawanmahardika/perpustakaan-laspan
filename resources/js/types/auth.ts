@@ -8,6 +8,7 @@ export type User = {
     updated_at: string;
     [key: string]: unknown;
 
+    sertifikats?: Sertifikat[];
     avatar?: string;
     avatar_path?: string;
     jabatan: string | null;

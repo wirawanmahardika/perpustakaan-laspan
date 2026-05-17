@@ -21,7 +21,6 @@ interface NavItem {
 }
 
 export const PublicNavbar: React.FC = () => {
-    // Mengambil data auth dari shared props Inertia.js
     const { url, props } = usePage();
     const auth = props.auth as { user: any } | undefined;
 
@@ -47,11 +46,14 @@ export const PublicNavbar: React.FC = () => {
                     {/* Logo */}
                     <div className="flex items-center gap-3">
                         <Link href="/" className="flex items-center gap-2">
-                            <div className="flex h-9 w-9 items-center justify-center rounded-lg bg-blue-600 text-white shadow-md shadow-blue-500/20">
-                                <BookOpen size={18} />
-                            </div>
+                            <img
+                                src="/logo-noname.png"
+                                alt="logo"
+                                className="w-10"
+                            />
+                            {/* <BookOpen size={18} /> */}
                             <span className="font-sans text-xs font-black tracking-widest text-slate-900 uppercase dark:text-white">
-                                Portal Perpus
+                                {props.name}
                             </span>
                         </Link>
                     </div>

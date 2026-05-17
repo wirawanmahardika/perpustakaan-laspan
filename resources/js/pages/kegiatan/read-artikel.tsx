@@ -19,7 +19,7 @@ const ReadArtikel: React.FC<Props> = ({ activity }) => {
             <nav className="sticky top-0 z-50 w-full border-b border-slate-100 bg-white/80 backdrop-blur-xl">
                 <div className="mx-auto flex h-16 max-w-4xl items-center justify-between px-4 sm:px-6">
                     <Link
-                        href="/aktivitas"
+                        href="/activities"
                         className="group flex min-w-0 items-center gap-2 text-[10px] font-black tracking-widest text-slate-400 uppercase transition-colors hover:text-blue-600"
                     >
                         <ArrowLeft

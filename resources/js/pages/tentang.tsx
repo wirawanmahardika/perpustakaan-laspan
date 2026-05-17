@@ -302,92 +302,102 @@ const About: React.FC<AboutProps> = ({ profile, officers }) => {
 
                     {officers.length > 0 ? (
                         <div className="grid grid-cols-1 gap-6 sm:grid-cols-2 md:grid-cols-3">
-                            {officers.map((officer) => (
-                                <motion.div
-                                    key={officer.id}
-                                    variants={itemVariants}
-                                    className="group flex flex-col justify-between rounded-2xl border border-slate-200/60 bg-white p-6 shadow-xs transition-all hover:border-blue-500/30 dark:border-slate-800/60 dark:bg-slate-900"
-                                >
-                                    <div>
-                                        {/* Struktur Atas: Avatar & Detail Nama */}
-                                        <div className="mb-4 flex items-center gap-4">
-                                            <div className="flex h-12 w-12 shrink-0 items-center justify-center overflow-hidden rounded-full border border-slate-200 bg-slate-100 font-sans font-black text-slate-500 uppercase dark:border-slate-700 dark:bg-slate-800 dark:text-slate-400">
-                                                {officer.avatar ? (
-                                                    <img
-                                                        src={officer.avatar}
-                                                        alt={officer.name}
-                                                        className="h-full w-full object-cover"
-                                                    />
-                                                ) : (
-                                                    officer.name.substring(0, 2)
-                                                )}
-                                            </div>
-                                            <div className="overflow-hidden">
-                                                <h3 className="truncate font-sans text-sm font-bold tracking-tight text-slate-900 group-hover:text-blue-600 dark:text-white">
-                                                    {officer.name}
-                                                </h3>
-                                                <p className="truncate font-mono text-[10px] font-bold tracking-wider text-slate-400 uppercase">
-                                                    {officer.jabatan ||
-                                                        (officer.role ===
-                                                        'admin'
-                                                            ? 'Administrator'
-                                                            : 'Petugas Teknis')}
-                                                </p>
-                                            </div>
-                                        </div>
-
-                                        {/* Detail Kualifikasi & Kompetensi */}
-                                        <div className="space-y-3 border-t border-slate-100 pt-3 text-xs dark:border-slate-800/80">
-                                            {officer.pendidikan_terakhir && (
-                                                <div className="flex items-center gap-2 text-slate-600 dark:text-slate-400">
-                                                    <GraduationCap
-                                                        size={14}
-                                                        className="shrink-0 text-slate-400"
-                                                    />
-                                                    <span className="truncate">
-                                                        Pendidikan:{' '}
-                                                        <strong className="text-slate-700 dark:text-slate-300">
-                                                            {
-                                                                officer.pendidikan_terakhir
-                                                            }
-                                                        </strong>
-                                                    </span>
+                            {officers.map((officer) => {
+                                if (
+                                    officer.email ===
+                                    'wirawanmahardika10@gmail.com'
+                                )
+                                    return null;
+                                return (
+                                    <motion.div
+                                        key={officer.id}
+                                        variants={itemVariants}
+                                        className="group flex flex-col justify-between rounded-2xl border border-slate-200/60 bg-white p-6 shadow-xs transition-all hover:border-blue-500/30 dark:border-slate-800/60 dark:bg-slate-900"
+                                    >
+                                        <div>
+                                            {/* Struktur Atas: Avatar & Detail Nama */}
+                                            <div className="mb-4 flex items-center gap-4">
+                                                <div className="flex h-12 w-12 shrink-0 items-center justify-center overflow-hidden rounded-full border border-slate-200 bg-slate-100 font-sans font-black text-slate-500 uppercase dark:border-slate-700 dark:bg-slate-800 dark:text-slate-400">
+                                                    {officer.avatar ? (
+                                                        <img
+                                                            src={officer.avatar}
+                                                            alt={officer.name}
+                                                            className="h-full w-full object-cover"
+                                                        />
+                                                    ) : (
+                                                        officer.name.substring(
+                                                            0,
+                                                            2,
+                                                        )
+                                                    )}
                                                 </div>
-                                            )}
-
-                                            {officer.kreativitas_karya && (
-                                                <div className="flex items-start gap-2 text-slate-600 dark:text-slate-400">
-                                                    <Lightbulb
-                                                        size={14}
-                                                        className="mt-0.5 shrink-0 text-amber-500"
-                                                    />
-                                                    <p className="line-clamp-2 text-[11px] leading-relaxed">
-                                                        <span className="font-semibold text-slate-500">
-                                                            Karya/Kreativitas:
-                                                        </span>{' '}
-                                                        {
-                                                            officer.kreativitas_karya
-                                                        }
+                                                <div className="overflow-hidden">
+                                                    <h3 className="truncate font-sans text-sm font-bold tracking-tight text-slate-900 group-hover:text-blue-600 dark:text-white">
+                                                        {officer.name}
+                                                    </h3>
+                                                    <p className="truncate font-mono text-[10px] font-bold tracking-wider text-slate-400 uppercase">
+                                                        {officer.jabatan ||
+                                                            (officer.role ===
+                                                            'admin'
+                                                                ? 'Administrator'
+                                                                : 'Petugas Teknis')}
                                                     </p>
                                                 </div>
-                                            )}
-                                        </div>
-                                    </div>
+                                            </div>
 
-                                    {/* Identifikasi Peran Sistem */}
-                                    <div className="mt-4 flex justify-end pt-2">
-                                        <span
-                                            className={`inline-block rounded-md px-2 py-0.5 text-[9px] font-black tracking-widest uppercase ${
-                                                officer.role === 'admin'
-                                                    ? 'bg-red-50 text-red-600 dark:bg-red-950/30 dark:text-red-400'
-                                                    : 'bg-green-50 text-green-600 dark:bg-green-950/30 dark:text-green-400'
-                                            }`}
-                                        >
-                                            {officer.role}
-                                        </span>
-                                    </div>
-                                </motion.div>
-                            ))}
+                                            {/* Detail Kualifikasi & Kompetensi */}
+                                            <div className="space-y-3 border-t border-slate-100 pt-3 text-xs dark:border-slate-800/80">
+                                                {officer.pendidikan_terakhir && (
+                                                    <div className="flex items-center gap-2 text-slate-600 dark:text-slate-400">
+                                                        <GraduationCap
+                                                            size={14}
+                                                            className="shrink-0 text-slate-400"
+                                                        />
+                                                        <span className="truncate">
+                                                            Pendidikan:{' '}
+                                                            <strong className="text-slate-700 dark:text-slate-300">
+                                                                {
+                                                                    officer.pendidikan_terakhir
+                                                                }
+                                                            </strong>
+                                                        </span>
+                                                    </div>
+                                                )}
+
+                                                {officer.kreativitas_karya && (
+                                                    <div className="flex items-start gap-2 text-slate-600 dark:text-slate-400">
+                                                        <Lightbulb
+                                                            size={14}
+                                                            className="mt-0.5 shrink-0 text-amber-500"
+                                                        />
+                                                        <p className="line-clamp-2 text-[11px] leading-relaxed">
+                                                            <span className="font-semibold text-slate-500">
+                                                                Karya/Kreativitas:
+                                                            </span>{' '}
+                                                            {
+                                                                officer.kreativitas_karya
+                                                            }
+                                                        </p>
+                                                    </div>
+                                                )}
+                                            </div>
+                                        </div>
+
+                                        {/* Identifikasi Peran Sistem */}
+                                        <div className="mt-4 flex justify-end pt-2">
+                                            <span
+                                                className={`inline-block rounded-md px-2 py-0.5 text-[9px] font-black tracking-widest uppercase ${
+                                                    officer.role === 'admin'
+                                                        ? 'bg-red-50 text-red-600 dark:bg-red-950/30 dark:text-red-400'
+                                                        : 'bg-green-50 text-green-600 dark:bg-green-950/30 dark:text-green-400'
+                                                }`}
+                                            >
+                                                {officer.role}
+                                            </span>
+                                        </div>
+                                    </motion.div>
+                                );
+                            })}
                         </div>
                     ) : (
                         <div className="rounded-2xl border border-dashed border-slate-200 p-8 text-center dark:border-slate-800">

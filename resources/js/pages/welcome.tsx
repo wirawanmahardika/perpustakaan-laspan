@@ -39,6 +39,7 @@ import { Stat } from '@/types/my-type/stat';
 import { Document } from '@/types/my-type/document';
 import { Kegiatan } from '@/types/my-type/kegiatan';
 import { formatHumanDate } from '@/lib/utils';
+import { PublicNavbar } from '@/components/public-navbar';
 
 interface Props {
     profile: ProfilPerpus;
@@ -93,8 +94,10 @@ const Welcome: React.FC<Props> = ({
                 title={`Portal Resmi - ${profile?.nama_perpustakaan || 'Perpustakaan'}`}
             />
 
+            <PublicNavbar />
+
             {/* Navigasi Minimalis */}
-            <nav className="sticky top-0 z-50 border-b border-slate-200/60 bg-white/70 backdrop-blur-xl">
+            {/* <nav className="sticky top-0 z-50 border-b border-slate-200/60 bg-white/70 backdrop-blur-xl">
                 <div className="mx-auto max-w-7xl px-6">
                     <div className="flex h-20 items-center justify-between">
                         <div className="flex items-center gap-3">
@@ -121,7 +124,7 @@ const Welcome: React.FC<Props> = ({
                         </Link>
                     </div>
                 </div>
-            </nav>
+            </nav> */}
 
             {/* Hero Section */}
             <header className="relative px-6 py-24 lg:py-32">

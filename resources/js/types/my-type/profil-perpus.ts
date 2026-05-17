@@ -14,7 +14,13 @@ export interface ProfilPerpus {
     nama_petugas?: string;
     nama_penanggung_jawab?: string;
     sifat_bangunan: 'gabung' | 'sendiri';
-    media_sosial: any[];
+    media_sosial: {
+        facebook?: string | null;
+        instagram?: string | null;
+        twitter?: string | null;
+        website?: string | null;
+        [key: string]: string | null | undefined;
+    } | null;
 
     // Data Demografi & Geografis
     luas_wilayah?: number;

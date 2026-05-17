@@ -3,6 +3,7 @@ export interface Document {
     file_path: string;
     file_url: string;
     keterangan: string;
+    tipe_file: 'foto' | 'video' | 'pdf_scan' | 'infografis';
     kategori:
         | 'koleksi'
         | 'sarpras'
@@ -14,7 +15,4 @@ export interface Document {
         | 'dampak';
     created_at: string;
     updated_at?: string;
-
-    tipe_file: 'foto' | 'video' | 'pdf_scan' | 'infografis';
-    label_bukti: string;
 }

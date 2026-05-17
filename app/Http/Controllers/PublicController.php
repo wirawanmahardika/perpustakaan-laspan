@@ -23,6 +23,37 @@ class PublicController extends Controller
         ]);
     }
 
+
+    public function about()
+    {
+        $profile = ProfilPerpus::first("*");
+        $officers = User::orderBy('id', 'asc')->get();
+        return Inertia::render('tentang', [
+            'profile' => $profile,
+            'officers' => $officers
+        ]);
+    }
+
+    public function documents()
+    {
+        $profile = ProfilPerpus::first("*");
+        $documents = Document::orderBy('created_at', 'desc')->get();
+        return Inertia::render('document', [
+            'profile' => $profile,
+            'documents' => $documents
+        ]);
+    }
+
+    public function contact()
+    {
+        // Mengambil rekaman data profil pertama untuk memuat relasi kontak dan alamat resmi
+        $profile = ProfilPerpus::first("*");
+
+        return Inertia::render('kontak', [
+            'profile' => $profile
+        ]);
+    }
+
     public function aktivitas(Request $request)
     {
         $query = ActivityLog::query();

@@ -51,7 +51,7 @@ class ProfileController extends Controller
         $user->save();
         Inertia::flash('toast', [
             'type' => 'success',
-            'message' => $validatedData['avatar']
+            'message' => "Berhasil mengubah profile."
         ]);
 
         return to_route('profile.edit');

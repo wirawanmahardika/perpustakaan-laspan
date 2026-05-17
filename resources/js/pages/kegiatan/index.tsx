@@ -82,20 +82,21 @@ export default function KegiatanIndex({ kegiatan }: { kegiatan: Kegiatan[] }) {
                     </div>
                 )}
 
-                <div className="flex items-center justify-between">
+                <div className="flex flex-col items-start gap-4 md:flex-row md:items-center md:justify-between">
                     <h1 className="text-2xl font-[1000] tracking-tighter uppercase md:text-3xl">
                         Agenda & Inovasi
                     </h1>
                     <button
                         onClick={() => setIsModalOpen(true)}
-                        className="flex items-center gap-2 rounded-xl bg-primary px-6 py-4 text-[10px] font-black tracking-widest text-primary-foreground uppercase"
+                        className="flex w-full items-center justify-center gap-2 rounded-xl bg-primary px-6 py-4 text-[10px] font-black tracking-widest text-primary-foreground uppercase shadow-lg transition-transform active:scale-95 md:w-auto"
                     >
                         <Plus className="h-4 w-4" /> TAMBAH
                     </button>
                 </div>
 
-                <div className="overflow-hidden rounded-3xl border border-border bg-card">
-                    <table className="w-full text-left">
+                {/* Desktop Table View */}
+                <div className="hidden overflow-x-auto rounded-3xl border border-border bg-card md:block">
+                    <table className="w-full min-w-[800px] text-left">
                         <thead className="bg-muted/30 text-[10px] font-black tracking-widest text-muted-foreground uppercase">
                             <tr>
                                 <th className="p-5">No</th>
@@ -179,10 +180,78 @@ export default function KegiatanIndex({ kegiatan }: { kegiatan: Kegiatan[] }) {
                     </table>
                 </div>
 
+                {/* Mobile Card View */}
+                <div className="grid grid-cols-1 gap-4 md:hidden">
+                    {kegiatan.map((item, index) => (
+                        <div key={item.id} className="flex flex-col gap-4 rounded-3xl border border-border bg-card p-5 shadow-sm">
+                            <div className="flex items-start justify-between gap-4">
+                                <div className="space-y-1">
+                                    <div className="flex items-center gap-2">
+                                        <span className="text-[10px] font-black text-muted-foreground">#{index + 1}</span>
+                                        <p className="text-sm leading-tight font-bold uppercase">
+                                            {item.nama_kegiatan}
+                                        </p>
+                                    </div>
+                                    <div className="flex flex-wrap gap-2">
+                                        <span className={`rounded-full border px-2 py-0.5 text-[8px] font-black uppercase ${
+                                            item.tipe === 'penghargaan'
+                                                ? 'border-amber-500 bg-amber-50 text-amber-600'
+                                                : 'border-primary bg-primary/5 text-primary'
+                                        }`}>
+                                            {item.tipe.replace('_', ' ')}
+                                        </span>
+                                        {item.testimoni && (
+                                            <span className="rounded-full border border-emerald-500 bg-emerald-50 px-2 py-0.5 text-[8px] font-black text-emerald-600 uppercase">
+                                                Ada Testimoni
+                                            </span>
+                                        )}
+                                    </div>
+                                </div>
+                                <ActionDropdown
+                                    onEdit={() => openEditModal(item)}
+                                    onDelete={() => router.delete(`/kegiatan/${item.id}`)}
+                                />
+                            </div>
+                            
+                            <div className="grid grid-cols-1 gap-3 rounded-2xl bg-muted/20 p-4 sm:grid-cols-2">
+                                <div>
+                                    <p className="text-[9px] font-black tracking-widest text-muted-foreground uppercase">Waktu</p>
+                                    <p className="mt-0.5 flex items-center gap-1 text-[10px] font-bold uppercase">
+                                        <Calendar className="h-3 w-3" /> {formatHumanDate(item.tanggal)}
+                                    </p>
+                                </div>
+                                <div>
+                                    <p className="text-[9px] font-black tracking-widest text-muted-foreground uppercase">Pihak Terlibat</p>
+                                    <p className="mt-0.5 text-xs text-muted-foreground">
+                                        {item.pihak_terlibat || '-'}
+                                    </p>
+                                </div>
+                                <div className="border-t border-border/50 pt-3 sm:col-span-2">
+                                    {item.artikel ? (
+                                        <Link
+                                            href={`/kegiatan/${item.id}/artikel`}
+                                            className="group flex w-full items-center justify-center gap-2 rounded-xl bg-emerald-50 py-3 text-[10px] font-black tracking-widest text-emerald-600 uppercase transition-colors hover:bg-emerald-100"
+                                        >
+                                            <Edit3 className="h-3 w-3" /> EDIT ARTIKEL
+                                        </Link>
+                                    ) : (
+                                        <Link
+                                            href={`/kegiatan/${item.id}/artikel`}
+                                            className="group flex w-full items-center justify-center gap-2 rounded-xl bg-blue-50 py-3 text-[10px] font-black tracking-widest text-blue-600 uppercase transition-colors hover:bg-blue-100"
+                                        >
+                                            <Plus className="h-3 w-3" /> TULIS ARTIKEL
+                                        </Link>
+                                    )}
+                                </div>
+                            </div>
+                        </div>
+                    ))}
+                </div>
+
                 <Dialog.Root open={isModalOpen} onOpenChange={setIsModalOpen}>
                     <Dialog.Portal>
                         <Dialog.Overlay className="fixed inset-0 z-50 bg-slate-950/40 backdrop-blur-sm" />
-                        <Dialog.Content className="fixed top-1/2 left-1/2 z-50 max-h-[90vh] w-full max-w-xl -translate-x-1/2 -translate-y-1/2 overflow-y-auto rounded-2xl border bg-card p-8 shadow-2xl">
+                        <Dialog.Content className="fixed top-1/2 left-1/2 z-50 max-h-[90vh] w-[95vw] max-w-xl -translate-x-1/2 -translate-y-1/2 overflow-y-auto rounded-2xl border bg-card p-6 shadow-2xl md:w-full md:p-8">
                             <form onSubmit={submit} className="space-y-5">
                                 <h2 className="border-b pb-4 text-lg font-black tracking-tighter uppercase">
                                     Formulir Kegiatan & Dampak
@@ -205,7 +274,7 @@ export default function KegiatanIndex({ kegiatan }: { kegiatan: Kegiatan[] }) {
                                     />
                                 </FormGroup>
 
-                                <div className="grid grid-cols-2 gap-4">
+                                <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
                                     <FormGroup label="Tipe Kegiatan">
                                         <select
                                             className="w-full cursor-pointer appearance-none rounded-xl border border-input bg-muted/30 px-4 py-3 text-sm"

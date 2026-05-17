@@ -78,9 +78,9 @@ export default function UserIndex({ users }: { users: User[] }) {
     return (
         <>
             <Head title="Manajemen Tenaga" />
-            <div className="space-y-8 p-8">
+            <div className="space-y-6 p-4 md:space-y-8 md:p-8">
                 {/* Header Section */}
-                <div className="flex items-center justify-between">
+                <div className="flex flex-col items-start gap-4 md:flex-row md:items-center md:justify-between">
                     <div>
                         <h1 className="text-2xl font-[1000] tracking-tighter uppercase">
                             Manajemen Tenaga
@@ -91,7 +91,7 @@ export default function UserIndex({ users }: { users: User[] }) {
                     </div>
                     <button
                         onClick={openAddModal}
-                        className="flex items-center gap-2 rounded-xl bg-primary px-6 py-4 text-[10px] font-black tracking-widest text-primary-foreground uppercase shadow-lg transition-transform active:scale-95"
+                        className="flex w-full items-center justify-center gap-2 rounded-xl bg-primary px-6 py-4 text-[10px] font-black tracking-widest text-primary-foreground uppercase shadow-lg transition-transform active:scale-95 md:w-auto"
                     >
                         <UserPlus className="h-4 w-4" /> TAMBAH PETUGAS
                     </button>
@@ -119,14 +119,13 @@ export default function UserIndex({ users }: { users: User[] }) {
                     />
                 </div>
 
-                {/* Table Section */}
-                <div className="overflow-hidden rounded-3xl border border-border bg-card shadow-sm">
-                    <table className="w-full text-left">
+                {/* Desktop Table View */}
+                <div className="hidden overflow-x-auto rounded-3xl border border-border bg-card shadow-sm md:block">
+                    <table className="w-full min-w-[800px] text-left">
                         <thead className="bg-muted/30 text-[10px] font-black tracking-widest text-muted-foreground uppercase">
                             <tr>
                                 <th className="p-5">Petugas / Jabatan</th>
                                 <th className="p-5">Kualifikasi</th>
-                                <th className="p-5">Sertifikat</th>
                                 <th className="p-5">Akses</th>
                                 <th className="p-5 text-right">Opsi</th>
                             </tr>
@@ -164,18 +163,6 @@ export default function UserIndex({ users }: { users: User[] }) {
                                         </div>
                                     </td>
                                     <td className="p-5">
-                                        {user.sertifikat_kompetensi_path ? (
-                                            <span className="flex items-center gap-1 text-[9px] font-black text-emerald-600 uppercase">
-                                                <FileBadge className="h-3 w-3" />{' '}
-                                                Valid
-                                            </span>
-                                        ) : (
-                                            <span className="text-[9px] text-muted-foreground/50 uppercase italic">
-                                                Kosong
-                                            </span>
-                                        )}
-                                    </td>
-                                    <td className="p-5">
                                         <span
                                             className={`rounded-full border px-3 py-1 text-[8px] font-black uppercase ${user.role === 'admin' ? 'border-amber-500 bg-amber-50 text-amber-600' : 'border-slate-300 bg-slate-50 text-slate-600'}`}
                                         >
@@ -199,11 +186,80 @@ export default function UserIndex({ users }: { users: User[] }) {
                     </table>
                 </div>
 
+                {/* Mobile Card View */}
+                <div className="grid grid-cols-1 gap-4 md:hidden">
+                    {users.map((user) => (
+                        <div
+                            key={user.id}
+                            className="flex flex-col gap-4 rounded-3xl border border-border bg-card p-5 shadow-sm"
+                        >
+                            <div className="flex items-start justify-between gap-4">
+                                <div className="flex items-center gap-3">
+                                    <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-full bg-primary/10 text-primary">
+                                        <UserCircle className="h-6 w-6" />
+                                    </div>
+                                    <div>
+                                        <p className="text-sm leading-tight font-black uppercase">
+                                            {user.name}
+                                        </p>
+                                        <p className="flex items-center gap-1 text-[10px] font-bold text-muted-foreground uppercase">
+                                            <Mail className="h-3 w-3" />{' '}
+                                            {user.email}
+                                        </p>
+                                    </div>
+                                </div>
+                                <ActionDropdown
+                                    onEdit={() => openEditModal(user)}
+                                    onDelete={() => deleteUser(user.id)}
+                                    onManageSertifikat={() => {
+                                        router.get(
+                                            `/users/${user.id}/sertifikat`,
+                                        );
+                                    }}
+                                />
+                            </div>
+
+                            <div className="grid grid-cols-2 gap-2 rounded-2xl bg-muted/20 p-4">
+                                <div>
+                                    <p className="text-[9px] font-black tracking-widest text-muted-foreground uppercase">
+                                        Jabatan
+                                    </p>
+                                    <p className="mt-0.5 text-[10px] font-black uppercase">
+                                        {user.jabatan || 'Staf'}
+                                    </p>
+                                </div>
+                                <div>
+                                    <p className="text-[9px] font-black tracking-widest text-muted-foreground uppercase">
+                                        Pendidikan
+                                    </p>
+                                    <p className="mt-0.5 flex items-center gap-1 text-[10px] font-black uppercase">
+                                        <GraduationCap className="h-3 w-3" />{' '}
+                                        {user.pendidikan_terakhir || '-'}
+                                    </p>
+                                </div>
+
+                                <div>
+                                    <p className="text-[9px] font-black tracking-widest text-muted-foreground uppercase">
+                                        Akses
+                                    </p>
+                                    <div className="mt-0.5">
+                                        <span
+                                            className={`inline-flex rounded-full border px-2 py-0.5 text-[8px] font-black uppercase ${user.role === 'admin' ? 'border-amber-500 bg-amber-50 text-amber-600' : 'border-slate-300 bg-slate-50 text-slate-600'}`}
+                                        >
+                                            {user.role}
+                                        </span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    ))}
+                </div>
+
                 {/* Modal Create/Edit */}
                 <Dialog.Root open={isModalOpen} onOpenChange={setIsModalOpen}>
                     <Dialog.Portal>
                         <Dialog.Overlay className="fixed inset-0 z-50 animate-in bg-black/40 backdrop-blur-sm fade-in" />
-                        <Dialog.Content className="fixed top-1/2 left-1/2 z-50 w-full max-w-lg -translate-x-1/2 -translate-y-1/2 animate-in rounded-3xl border bg-card p-8 shadow-2xl duration-200 zoom-in-95">
+                        <Dialog.Content className="fixed top-1/2 left-1/2 z-50 max-h-[90vh] w-[95vw] max-w-lg -translate-x-1/2 -translate-y-1/2 animate-in overflow-y-auto rounded-3xl border bg-card p-6 shadow-2xl duration-200 zoom-in-95 md:w-full md:p-8">
                             <div className="mb-6 flex items-center justify-between border-b pb-4">
                                 <h2 className="text-xl font-black tracking-tighter uppercase">
                                     {editingUser
@@ -242,7 +298,7 @@ export default function UserIndex({ users }: { users: User[] }) {
                                     />
                                 )}
 
-                                <div className="grid grid-cols-2 gap-4">
+                                <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
                                     <FormInput
                                         label="Jabatan"
                                         value={data.jabatan}

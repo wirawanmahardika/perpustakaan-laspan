@@ -11,16 +11,8 @@ import {
     SlidersHorizontal,
 } from 'lucide-react';
 import { formatHumanDate } from '@/lib/utils';
-
-interface ActivityData {
-    id: number;
-    nama_kegiatan: string;
-    deskripsi: string;
-    tipe: 'pemberdayaan' | 'promosi' | 'kerjasama' | 'layanan_khusus';
-    tanggal: string;
-    pihak_terlibat?: string | null;
-    artikel?: string | null;
-}
+import { Kegiatan } from '@/types/my-type/kegiatan';
+import { ProfilPerpus } from '@/types/my-type/profil-perpus';
 
 interface PaginationLink {
     url: string | null;
@@ -29,12 +21,9 @@ interface PaginationLink {
 }
 
 interface Props {
-    profile?: {
-        nama_perpustakaan: string;
-        [key: string]: any;
-    } | null;
+    profile?: ProfilPerpus | null;
     activities: {
-        data: ActivityData[];
+        data: Kegiatan[];
         links: PaginationLink[];
         current_page: number;
         last_page: number;
@@ -49,7 +38,7 @@ const Index: React.FC<Props> = ({ profile, activities, filters }) => {
     // Fungsi Handle Pencarian & Filter Sinkron Berbasis Inertia router
     const handleFilter = (key: string, value: string) => {
         router.get(
-            '/aktivitas',
+            '/activities',
             { ...filters, [key]: value },
             {
                 preserveState: true,
@@ -279,7 +268,7 @@ const Index: React.FC<Props> = ({ profile, activities, filters }) => {
                                 href={link.url || '#'}
                                 onClick={(e) => !link.url && e.preventDefault()}
                                 dangerouslySetInnerHTML={{ __html: link.label }}
-                                className={`flex h-9 min-w-[2.25rem] items-center justify-center rounded-xl px-2 text-[9px] font-black tracking-wider uppercase transition-all ${
+                                className={`flex h-9 min-w-9 items-center justify-center rounded-xl px-2 text-[9px] font-black tracking-wider uppercase transition-all ${
                                     link.active
                                         ? 'bg-slate-900 text-white shadow-xs dark:bg-blue-600 dark:text-white'
                                         : 'border border-slate-200 bg-white text-slate-500 hover:bg-slate-50 dark:border-slate-800 dark:bg-slate-900 dark:text-slate-400 dark:hover:bg-slate-800/60'

@@ -1,21 +1,18 @@
 import React, { useState } from 'react';
 import { Head, Link } from '@inertiajs/react';
 import {
-    MapPin,
-    Phone,
-    LogIn,
     Users,
     Activity,
     Layers,
-    Instagram,
-    Facebook,
-    Globe,
     ExternalLink,
     FileText,
     X,
     ArrowRight,
+    BookOpen,
+    Library,
+    TrendingUp,
 } from 'lucide-react';
-import { motion, AnimatePresence } from 'framer-motion';
+import { motion, AnimatePresence, Variants } from 'framer-motion';
 import {
     Chart as ChartJS,
     CategoryScale,
@@ -30,8 +27,6 @@ import {
 } from 'chart.js';
 import { Doughnut } from 'react-chartjs-2';
 import { StatBox } from '@/components/my-components/stat-box';
-import { ContactItem } from '@/components/my-components/contact-item';
-import { SocialIcon } from '@/components/my-components/social-icon';
 import { LegendItem } from '@/components/my-components/legend-item';
 import { User } from '@/types';
 import { ProfilPerpus } from '@/types/my-type/profil-perpus';
@@ -56,10 +51,9 @@ const Welcome: React.FC<Props> = ({
     documents,
     officers,
 }) => {
-    const socialMedia: any = profile?.media_sosial || {};
     const [selectedDoc, setSelectedDoc] = useState<any>(null);
 
-    const containerVariants = {
+    const containerVariants: Variants = {
         hidden: { opacity: 0 },
         visible: {
             opacity: 1,
@@ -67,9 +61,13 @@ const Welcome: React.FC<Props> = ({
         },
     };
 
-    const itemVariants = {
-        hidden: { y: 20, opacity: 0 },
-        visible: { y: 0, opacity: 1 },
+    const itemVariants: Variants = {
+        hidden: { opacity: 0, y: 15 },
+        visible: {
+            opacity: 1,
+            y: 0,
+            transition: { type: 'spring', stiffness: 100 },
+        },
     };
 
     const collectionData = {
@@ -83,420 +81,386 @@ const Welcome: React.FC<Props> = ({
                 ],
                 backgroundColor: ['#2563eb', '#10b981', '#f59e0b'],
                 borderWidth: 0,
-                hoverOffset: 20,
+                hoverOffset: 10,
             },
         ],
     };
 
     return (
-        <div className="min-h-screen overflow-x-hidden bg-[#F8FAFC] font-sans text-slate-900 selection:bg-blue-600 selection:text-white">
+        <div className="min-h-screen bg-slate-50 text-slate-900 dark:bg-slate-950 dark:text-slate-50">
             <Head
                 title={`Portal Resmi - ${profile?.nama_perpustakaan || 'Perpustakaan'}`}
             />
 
             <PublicNavbar />
 
-            {/* Navigasi Minimalis */}
-            {/* <nav className="sticky top-0 z-50 border-b border-slate-200/60 bg-white/70 backdrop-blur-xl">
-                <div className="mx-auto max-w-7xl px-6">
-                    <div className="flex h-20 items-center justify-between">
-                        <div className="flex items-center gap-3">
-                            <img
-                                src="/logo-noname.png"
-                                className="w-12 text-white"
-                                alt="logo"
-                            />
-                            <div className="flex flex-col">
-                                <span className="leading-none font-[1000] tracking-tighter text-slate-900 uppercase sm:text-xl">
-                                    {profile?.nama_perpustakaan ||
-                                        'Sistem Perpustakaan'}
-                                </span>
-                                <span className="text-[10px] font-black tracking-[0.3em] text-blue-600 uppercase">
-                                    NPP. {profile?.npp || 'BELUM TERDAFTAR'}
-                                </span>
-                            </div>
-                        </div>
-                        <Link
-                            href="/login"
-                            className="group flex items-center gap-2 rounded-xl bg-slate-950 px-6 py-3 text-[10px] font-black tracking-[0.2em] text-white transition-all hover:bg-blue-600 active:scale-95"
-                        >
-                            <LogIn className="h-4 w-4" /> LOGIN SISTEM
-                        </Link>
-                    </div>
-                </div>
-            </nav> */}
-
             {/* Hero Section */}
-            <header className="relative px-6 py-24 lg:py-32">
-                <motion.div
-                    initial={{ opacity: 0, scale: 0.9 }}
-                    animate={{ opacity: 1, scale: 1 }}
-                    transition={{ duration: 0.5 }}
-                    className="mx-auto max-w-7xl text-center"
-                >
-                    <div className="mb-10 inline-flex items-center gap-2 rounded-full border border-blue-100 bg-blue-50 px-5 py-2.5 text-[10px] font-black tracking-widest text-blue-600 uppercase">
-                        <Activity className="h-4 w-4 animate-pulse" />{' '}
-                        Monitoring Akreditasi 2026
-                    </div>
-                    <h1 className="mx-auto mb-10 max-w-5xl text-4xl font-[1000] tracking-[-0.04em] text-slate-900 sm:text-7xl lg:text-9xl lg:leading-[0.85]">
+            <header className="relative overflow-hidden border-b border-slate-200/60 bg-white py-20 dark:border-slate-800/50 dark:bg-slate-900">
+                <div className="bg-radial-at-t absolute inset-0 from-blue-50/50 via-transparent to-transparent dark:from-blue-950/20" />
+                <div className="relative z-10 mx-auto max-w-7xl px-6 text-center">
+                    <motion.div
+                        initial={{ opacity: 0, scale: 0.95 }}
+                        animate={{ opacity: 1, scale: 1 }}
+                        className="mb-4 inline-flex items-center gap-2 rounded-full bg-blue-50 px-3 py-1 text-[10px] font-black tracking-widest text-blue-600 uppercase dark:bg-blue-950/50 dark:text-blue-400"
+                    >
+                        <Activity className="h-3 w-3 animate-pulse" /> Portal
+                        Digital Interaktif
+                    </motion.div>
+
+                    <motion.h1
+                        initial={{ opacity: 0, y: 10 }}
+                        animate={{ opacity: 1, y: 0 }}
+                        className="mx-auto mb-6 max-w-4xl font-sans text-4xl font-black tracking-tight text-slate-900 sm:text-6xl lg:text-7xl dark:text-white"
+                    >
                         {profile?.nama_perpustakaan || 'DIGITAL LIBRARY'}
-                    </h1>
-                </motion.div>
+                    </motion.h1>
+
+                    <motion.p
+                        initial={{ opacity: 0 }}
+                        animate={{ opacity: 1 }}
+                        transition={{ delay: 0.2 }}
+                        className="mx-auto max-w-2xl text-sm leading-relaxed font-medium text-slate-500 dark:text-slate-400"
+                    >
+                        Pusat sumber informasi, literasi, dan kegiatan
+                        masyarakat desa. Terus berkomitmen untuk meningkatkan
+                        indeks literasi masyarakat melalui keberagaman koleksi
+                        dan layanan.
+                    </motion.p>
+                </div>
             </header>
 
-            {/* Stats Bar */}
-            <section className="mx-auto mb-24 max-w-7xl px-6">
-                <div className="grid grid-cols-2 gap-4 md:grid-cols-4">
-                    <StatBox
-                        icon={<Layers className="text-blue-500" />}
-                        label="Koleksi Buku"
-                        value={latest_stats?.jumlah_koleksi || 0}
-                    />
-                    <StatBox
-                        icon={<Users className="text-emerald-500" />}
-                        label="Anggota Terdaftar"
-                        value={latest_stats?.jumlah_anggota || 0}
-                    />
-                    <StatBox
-                        icon={<Activity className="text-amber-500" />}
-                        label="Pengunjung"
-                        value={latest_stats?.jumlah_pengunjung || 0}
-                    />
-                    <StatBox
-                        icon={<ExternalLink className="text-rose-500" />}
-                        label="Koleksi Digital"
-                        value={latest_stats?.koleksi_digital || 0}
-                    />
-                </div>
-            </section>
-
-            <section className="mx-auto mb-32 max-w-7xl px-6">
-                <div className="mb-12">
-                    <h2 className="text-4xl leading-none font-[1000] tracking-tighter uppercase italic">
-                        Pengelola Unit
-                    </h2>
-                    <p className="mt-2 text-[10px] font-black tracking-widest text-slate-400 uppercase">
-                        Sumber Daya Manusia Kompeten
-                    </p>
-                </div>
-
-                <div className="grid gap-4 sm:grid-cols-2 sm:gap-6 lg:grid-cols-3">
-                    {officers
-                        .filter(
-                            (user) =>
-                                user.email !== 'wirawanmahardika10@gmail.com',
-                        )
-                        .map((user) => (
-                            <motion.div
-                                key={user.id}
-                                whileHover={{ y: -5 }}
-                                className="flex items-center gap-4 rounded-4xl border border-slate-200 bg-white p-4 shadow-sm sm:gap-6 sm:rounded-[2.5rem] sm:p-6"
-                            >
-                                {/* RESPONSIVE FIX: Ukuran avatar h-14 w-14 di mobile, h-20 w-20 di layar sm */}
-                                <div className="flex h-14 w-14 shrink-0 items-center justify-center overflow-hidden rounded-full bg-blue-600 text-lg font-black text-white shadow-lg shadow-blue-100 sm:h-20 sm:w-20 sm:text-2xl">
-                                    {/* {user.name ? user.name.charAt(0) : '?'} */}
-                                    <img src={user.avatar} alt="" />
-                                </div>
-
-                                {/* Kontainer Teks Fleksibel */}
-                                <div className="min-w-0 flex-1">
-                                    <p className="text-[9px] font-black tracking-widest text-blue-600 uppercase sm:text-[10px]">
-                                        {user.jabatan}
-                                    </p>
-                                    {/* RESPONSIVE FIX: Ukuran font text-base di mobile agar muat, text-xl di layar sm */}
-                                    <h4 className="truncate text-base font-[1000] tracking-tight text-slate-900 uppercase sm:text-xl">
-                                        {user.name}
-                                    </h4>
-                                    {/* RESPONSIVE FIX: flex-wrap untuk mencegah elemen badge keluar dari batas lebar jika teks panjang */}
-                                    <div className="mt-2 flex flex-wrap items-center gap-1.5 sm:gap-2">
-                                        <span className="rounded-md bg-slate-100 px-2 py-0.5 text-[8px] font-bold text-slate-500 uppercase sm:text-[9px]">
-                                            {user.pendidikan_terakhir}
-                                        </span>
-                                        {user.kreativitas_karya && (
-                                            <span className="rounded-md bg-emerald-50 px-2 py-0.5 text-[8px] font-bold text-emerald-600 uppercase sm:text-[9px]">
-                                                Inovatif
-                                            </span>
-                                        )}
-                                    </div>
-                                </div>
-                            </motion.div>
-                        ))}
-                </div>
-            </section>
-
-            <section className="mx-auto mb-20 max-w-7xl overflow-hidden px-4 md:mb-32 md:px-6">
-                <div className="grid gap-6 lg:grid-cols-12 lg:gap-8">
-                    {/* Grafik Komposisi Koleksi */}
-                    <motion.div
-                        initial={{ opacity: 0, x: -20 }}
-                        whileInView={{ opacity: 1, x: 0 }}
-                        viewport={{ once: true }}
-                        className="rounded-[2.5rem] border border-slate-200 bg-white p-8 shadow-sm md:rounded-[3rem] md:p-12 lg:col-span-5"
-                    >
-                        <h3 className="mb-2 text-xl leading-tight font-[1000] tracking-tighter uppercase md:text-2xl">
-                            Komposisi Koleksi
-                        </h3>
-                        <p className="mb-8 text-[9px] font-black tracking-widest text-slate-400 uppercase md:mb-10 md:text-[10px]">
-                            Data Berdasarkan Kategori Buku
-                        </p>
-
-                        {/* Perkecil max-width pada mobile agar tidak menekan padding */}
-                        <div className="relative mx-auto aspect-square max-w-55 md:max-w-70">
-                            <Doughnut
-                                data={collectionData}
-                                options={{
-                                    cutout: '75%',
-                                    maintainAspectRatio: false,
-                                    responsive: true,
-                                    plugins: {
-                                        legend: { display: false },
-                                        tooltip: {
-                                            backgroundColor: '#0f172a',
-                                            titleFont: {
-                                                size: 12,
-                                                weight: 'bold',
-                                            },
-                                            bodyFont: { size: 12 },
-                                            padding: 12,
-                                            displayColors: false,
-                                        },
-                                    },
-                                }}
-                            />
-                            <div className="absolute inset-0 flex flex-col items-center justify-center">
-                                <span className="text-2xl font-[1000] tracking-tighter italic md:text-4xl">
-                                    {(
-                                        latest_stats?.jumlah_koleksi || 0
-                                    ).toLocaleString()}
-                                </span>
-                                <span className="text-[8px] font-black text-slate-400 uppercase md:text-[9px]">
-                                    Total Judul
-                                </span>
-                            </div>
+            <main className="mx-auto max-w-7xl space-y-24 px-6 py-16">
+                {/* Stats Bar */}
+                <motion.section
+                    variants={containerVariants}
+                    initial="hidden"
+                    whileInView="visible"
+                    viewport={{ once: true, margin: '-100px' }}
+                >
+                    <div className="mb-8 flex items-center justify-between border-b border-slate-200/60 pb-4 dark:border-slate-800/60">
+                        <div>
+                            <h2 className="flex items-center gap-3 text-base font-black tracking-tight text-slate-900 uppercase dark:text-white">
+                                <TrendingUp
+                                    size={20}
+                                    className="text-blue-600"
+                                />{' '}
+                                Statistik Literasi
+                            </h2>
+                            <p className="mt-1 text-xs font-medium text-slate-500 dark:text-slate-400">
+                                Rekapitulasi data perkembangan literasi tahun{' '}
+                                {latest_stats?.tahun ||
+                                    new Date().getFullYear()}
+                            </p>
                         </div>
+                    </div>
+                    <div className="grid grid-cols-2 gap-4 lg:grid-cols-4">
+                        <motion.div variants={itemVariants}>
+                            <StatBox
+                                icon={<Layers />}
+                                label="Koleksi Buku"
+                                value={latest_stats?.jumlah_koleksi || 0}
+                            />
+                        </motion.div>
+                        <motion.div variants={itemVariants}>
+                            <StatBox
+                                icon={<Users />}
+                                label="Anggota"
+                                value={latest_stats?.jumlah_anggota || 0}
+                            />
+                        </motion.div>
+                        <motion.div variants={itemVariants}>
+                            <StatBox
+                                icon={<Activity />}
+                                label="Pengunjung"
+                                value={latest_stats?.jumlah_pengunjung || 0}
+                            />
+                        </motion.div>
+                        <motion.div variants={itemVariants}>
+                            <StatBox
+                                icon={<Library />}
+                                label="Peminjaman"
+                                value={latest_stats?.jumlah_peminjaman || 0}
+                            />
+                        </motion.div>
+                        <motion.div variants={itemVariants}>
+                            <StatBox
+                                icon={<BookOpen />}
+                                label="Buku Dibaca"
+                                value={latest_stats?.buku_dibaca || 0}
+                            />
+                        </motion.div>
+                        <motion.div variants={itemVariants}>
+                            <StatBox
+                                icon={<TrendingUp />}
+                                label="Penambahan"
+                                value={latest_stats?.penambahan_koleksi || 0}
+                            />
+                        </motion.div>
+                        <motion.div
+                            variants={itemVariants}
+                            className="col-span-2"
+                        >
+                            <StatBox
+                                icon={<ExternalLink />}
+                                label="Koleksi Digital"
+                                value={latest_stats?.koleksi_digital || 0}
+                            />
+                        </motion.div>
+                    </div>
+                </motion.section>
 
-                        {/* Legend Custom - Sesuaikan margin */}
-                        <div className="mt-8 space-y-3 md:mt-10">
-                            <LegendItem
-                                color="bg-blue-600"
-                                label="Koleksi Fiksi"
-                                value={latest_stats?.koleksi_fiksi}
-                            />
-                            <LegendItem
-                                color="bg-emerald-500"
-                                label="Non-Fiksi"
-                                value={latest_stats?.koleksi_nonfiksi}
-                            />
-                            <LegendItem
-                                color="bg-amber-500"
-                                label="Digital"
-                                value={latest_stats?.koleksi_digital}
-                            />
-                        </div>
-                    </motion.div>
-
-                    {/* Highlight Minat Baca */}
-                    <motion.div
-                        initial={{ opacity: 0, x: 20 }}
-                        whileInView={{ opacity: 1, x: 0 }}
-                        viewport={{ once: true }}
-                        className="flex flex-col justify-center rounded-[2.5rem] bg-blue-600 p-8 text-white shadow-2xl shadow-blue-200 md:rounded-[3rem] md:p-12 lg:col-span-7"
-                    >
-                        <div className="mb-6 flex h-10 w-10 items-center justify-center rounded-2xl bg-white/10 md:mb-8 md:h-12 md:w-12">
-                            <Activity className="h-5 w-5 text-white md:h-6 md:w-6" />
-                        </div>
-                        <h3 className="mb-4 text-[9px] font-black tracking-[0.2em] uppercase opacity-60 md:text-[10px] md:tracking-[0.3em]">
-                            Analisis Literasi Desa
-                        </h3>
-                        {/* Responsif Font Size untuk Quote */}
-                        <blockquote className="mb-8 text-xl leading-tight font-[1000] tracking-tighter italic sm:text-2xl md:mb-10 md:text-4xl">
-                            "
-                            {latest_stats?.analisis_minat_baca ||
-                                'Terus berkomitmen meningkatkan indeks literasi masyarakat melalui keberagaman koleksi.'}
-                            "
-                        </blockquote>
-                        <div className="flex items-center gap-4 border-t border-white/10 pt-8 md:pt-10">
+                <div className="grid gap-8 lg:grid-cols-12">
+                    {/* Log Agenda Section */}
+                    <div className="lg:col-span-8">
+                        <div className="mb-8 flex items-end justify-between border-b border-slate-200/60 pb-4 dark:border-slate-800/60">
                             <div>
-                                <p className="text-lg font-black italic md:text-xl">
-                                    Tahun {latest_stats?.tahun || '2025'}
-                                </p>
-                                <p className="text-[9px] font-black uppercase opacity-60 md:text-[10px]">
-                                    Periode Data Terbaru
+                                <h2 className="text-base font-black tracking-tight text-slate-900 uppercase dark:text-white">
+                                    Log Agenda & Berita
+                                </h2>
+                                <p className="mt-1 text-xs font-medium text-slate-500 dark:text-slate-400">
+                                    Arsip Kegiatan & Dokumentasi Terbaru
                                 </p>
                             </div>
+                            <Link
+                                href="/activities"
+                                className="group flex items-center gap-2 rounded-xl border border-slate-200/60 bg-white px-4 py-2 text-[10px] font-black tracking-widest uppercase transition-all hover:border-blue-500/30 hover:bg-slate-50 dark:border-slate-800/60 dark:bg-slate-900 dark:hover:bg-slate-800"
+                            >
+                                Lihat Semua{' '}
+                                <ArrowRight className="h-3 w-3 transition-transform group-hover:translate-x-1" />
+                            </Link>
                         </div>
-                    </motion.div>
-                </div>
-            </section>
 
-            {/* Main Content & Sidebar */}
-            <motion.div>
-                <main className="mx-auto max-w-7xl overflow-hidden px-4 pb-20 md:px-6 md:pb-32">
-                    <div className="grid gap-12 lg:grid-cols-12 lg:gap-16">
-                        {/* Log Agenda Section */}
-                        <div className="lg:col-span-8">
-                            <div className="mb-8 flex items-end justify-between border-b-4 border-slate-950 pb-4 md:mb-12 md:border-b-[6px] md:pb-6">
-                                <div>
-                                    <h2 className="text-3xl leading-none font-[1000] tracking-tighter uppercase italic md:text-4xl">
-                                        Log Agenda
-                                    </h2>
-                                    <p className="mt-2 text-[9px] font-black tracking-widest text-slate-400 uppercase md:text-[10px]">
-                                        Arsip Kegiatan & Dokumentasi
-                                    </p>
-                                </div>
-                                <Link
-                                    href="/aktivitas"
-                                    className="group flex items-center gap-2 rounded-full border-2 border-slate-950 px-4 py-1.5 text-[8px] font-black tracking-widest whitespace-nowrap uppercase transition-all hover:bg-slate-950 hover:text-white md:px-5 md:py-2 md:text-[10px]"
-                                >
-                                    Lihat Semua{' '}
-                                    <ArrowRight className="h-3 w-3 transition-transform group-hover:translate-x-1" />
-                                </Link>
-                            </div>
+                        <div className="grid gap-6 sm:grid-cols-2">
+                            {activities.map((act) => {
+                                const hasArticle =
+                                    act.artikel && act.artikel.trim() !== '';
 
-                            <div className="grid gap-6 sm:grid-cols-2 md:gap-8">
-                                {activities.map((act) => {
-                                    const hasArticle =
-                                        act.artikel &&
-                                        act.artikel.trim() !== '';
-
-                                    return (
-                                        <div
-                                            key={act.id}
-                                            className="group relative flex flex-col rounded-4xl border border-slate-200 bg-white p-6 transition-all hover:border-blue-600 hover:shadow-2xl hover:shadow-blue-100 md:rounded-[2.5rem] md:p-10"
-                                        >
-                                            <div className="mb-4 flex items-center justify-between md:mb-6">
-                                                <span className="rounded-full bg-blue-50 px-3 py-1 text-[8px] font-black tracking-widest text-blue-600 uppercase md:px-4 md:py-1.5 md:text-[9px]">
-                                                    {act.tipe}
+                                return (
+                                    <div
+                                        key={act.id}
+                                        className="group relative flex flex-col justify-between overflow-hidden rounded-2xl border border-slate-200/60 bg-white shadow-xs transition-all hover:border-blue-500/30 hover:shadow-md dark:border-slate-800/60 dark:bg-slate-900"
+                                    >
+                                        <div className="p-6">
+                                            <div className="mb-4 flex items-center justify-between">
+                                                <span className="inline-block rounded-md bg-blue-50 px-2 py-0.5 font-mono text-[9px] font-black tracking-wider text-blue-600 uppercase dark:bg-blue-950/40 dark:text-blue-400">
+                                                    {act.tipe.replace('_', ' ')}
                                                 </span>
-                                                <span className="text-[9px] font-bold text-slate-400 md:text-[10px]">
+                                                <span className="font-mono text-[10px] font-bold text-slate-400">
                                                     {formatHumanDate(
                                                         act.tanggal,
                                                     )}
                                                 </span>
                                             </div>
 
-                                            <h3 className="mb-4 text-xl leading-tight font-[1000] tracking-tight text-slate-950 uppercase italic transition-colors group-hover:text-blue-600 md:mb-5 md:text-2xl">
+                                            <h3 className="mb-3 font-sans text-sm font-bold tracking-tight text-slate-900 transition-colors group-hover:text-blue-600 dark:text-slate-100 dark:group-hover:text-blue-400">
                                                 {act.nama_kegiatan}
                                             </h3>
 
-                                            <p className="mb-8 line-clamp-3 text-xs leading-relaxed font-medium text-slate-500 italic md:mb-10 md:line-clamp-4 md:text-sm">
+                                            <p className="line-clamp-3 text-xs leading-relaxed font-medium text-slate-500 dark:text-slate-400">
                                                 "{act.deskripsi}"
                                             </p>
+                                        </div>
 
-                                            <div className="mt-auto flex items-center justify-between border-t border-slate-100 pt-6 md:pt-8">
-                                                <p className="mr-2 truncate text-[9px] font-black text-slate-400 uppercase">
+                                        <div className="flex items-center justify-between border-t border-slate-100 bg-slate-50/50 px-6 py-4 dark:border-slate-800/60 dark:bg-slate-950/10">
+                                            <div className="flex items-center gap-1.5 overflow-hidden pr-2 font-mono text-[9px] font-bold tracking-tight text-slate-400 uppercase">
+                                                <Users
+                                                    size={11}
+                                                    className="shrink-0 text-slate-400"
+                                                />
+                                                <span className="truncate">
                                                     Pihak:{' '}
                                                     {act.pihak_terlibat ||
-                                                        'Lokal'}
-                                                </p>
-
-                                                {hasArticle ? (
-                                                    <Link
-                                                        href={`/kegiatan/${act.id}/read/artikel`}
-                                                        className="flex shrink-0 items-center gap-2 rounded-full bg-slate-950 px-4 py-2.5 text-[8px] font-black tracking-widest text-white uppercase shadow-lg shadow-slate-200 transition-all hover:bg-blue-600 md:px-6 md:py-3 md:text-[9px]"
-                                                    >
-                                                        Baca{' '}
-                                                        <ArrowRight className="h-3 w-3" />
-                                                    </Link>
-                                                ) : (
-                                                    <div className="flex shrink-0 items-center gap-2 rounded-full border border-slate-100 bg-slate-50 px-4 py-2.5 text-[8px] font-black tracking-widest text-slate-400 uppercase md:text-[9px]">
-                                                        Selesai
-                                                    </div>
-                                                )}
+                                                        'Internal'}
+                                                </span>
                                             </div>
+
+                                            {hasArticle ? (
+                                                <Link
+                                                    href={`/kegiatan/${act.id}/read/artikel`}
+                                                    className="inline-flex items-center gap-1 rounded-lg bg-slate-900 px-3 py-1.5 text-[9px] font-black tracking-widest text-white uppercase transition-colors hover:bg-blue-600 dark:bg-slate-800 dark:hover:bg-blue-600"
+                                                >
+                                                    Baca{' '}
+                                                    <ArrowRight size={10} />
+                                                </Link>
+                                            ) : (
+                                                <span className="shrink-0 font-mono text-[8px] font-black tracking-wider text-amber-500 uppercase">
+                                                    Selesai
+                                                </span>
+                                            )}
                                         </div>
-                                    );
-                                })}
+                                    </div>
+                                );
+                            })}
+                        </div>
+                    </div>
+
+                    {/* Sidebar */}
+                    <aside className="space-y-6 lg:col-span-4">
+                        {/* Grafik Komposisi Koleksi */}
+                        <div className="rounded-2xl border border-slate-200/60 bg-white p-6 shadow-xs dark:border-slate-800/60 dark:bg-slate-900">
+                            <h3 className="mb-2 text-sm font-black tracking-tight text-slate-900 uppercase dark:text-white">
+                                Komposisi Koleksi
+                            </h3>
+                            <p className="mb-6 text-[10px] font-black tracking-widest text-slate-400 uppercase">
+                                Kategori Buku {latest_stats?.tahun}
+                            </p>
+
+                            <div className="relative mx-auto mb-6 aspect-square max-w-50">
+                                <Doughnut
+                                    data={collectionData}
+                                    options={{
+                                        cutout: '75%',
+                                        maintainAspectRatio: false,
+                                        responsive: true,
+                                        plugins: {
+                                            legend: { display: false },
+                                            tooltip: {
+                                                backgroundColor: '#0f172a',
+                                                titleFont: {
+                                                    size: 12,
+                                                    weight: 'bold',
+                                                },
+                                                bodyFont: { size: 12 },
+                                                padding: 12,
+                                                displayColors: false,
+                                            },
+                                        },
+                                    }}
+                                />
+                                <div className="absolute inset-0 flex flex-col items-center justify-center">
+                                    <span className="text-2xl font-black text-slate-900 dark:text-white">
+                                        {(
+                                            latest_stats?.jumlah_koleksi || 0
+                                        ).toLocaleString()}
+                                    </span>
+                                    <span className="text-[9px] font-black tracking-widest text-slate-400 uppercase">
+                                        Total Judul
+                                    </span>
+                                </div>
+                            </div>
+
+                            <div className="space-y-3">
+                                <LegendItem
+                                    color="bg-blue-600"
+                                    label="Fiksi"
+                                    value={latest_stats?.koleksi_fiksi}
+                                />
+                                <LegendItem
+                                    color="bg-emerald-500"
+                                    label="Non-Fiksi"
+                                    value={latest_stats?.koleksi_nonfiksi}
+                                />
+                                <LegendItem
+                                    color="bg-amber-500"
+                                    label="Digital"
+                                    value={latest_stats?.koleksi_digital}
+                                />
                             </div>
                         </div>
 
-                        {/* Sidebar */}
-                        <aside className="space-y-6 md:space-y-8 lg:col-span-4">
-                            {/* Info Perpus - Penyesuaian Padding Mobile */}
-                            <div className="rounded-4xl bg-slate-950 p-8 text-white shadow-2xl md:rounded-[3rem] md:p-12">
-                                <h3 className="mb-8 text-[9px] font-black tracking-[0.3em] text-blue-400 uppercase opacity-60 md:mb-10 md:text-[10px] md:tracking-[0.4em]">
-                                    IDENTITAS UNIT
+                        {/* Analisis Literasi */}
+                        {latest_stats?.analisis_minat_baca && (
+                            <div className="rounded-2xl bg-blue-600 p-6 text-white shadow-lg shadow-blue-500/20 dark:bg-blue-900/50">
+                                <div className="mb-4 flex h-8 w-8 items-center justify-center rounded-xl bg-white/10">
+                                    <Activity className="h-4 w-4 text-white" />
+                                </div>
+                                <h3 className="mb-3 text-[9px] font-black tracking-widest text-blue-200 uppercase">
+                                    Analisis Minat Baca
                                 </h3>
-                                <div className="space-y-8 md:space-y-12">
-                                    <ContactItem
-                                        icon={
-                                            <MapPin className="h-5 w-5 text-blue-400" />
-                                        }
-                                        label="Lokasi"
-                                        value={profile?.alamat}
-                                    />
-                                    <ContactItem
-                                        icon={
-                                            <Phone className="h-5 w-5 text-blue-400" />
-                                        }
-                                        label="Kontak"
-                                        value={profile?.kontak}
-                                    />
+                                <blockquote className="text-sm leading-relaxed font-medium">
+                                    "{latest_stats.analisis_minat_baca}"
+                                </blockquote>
+                            </div>
+                        )}
 
-                                    <div className="space-y-4 border-t border-white/10 pt-8 md:pt-10">
-                                        <p className="text-[9px] font-black tracking-widest text-slate-500 uppercase md:text-[10px]">
-                                            Media Sosial
-                                        </p>
-                                        <div className="flex gap-4">
-                                            {socialMedia.instagram && (
-                                                <SocialIcon
-                                                    href={socialMedia.instagram}
-                                                    icon={<Instagram />}
-                                                />
-                                            )}
-                                            {socialMedia.facebook && (
-                                                <SocialIcon
-                                                    href={socialMedia.facebook}
-                                                    icon={<Facebook />}
-                                                />
-                                            )}
-                                            {socialMedia.website && (
-                                                <SocialIcon
-                                                    href={socialMedia.website}
-                                                    icon={<Globe />}
-                                                />
-                                            )}
-                                        </div>
+                        {/* Demografi Card */}
+                        <div className="rounded-2xl border border-slate-200/60 bg-white p-6 shadow-xs dark:border-slate-800/60 dark:bg-slate-900">
+                            <h4 className="mb-4 text-[10px] font-black tracking-widest text-slate-400 uppercase">
+                                Kondisi Wilayah
+                            </h4>
+                            <div className="grid grid-cols-2 gap-4">
+                                <div className="border-r border-slate-100 pr-2 dark:border-slate-800">
+                                    <p className="text-lg font-black text-slate-900 dark:text-white">
+                                        {profile?.jumlah_penduduk?.toLocaleString() ||
+                                            '-'}
+                                    </p>
+                                    <p className="text-[9px] font-bold tracking-widest text-slate-400 uppercase">
+                                        Penduduk
+                                    </p>
+                                </div>
+                                <div className="pl-2">
+                                    <p className="text-lg font-black text-slate-900 dark:text-white">
+                                        {profile?.luas_wilayah || '-'} Km²
+                                    </p>
+                                    <p className="text-[9px] font-bold tracking-widest text-slate-400 uppercase">
+                                        Luas Area
+                                    </p>
+                                </div>
+                            </div>
+                        </div>
+                    </aside>
+                </div>
+            </main>
+
+            <section className="mx-auto max-w-7xl px-6 pb-16">
+                <div className="mb-8 border-b border-slate-200/60 pb-4 dark:border-slate-800/60">
+                    <h2 className="flex items-center gap-2 text-base font-black tracking-tight text-slate-900 uppercase dark:text-white">
+                        <Users size={18} className="text-blue-600" /> Pengelola
+                        Unit
+                    </h2>
+                    <p className="mt-1 text-xs font-medium text-slate-500 dark:text-slate-400">
+                        Sumber Daya Manusia Kompeten
+                    </p>
+                </div>
+
+                <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
+                    {officers
+                        .filter(
+                            (user) =>
+                                user.email !== 'wirawanmahardika10@gmail.com',
+                        )
+                        .map((user) => (
+                            <div
+                                key={user.id}
+                                className="group flex items-center gap-4 rounded-2xl border border-slate-200/60 bg-white p-4 shadow-xs transition-all hover:border-blue-500/30 dark:border-slate-800/60 dark:bg-slate-900"
+                            >
+                                <div className="flex h-14 w-14 shrink-0 items-center justify-center overflow-hidden rounded-full bg-slate-100 font-bold text-slate-400 dark:bg-slate-800">
+                                    {user.avatar ? (
+                                        <img
+                                            src={user.avatar}
+                                            alt={user.name}
+                                            className="h-full w-full object-cover"
+                                        />
+                                    ) : (
+                                        user.name.charAt(0)
+                                    )}
+                                </div>
+                                <div className="min-w-0 flex-1">
+                                    <p className="text-[9px] font-black tracking-widest text-blue-600 uppercase">
+                                        {user.jabatan || 'Petugas'}
+                                    </p>
+                                    <h4 className="truncate text-sm font-bold text-slate-900 dark:text-white">
+                                        {user.name}
+                                    </h4>
+                                    <div className="mt-1.5 flex flex-wrap items-center gap-1.5">
+                                        <span className="rounded bg-slate-100 px-1.5 py-0.5 text-[8px] font-bold text-slate-500 uppercase dark:bg-slate-800 dark:text-slate-400">
+                                            {user.pendidikan_terakhir || '-'}
+                                        </span>
                                     </div>
                                 </div>
                             </div>
+                        ))}
+                </div>
+            </section>
 
-                            {/* Demografi Card */}
-                            <div className="rounded-4xl border border-slate-200 bg-white p-8 shadow-sm md:p-10">
-                                <h4 className="mb-6 text-[9px] font-black tracking-widest text-slate-400 uppercase md:text-[10px]">
-                                    Kondisi Wilayah
-                                </h4>
-                                <div className="grid grid-cols-2 gap-4 md:gap-6">
-                                    <div className="border-r border-slate-100 pr-2">
-                                        <p className="text-lg font-black md:text-xl">
-                                            {profile?.jumlah_penduduk?.toLocaleString()}
-                                        </p>
-                                        <p className="text-[8px] font-bold text-slate-400 uppercase md:text-[9px]">
-                                            Penduduk
-                                        </p>
-                                    </div>
-                                    <div className="pl-2">
-                                        <p className="text-lg font-black md:text-xl">
-                                            {profile?.luas_wilayah} Km²
-                                        </p>
-                                        <p className="text-[8px] font-bold text-slate-400 uppercase md:text-[9px]">
-                                            Luas
-                                        </p>
-                                    </div>
-                                </div>
-                            </div>
-                        </aside>
-                    </div>
-                </main>
-            </motion.div>
-
-            <section className="mx-auto mb-32 max-w-7xl px-6">
-                <div className="mb-12">
-                    <h2 className="text-4xl leading-none font-[1000] tracking-tighter uppercase italic">
+            <section className="mx-auto max-w-7xl px-6 pb-24">
+                <div className="mb-8 border-b border-slate-200/60 pb-4 dark:border-slate-800/60">
+                    <h2 className="flex items-center gap-2 text-base font-black tracking-tight text-slate-900 uppercase dark:text-white">
+                        <FileText size={18} className="text-blue-600" />{' '}
                         Evidence Repository
                     </h2>
-                    <p className="mt-2 text-[10px] font-black tracking-widest text-slate-400 uppercase">
-                        Penyimpanan Dokumentasi Digital
+                    <p className="mt-1 text-xs font-medium text-slate-500 dark:text-slate-400">
+                        Penyimpanan Dokumentasi Digital Terbuka
                     </p>
                 </div>
 
@@ -506,19 +470,18 @@ const Welcome: React.FC<Props> = ({
                         initial="hidden"
                         whileInView="visible"
                         viewport={{ once: true }}
-                        className="grid grid-cols-2 gap-4 md:grid-cols-4"
+                        className="grid grid-cols-2 gap-4 md:grid-cols-4 lg:grid-cols-5"
                     >
                         {documents.map((doc) => (
                             <motion.div
                                 key={doc.id}
                                 variants={itemVariants}
-                                whileHover={{ y: -5 }}
                                 onClick={() => setSelectedDoc(doc)}
-                                className="group cursor-pointer overflow-hidden rounded-4xl border border-slate-200 bg-white p-4 shadow-sm transition-all hover:border-blue-600"
+                                className="group cursor-pointer overflow-hidden rounded-2xl border border-slate-200/60 bg-white p-3 shadow-xs transition-all hover:border-blue-500/30 hover:shadow-md dark:border-slate-800/60 dark:bg-slate-900"
                             >
-                                <div className="relative mb-4 flex aspect-square items-center justify-center overflow-hidden rounded-2xl bg-slate-100 text-slate-400">
+                                <div className="relative mb-3 flex aspect-square items-center justify-center overflow-hidden rounded-xl bg-slate-50 text-slate-400 dark:bg-slate-950/50">
                                     {doc.file_path.match(
-                                        /\.(jpeg|jpg|png|gif)$/,
+                                        /\.(jpeg|jpg|png|gif)$/i,
                                     ) ? (
                                         <img
                                             src={`${doc.file_url}`}
@@ -527,56 +490,39 @@ const Welcome: React.FC<Props> = ({
                                         />
                                     ) : (
                                         <FileText
-                                            size={48}
-                                            className="opacity-20"
+                                            size={32}
+                                            className="opacity-40"
                                         />
                                     )}
                                     <div className="absolute inset-0 bg-blue-600/0 transition-colors group-hover:bg-blue-600/10" />
                                 </div>
-                                <p className="mb-1 text-[10px] font-black text-blue-600 uppercase">
-                                    {doc.kategori}
-                                </p>
-                                <p className="truncate text-sm font-bold tracking-tight uppercase">
-                                    {doc.keterangan}
-                                </p>
-                                <span
-                                    className={`mb-2 inline-block rounded-full px-2 py-0.5 text-[8px] font-black uppercase ${
-                                        doc.kategori === 'inovasi'
-                                            ? 'bg-amber-100 text-amber-700'
-                                            : doc.kategori === 'dampak'
-                                              ? 'bg-purple-100 text-purple-700'
-                                              : doc.kategori === 'layanan'
-                                                ? 'bg-blue-100 text-blue-700'
-                                                : doc.kategori === 'tenaga'
-                                                  ? 'bg-rose-100 text-rose-700'
-                                                  : doc.kategori === 'sarpras'
-                                                    ? 'bg-indigo-100 text-indigo-700'
-                                                    : 'bg-slate-100 text-slate-700'
-                                    }`}
-                                >
-                                    {doc.kategori.toUpperCase()}
-                                </span>
+                                <div className="px-1 pb-1">
+                                    <p className="mb-1 text-[9px] font-black tracking-widest text-blue-600 uppercase dark:text-blue-400">
+                                        {doc.kategori}
+                                    </p>
+                                    <p className="truncate text-xs font-bold text-slate-900 dark:text-white">
+                                        {doc.keterangan}
+                                    </p>
+                                    {/* <span className="mt-1.5 inline-block rounded bg-slate-100 px-1.5 py-0.5 font-mono text-[8px] font-bold text-slate-500 uppercase dark:bg-slate-800 dark:text-slate-400">
+                                        {doc.tipe_file.replace('_', ' ')}
+                                    </span> */}
+                                </div>
                             </motion.div>
                         ))}
                     </motion.div>
                 ) : (
-                    <motion.div
-                        initial={{ opacity: 0, y: 20 }}
-                        animate={{ opacity: 1, y: 0 }}
-                        className="flex flex-col items-center justify-center rounded-[3rem] border border-dashed border-slate-200 bg-slate-50/50 py-24 text-center"
-                    >
-                        <div className="mb-6 flex h-20 w-20 items-center justify-center rounded-full bg-white text-slate-300 shadow-sm">
-                            <FileText size={32} />
+                    <div className="flex flex-col items-center justify-center rounded-2xl border border-dashed border-slate-200/60 bg-slate-50/50 py-16 text-center dark:border-slate-800/60 dark:bg-slate-900/50">
+                        <div className="mb-4 flex h-16 w-16 items-center justify-center rounded-full bg-white text-slate-300 shadow-xs dark:bg-slate-900 dark:text-slate-700">
+                            <FileText size={28} />
                         </div>
-                        <h3 className="text-lg font-[1000] tracking-tighter text-slate-900 uppercase">
+                        <h3 className="text-sm font-bold text-slate-900 dark:text-white">
                             Data Tidak Ditemukan
                         </h3>
-                        <p className="mt-2 max-w-[320px] text-[10px] leading-relaxed font-black tracking-widest text-slate-400 uppercase">
+                        <p className="mt-1 text-xs text-slate-500 dark:text-slate-400">
                             Belum ada dokumen yang diunggah ke dalam repositori
-                            ini. Silakan tambahkan berkas pendukung pada modul
-                            terkait.
+                            ini.
                         </p>
-                    </motion.div>
+                    </div>
                 )}
             </section>
 
@@ -586,59 +532,77 @@ const Welcome: React.FC<Props> = ({
                         initial={{ opacity: 0 }}
                         animate={{ opacity: 1 }}
                         exit={{ opacity: 0 }}
-                        className="fixed inset-0 z-100 flex items-center justify-center bg-slate-950/90 p-6 backdrop-blur-md"
+                        className="fixed inset-0 z-100 flex items-center justify-center bg-slate-900/80 p-4 backdrop-blur-sm sm:p-6 dark:bg-slate-950/80"
                     >
                         <motion.div
-                            initial={{ scale: 0.9, opacity: 0 }}
-                            animate={{ scale: 1, opacity: 1 }}
-                            exit={{ scale: 0.9, opacity: 0 }}
-                            className="relative w-full max-w-4xl overflow-hidden rounded-[3rem] bg-white"
+                            initial={{ scale: 0.95, opacity: 0, y: 20 }}
+                            animate={{ scale: 1, opacity: 1, y: 0 }}
+                            exit={{ scale: 0.95, opacity: 0, y: 20 }}
+                            className="relative w-full max-w-4xl overflow-hidden rounded-2xl bg-white shadow-2xl dark:bg-slate-900"
                         >
                             <button
                                 onClick={() => setSelectedDoc(null)}
-                                className="absolute top-8 right-8 z-10 flex h-12 w-12 items-center justify-center rounded-full bg-slate-900 text-white transition-colors hover:bg-blue-600"
+                                className="absolute top-4 right-4 z-10 flex h-10 w-10 items-center justify-center rounded-xl bg-slate-100 text-slate-500 transition-colors hover:bg-slate-200 dark:bg-slate-800 dark:text-slate-400 dark:hover:bg-slate-700"
                             >
-                                <X size={24} />
+                                <X size={20} />
                             </button>
                             <div className="grid md:grid-cols-2">
-                                <div className="flex aspect-square items-center justify-center bg-slate-100 md:aspect-auto">
+                                <div className="flex aspect-square items-center justify-center bg-slate-50 p-6 md:aspect-auto dark:bg-slate-950/50">
                                     {selectedDoc.file_path.match(
-                                        /\.(jpeg|jpg|png|gif)$/,
+                                        /\.(jpeg|jpg|png|gif)$/i,
                                     ) ? (
                                         <img
                                             src={`${selectedDoc.file_url}`}
-                                            className="h-full w-full object-contain"
+                                            className="h-full w-full rounded-xl object-contain shadow-sm"
+                                            alt={selectedDoc.keterangan}
                                         />
                                     ) : (
-                                        <div className="p-12 text-center">
+                                        <div className="text-center">
                                             <FileText
-                                                size={80}
-                                                className="mx-auto mb-4 text-blue-600"
+                                                size={64}
+                                                className="mx-auto mb-4 text-blue-600 opacity-80"
                                             />
                                             <a
                                                 href={`${selectedDoc.file_url}`}
                                                 target="_blank"
-                                                className="text-xs font-black text-blue-600 uppercase underline"
+                                                rel="noreferrer"
+                                                className="inline-flex items-center gap-2 rounded-lg bg-blue-50 px-4 py-2 text-xs font-bold text-blue-600 transition-colors hover:bg-blue-100 dark:bg-blue-900/30 dark:text-blue-400 dark:hover:bg-blue-900/50"
                                             >
-                                                Unduh Dokumen PDF
+                                                Buka Dokumen{' '}
+                                                <ExternalLink size={14} />
                                             </a>
                                         </div>
                                     )}
                                 </div>
-                                <div className="p-12">
-                                    <span className="mb-6 inline-block rounded-full bg-blue-50 px-4 py-1.5 text-[10px] font-black text-blue-600 uppercase">
+                                <div className="flex flex-col justify-center p-8 sm:p-10">
+                                    <span className="mb-4 inline-block rounded-md bg-blue-50 px-2.5 py-1 text-[10px] font-black tracking-widest text-blue-600 uppercase dark:bg-blue-900/30 dark:text-blue-400">
                                         {selectedDoc.kategori}
                                     </span>
-                                    <h2 className="mb-6 text-3xl font-[1000] tracking-tighter uppercase">
+                                    <h2 className="mb-4 text-2xl font-black tracking-tight text-slate-900 dark:text-white">
                                         {selectedDoc.keterangan}
                                     </h2>
-                                    <div className="mb-6 h-1 w-12 bg-slate-900" />
-                                    <p className="text-sm leading-relaxed font-medium text-slate-500 italic">
-                                        "Dokumen ini merupakan bagian dari
-                                        pemenuhan instrumen akreditasi
-                                        perpustakaan desa tahun penilaian
-                                        2025/2026."
-                                    </p>
+                                    <div className="mb-6 h-px w-12 bg-slate-200 dark:bg-slate-800" />
+                                    <div className="space-y-4 text-xs font-medium text-slate-500 dark:text-slate-400">
+                                        <p>
+                                            <span className="font-bold text-slate-700 dark:text-slate-300">
+                                                Tipe Berkas:
+                                            </span>{' '}
+                                            <span className="uppercase">
+                                                {selectedDoc.tipe_file.replace(
+                                                    '_',
+                                                    ' ',
+                                                )}
+                                            </span>
+                                        </p>
+                                        <p>
+                                            <span className="font-bold text-slate-700 dark:text-slate-300">
+                                                Diupload Pada:
+                                            </span>{' '}
+                                            {formatHumanDate(
+                                                selectedDoc.created_at || '',
+                                            )}
+                                        </p>
+                                    </div>
                                 </div>
                             </div>
                         </motion.div>
@@ -646,21 +610,11 @@ const Welcome: React.FC<Props> = ({
                 )}
             </AnimatePresence>
 
-            <footer className="bg-slate-950 py-20 text-white">
-                <div className="mx-auto flex max-w-7xl flex-col items-center justify-between gap-8 px-6 md:flex-row">
-                    <div className="flex items-center gap-4">
-                        <div className="flex h-10 w-10 items-center justify-center rounded-lg">
-                            <img src="/logo-noname.png" alt="logo" sizes="20" />
-                        </div>
-                        <span className="font-[1000] tracking-tighter uppercase">
-                            {profile?.nama_perpustakaan}
-                        </span>
-                    </div>
-                    <p className="text-[10px] font-black tracking-widest text-slate-500 uppercase">
-                        © {new Date().getFullYear()} Hak Cipta Dilindungi •
-                        Dikembangkan untuk Akreditasi 2026
-                    </p>
-                </div>
+            <footer className="border-t border-slate-200/60 bg-white py-8 text-center dark:border-slate-800/40 dark:bg-slate-950">
+                <p className="text-[10px] font-black tracking-widest text-slate-400 uppercase">
+                    © {new Date().getFullYear()} •{' '}
+                    {profile?.nama_perpustakaan || 'Perpustakaan Desa'}
+                </p>
             </footer>
         </div>
     );

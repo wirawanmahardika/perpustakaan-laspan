@@ -259,7 +259,7 @@ export default function Documents({ profile, documents = [] }: DocumentsProps) {
                                         </div>
 
                                         <div className="flex items-center justify-between border-t border-slate-100 pt-2 font-mono text-[8px] font-bold tracking-tight text-slate-400 uppercase dark:border-slate-800/60">
-                                            <span className="max-w-[75px] truncate">
+                                            <span className="max-w-18.75 truncate">
                                                 {doc.kategori}
                                             </span>
                                             <span>#{doc.id}</span>

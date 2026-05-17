@@ -1,12 +1,41 @@
 import React from 'react';
 import { Head, Link, router } from '@inertiajs/react';
-import { ArrowLeft, Search, ArrowRight } from 'lucide-react';
+import { PublicNavbar } from '@/components/public-navbar';
+import { motion, Variants, AnimatePresence } from 'framer-motion';
+import {
+    Search,
+    Calendar,
+    Users,
+    ArrowUpRight,
+    FolderOpen,
+    SlidersHorizontal,
+} from 'lucide-react';
 import { formatHumanDate } from '@/lib/utils';
 
+interface ActivityData {
+    id: number;
+    nama_kegiatan: string;
+    deskripsi: string;
+    tipe: 'pemberdayaan' | 'promosi' | 'kerjasama' | 'layanan_khusus';
+    tanggal: string;
+    pihak_terlibat?: string | null;
+    artikel?: string | null;
+}
+
+interface PaginationLink {
+    url: string | null;
+    label: string;
+    active: boolean;
+}
+
 interface Props {
+    profile?: {
+        nama_perpustakaan: string;
+        [key: string]: any;
+    } | null;
     activities: {
-        data: any[];
-        links: any[];
+        data: ActivityData[];
+        links: PaginationLink[];
         current_page: number;
         last_page: number;
     };
@@ -16,8 +45,8 @@ interface Props {
     };
 }
 
-const Index: React.FC<Props> = ({ activities, filters }) => {
-    // Fungsi Handle Pencarian & Filter
+const Index: React.FC<Props> = ({ profile, activities, filters }) => {
+    // Fungsi Handle Pencarian & Filter Sinkron Berbasis Inertia router
     const handleFilter = (key: string, value: string) => {
         router.get(
             '/aktivitas',
@@ -29,163 +58,250 @@ const Index: React.FC<Props> = ({ activities, filters }) => {
         );
     };
 
+    // Konfigurasi variasi animasi framer-motion untuk kelancaran pemuatan grid
+    const containerVariants: Variants = {
+        hidden: { opacity: 0 },
+        visible: { opacity: 1, transition: { staggerChildren: 0.04 } },
+    };
+
+    const itemVariants: Variants = {
+        hidden: { opacity: 0, scale: 0.98, y: 10 },
+        visible: {
+            opacity: 1,
+            scale: 1,
+            y: 0,
+            transition: { type: 'spring', stiffness: 130, damping: 16 },
+        },
+    };
+
+    // Pemetaan tipe kegiatan ke label representatif terformat
+    const typeLabels: Record<string, string> = {
+        pemberdayaan: 'Pemberdayaan Masyarakat',
+        promosi: 'Promosi Literasi',
+        kerjasama: 'Kemitraan & Kerjasama',
+        layanan_khusus: 'Layanan Khusus Publik',
+    };
+
     return (
-        <div className="min-h-screen bg-[#F8FAFC] pb-24 font-sans text-slate-900">
-            <Head title="Arsip Lengkap Kegiatan" />
+        <div className="min-h-screen bg-slate-50 text-slate-900 dark:bg-slate-950 dark:text-slate-50">
+            <Head title="Arsip Kronologi Kegiatan - Portal Perpustakaan" />
 
-            {/* Header Mini */}
-            <nav className="sticky top-0 z-50 border-b border-slate-200 bg-white/70 backdrop-blur-md">
-                <div className="mx-auto flex h-20 max-w-7xl items-center justify-between px-6">
-                    <Link
-                        href="/"
-                        className="flex items-center gap-2 text-[10px] font-black tracking-widest text-slate-400 uppercase transition-colors hover:text-blue-600"
-                    >
-                        <ArrowLeft size={14} /> Kembali ke Beranda
-                    </Link>
-                    <span className="text-[10px] font-black tracking-[0.3em] text-slate-300 uppercase">
-                        Archive Mode
-                    </span>
-                </div>
-            </nav>
+            {/* Integrasi Navigasi Utama Publik */}
+            <PublicNavbar />
 
-            <header className="border-b border-slate-200 bg-white px-6 py-16 md:py-24">
-                <div className="mx-auto max-w-7xl">
-                    <h1 className="mb-8 text-5xl leading-none font-[1000] tracking-tighter uppercase italic md:text-8xl">
-                        Daftar <br />{' '}
-                        <span className="text-blue-600">Aktivitas.</span>
-                    </h1>
-
-                    {/* Filter Bar */}
-                    <div className="mt-12 flex flex-col gap-4 md:flex-row">
-                        <div className="relative flex-1">
-                            <Search
-                                className="absolute top-1/2 left-4 -translate-y-1/2 text-slate-400"
-                                size={18}
-                            />
-                            <input
-                                type="text"
-                                placeholder="Cari nama kegiatan atau deskripsi..."
-                                defaultValue={filters.search}
-                                onChange={(e) =>
-                                    handleFilter('search', e.target.value)
-                                }
-                                className="w-full rounded-2xl border-2 border-slate-100 py-4 pr-6 pl-12 font-bold transition-all focus:border-blue-600 focus:ring-0"
-                            />
+            {/* Header Dokumentasi Publik */}
+            <header className="relative overflow-hidden border-b border-slate-200/60 bg-white py-14 dark:border-slate-800/50 dark:bg-slate-900">
+                <div className="bg-radial-at-t absolute inset-0 from-blue-50/40 via-transparent to-transparent dark:from-blue-950/15" />
+                <div className="relative z-10 mx-auto flex max-w-7xl flex-col items-center justify-between gap-6 px-6 text-center md:flex-row md:text-left">
+                    <div>
+                        <div className="mb-3 inline-flex items-center gap-1.5 rounded-md bg-blue-50 px-2.5 py-0.5 text-[9px] font-black tracking-widest text-blue-600 uppercase dark:bg-blue-950/50 dark:text-blue-400">
+                            <Calendar size={11} /> Berita & Dokumentasi
                         </div>
-                        <select
-                            defaultValue={filters.type}
+                        <h1 className="font-sans text-2xl font-black tracking-tight text-slate-900 uppercase sm:text-3xl dark:text-white">
+                            Kronologi Kegiatan
+                        </h1>
+                        <p className="mt-1 max-w-xl text-xs leading-relaxed font-medium text-slate-500 dark:text-slate-400">
+                            Penelusuran seluruh riwayat pelaksanaan program
+                            kerja, rekam jejak perluasan literasi, serta
+                            aktivitas pemberdayaan masyarakat desa.
+                        </p>
+                    </div>
+
+                    {/* Bilah Pencarian Responsif Terintegrasi */}
+                    <div className="relative w-full shrink-0 md:w-72">
+                        <span className="pointer-events-none absolute inset-y-0 left-0 flex items-center pl-3.5 text-slate-400">
+                            <Search size={14} />
+                        </span>
+                        <input
+                            type="text"
+                            defaultValue={filters.search}
                             onChange={(e) =>
-                                handleFilter('type', e.target.value)
+                                handleFilter('search', e.target.value)
                             }
-                            className="rounded-2xl border-2 border-slate-100 px-8 py-4 text-[10px] font-black tracking-widest uppercase focus:border-blue-600"
-                        >
-                            <option value="">Semua Tipe</option>
-                            <option value="pemberdayaan">Pemberdayaan</option>
-                            <option value="promosi">Promosi</option>
-                            <option value="kerjasama">Kerjasama</option>
-                            <option value="layanan_khusus">
-                                Layanan Khusus
-                            </option>
-                        </select>
+                            placeholder="Cari kegiatan atau narasi..."
+                            className="w-full rounded-xl border border-slate-200 bg-slate-50/50 py-2.5 pr-4 pl-10 text-xs font-medium focus:border-blue-500 focus:bg-white focus:outline-hidden dark:border-slate-800 dark:bg-slate-900 dark:focus:bg-slate-950"
+                        />
                     </div>
                 </div>
             </header>
 
-            <main className="mx-auto max-w-7xl px-6 py-16">
-                {/* Grid Kegiatan */}
-                <div className="grid gap-6 md:grid-cols-3">
-                    {activities.data.length > 0 ? (
-                        activities.data.map((act) => {
-                            const hasArticle =
-                                act.artikel && act.artikel.trim() !== '';
+            {/* Konten Utama Galeri Kegiatan */}
+            <main className="mx-auto max-w-7xl space-y-8 px-6 py-10">
+                {/* Batang Penyaringan Tipe Menggunakan Struktur Segmented Control */}
+                <div className="no-scrollbar flex flex-wrap items-center gap-1.5 overflow-x-auto rounded-2xl border border-slate-200/60 bg-white p-3.5 shadow-xs select-none dark:border-slate-800/60 dark:bg-slate-900">
+                    <div className="mr-1 flex shrink-0 items-center gap-1 border-r border-slate-100 px-2 pr-3 text-[10px] font-black tracking-widest text-slate-400 uppercase dark:border-slate-800">
+                        <SlidersHorizontal size={12} /> Kategori:
+                    </div>
 
-                            return (
-                                <Link
-                                    key={act.id}
-                                    // Jika tidak ada artikel, href dihilangkan (mencegah navigasi)
-                                    href={
-                                        hasArticle
-                                            ? `/kegiatan/${act.id}/read/artikel`
-                                            : '#'
-                                    }
-                                    // Cegah scroll ke atas jika klik '#'
-                                    onClick={(e) =>
-                                        !hasArticle && e.preventDefault()
-                                    }
-                                    className={`group relative flex flex-col rounded-[2.5rem] border p-10 transition-all ${
-                                        hasArticle
-                                            ? 'cursor-pointer border-slate-200 bg-white hover:border-blue-600 hover:shadow-2xl hover:shadow-blue-100'
-                                            : 'cursor-not-allowed border-slate-100 bg-slate-50/50 opacity-60'
-                                    }`}
-                                >
-                                    <div className="mb-6 flex items-center justify-between">
-                                        <span
-                                            className={`rounded-full px-4 py-1.5 text-[9px] font-black tracking-widest uppercase ${hasArticle ? 'bg-blue-50 text-blue-600' : 'bg-slate-200 text-slate-500'}`}
-                                        >
-                                            {act.tipe}
-                                        </span>
-                                        <span className="text-[10px] font-bold text-slate-400">
-                                            {formatHumanDate(act.tanggal)}
-                                        </span>
-                                    </div>
+                    <button
+                        onClick={() => handleFilter('type', '')}
+                        className={`shrink-0 rounded-lg px-3.5 py-2 text-[9px] font-black tracking-widest uppercase transition-all ${
+                            !filters.type
+                                ? 'bg-slate-900 text-white dark:bg-blue-600'
+                                : 'border border-slate-100 bg-slate-50 text-slate-600 hover:bg-slate-100 dark:border-slate-800 dark:bg-slate-950 dark:text-slate-400'
+                        }`}
+                    >
+                        Semua Tipe
+                    </button>
 
-                                    <h3
-                                        className={`mb-5 text-2xl font-[1000] tracking-tight uppercase italic transition-colors ${hasArticle ? 'text-slate-950 group-hover:text-blue-600' : 'text-slate-400'}`}
-                                    >
-                                        {act.nama_kegiatan}
-                                    </h3>
-
-                                    <p className="mb-10 line-clamp-4 text-sm leading-relaxed font-medium text-slate-500 italic">
-                                        "{act.deskripsi}"
-                                    </p>
-
-                                    <div className="mt-auto flex items-center justify-between border-t border-slate-100 pt-8">
-                                        <div>
-                                            <p className="text-[10px] font-black text-slate-400 uppercase">
-                                                Pihak:{' '}
-                                                {act.pihak_terlibat || 'Lokal'}
-                                            </p>
-                                            {!hasArticle && (
-                                                <p className="mt-1 text-[8px] font-bold text-amber-500 uppercase">
-                                                    [ Narasi Sedang Disusun ]
-                                                </p>
-                                            )}
-                                        </div>
-
-                                        <div
-                                            className={`flex h-10 w-10 items-center justify-center rounded-full transition-all ${
-                                                hasArticle
-                                                    ? 'bg-slate-950 text-white group-hover:scale-110 group-hover:bg-blue-600'
-                                                    : 'bg-slate-200 text-slate-400'
-                                            }`}
-                                        >
-                                            <ArrowRight className="h-5 w-5" />
-                                        </div>
-                                    </div>
-                                </Link>
-                            );
-                        })
-                    ) : (
-                        <div className="col-span-full py-24 text-center">
-                            <p className="text-2xl font-black tracking-tighter text-slate-300 uppercase italic">
-                                Data Tidak Ditemukan
-                            </p>
-                        </div>
-                    )}
-                </div>
-
-                {/* Pagination Berkelas */}
-                <div className="mt-20 flex items-center justify-center gap-2">
-                    {activities.links.map((link, i) => (
-                        <Link
-                            key={i}
-                            href={link.url || '#'}
-                            dangerouslySetInnerHTML={{ __html: link.label }}
-                            className={`flex h-12 w-12 items-center justify-center rounded-xl text-[10px] font-black transition-all ${link.active ? 'bg-blue-600 text-white shadow-lg shadow-blue-100' : 'bg-white text-slate-400 hover:bg-slate-100'} ${!link.url ? 'cursor-not-allowed opacity-30' : ''} `}
-                        />
+                    {Object.entries(typeLabels).map(([key, label]) => (
+                        <button
+                            key={key}
+                            onClick={() => handleFilter('type', key)}
+                            className={`shrink-0 rounded-lg px-3.5 py-2 text-[9px] font-black tracking-widest uppercase transition-all ${
+                                filters.type === key
+                                    ? 'bg-slate-900 text-white dark:bg-blue-600'
+                                    : 'border border-slate-100 bg-slate-50 text-slate-600 hover:bg-slate-100 dark:border-slate-800 dark:bg-slate-950 dark:text-slate-400'
+                            }`}
+                        >
+                            {label}
+                        </button>
                     ))}
                 </div>
+
+                {/* Grid Visualisasi Berita Kegiatan */}
+                {activities.data.length > 0 ? (
+                    <motion.div
+                        variants={containerVariants}
+                        initial="hidden"
+                        animate="visible"
+                        className="grid grid-cols-1 gap-6 sm:grid-cols-2 md:grid-cols-3"
+                    >
+                        <AnimatePresence mode="popLayout">
+                            {activities.data.map((act) => {
+                                const hasArticle =
+                                    act.artikel && act.artikel.trim() !== '';
+
+                                return (
+                                    <motion.div
+                                        key={act.id}
+                                        variants={itemVariants}
+                                        layout
+                                        className={`group relative flex flex-col justify-between overflow-hidden rounded-2xl border bg-white shadow-xs transition-all ${
+                                            hasArticle
+                                                ? 'cursor-pointer border-slate-200/60 hover:border-blue-500/30 hover:shadow-md dark:border-slate-800/60 dark:bg-slate-900'
+                                                : 'cursor-not-allowed border-slate-200/30 bg-slate-100/40 dark:border-slate-900/40 dark:bg-slate-950/20'
+                                        }`}
+                                    >
+                                        <div className="space-y-4 p-5">
+                                            {/* Bar Informasi Atas Kartu */}
+                                            <div className="flex flex-wrap items-center justify-between gap-2">
+                                                <span
+                                                    className={`inline-block rounded-md px-2 py-0.5 font-mono text-[9px] font-black tracking-wider uppercase ${
+                                                        hasArticle
+                                                            ? 'bg-blue-50 text-blue-600 dark:bg-blue-950/40 dark:text-blue-400'
+                                                            : 'bg-slate-200/60 text-slate-500 dark:bg-slate-800 dark:text-slate-500'
+                                                    }`}
+                                                >
+                                                    {act.tipe.replace('_', ' ')}
+                                                </span>
+                                                <span className="font-mono text-[10px] font-bold text-slate-400">
+                                                    {formatHumanDate(
+                                                        act.tanggal,
+                                                    )}
+                                                </span>
+                                            </div>
+
+                                            {/* Detail Judul dan Deskripsi */}
+                                            <div className="space-y-2">
+                                                <h3
+                                                    className={`font-sans text-sm leading-snug font-black tracking-tight transition-colors ${
+                                                        hasArticle
+                                                            ? 'text-slate-800 group-hover:text-blue-600 dark:text-slate-100 dark:group-hover:text-blue-400'
+                                                            : 'text-slate-400 dark:text-slate-600'
+                                                    }`}
+                                                >
+                                                    {act.nama_kegiatan}
+                                                </h3>
+                                                <p className="line-clamp-3 text-[11px] leading-relaxed font-medium text-slate-500 dark:text-slate-400">
+                                                    "{act.deskripsi}"
+                                                </p>
+                                            </div>
+                                        </div>
+
+                                        {/* Batang Informasi Bagian Bawah Kartu */}
+                                        <div className="flex items-center justify-between border-t border-slate-100 bg-slate-50/50 px-5 py-3.5 dark:border-slate-800/60 dark:bg-slate-950/10">
+                                            <div className="flex items-center gap-1.5 overflow-hidden pr-2 font-mono text-[9px] font-bold tracking-tight text-slate-400 uppercase">
+                                                <Users
+                                                    size={11}
+                                                    className="shrink-0 text-slate-400"
+                                                />
+                                                <span className="truncate">
+                                                    Pihak:{' '}
+                                                    {act.pihak_terlibat ||
+                                                        'Internal'}
+                                                </span>
+                                            </div>
+
+                                            {/* Aksi Berdasarkan Kondisi Eksistensi Artikel */}
+                                            {hasArticle ? (
+                                                <Link
+                                                    href={`/kegiatan/${act.id}/read/artikel`}
+                                                    className="inline-flex h-7 items-center gap-1 rounded-lg bg-slate-900 px-2.5 text-[9px] font-black tracking-widest text-white uppercase transition-colors hover:bg-blue-600 dark:bg-slate-800 dark:hover:bg-blue-600"
+                                                >
+                                                    Baca{' '}
+                                                    <ArrowUpRight size={10} />
+                                                </Link>
+                                            ) : (
+                                                <span className="shrink-0 font-mono text-[8px] font-black tracking-wider text-amber-500 uppercase dark:text-amber-500/80">
+                                                    Proses Rilis
+                                                </span>
+                                            )}
+                                        </div>
+                                    </motion.div>
+                                );
+                            })}
+                        </AnimatePresence>
+                    </motion.div>
+                ) : (
+                    /* Tampilan Kasus Kosong Jika Pencarian Gagal Menemukan Hasil */
+                    <div className="rounded-2xl border border-dashed border-slate-200 bg-white p-12 py-20 text-center shadow-xs dark:border-slate-800/80 dark:bg-slate-900">
+                        <FolderOpen
+                            size={36}
+                            className="mx-auto mb-3 text-slate-300 dark:text-slate-700"
+                        />
+                        <p className="text-xs font-bold tracking-wider text-slate-400 uppercase">
+                            Aktivitas Tidak Ditemukan
+                        </p>
+                        <p className="mt-1 text-xs text-slate-400/80">
+                            Belum ada rilis dokumentasi kegiatan resmi untuk
+                            kategori penelusuran ini.
+                        </p>
+                    </div>
+                )}
+
+                {/* Kontrol Navigasi Halaman / Pagination Berkelas */}
+                {activities.links.length > 3 && (
+                    <div className="mt-12 flex items-center justify-center gap-1.5 select-none">
+                        {activities.links.map((link, i) => (
+                            <Link
+                                key={i}
+                                href={link.url || '#'}
+                                onClick={(e) => !link.url && e.preventDefault()}
+                                dangerouslySetInnerHTML={{ __html: link.label }}
+                                className={`flex h-9 min-w-[2.25rem] items-center justify-center rounded-xl px-2 text-[9px] font-black tracking-wider uppercase transition-all ${
+                                    link.active
+                                        ? 'bg-slate-900 text-white shadow-xs dark:bg-blue-600 dark:text-white'
+                                        : 'border border-slate-200 bg-white text-slate-500 hover:bg-slate-50 dark:border-slate-800 dark:bg-slate-900 dark:text-slate-400 dark:hover:bg-slate-800/60'
+                                } ${!link.url ? 'pointer-events-none cursor-not-allowed opacity-30' : ''}`}
+                            />
+                        ))}
+                    </div>
+                )}
             </main>
+
+            {/* Footer Konten */}
+            <footer className="mt-16 border-t border-slate-200/60 bg-white py-8 text-center dark:border-slate-800/40 dark:bg-slate-950">
+                <div className="mx-auto flex max-w-7xl flex-col items-center justify-between gap-4 px-6 sm:flex-row">
+                    <p className="text-[10px] font-black tracking-widest text-slate-400 uppercase">
+                        © {new Date().getFullYear()} •{' '}
+                        {profile?.nama_perpustakaan || 'Perpustakaan Desa'}
+                    </p>
+                    <p className="rounded bg-slate-100 px-2.5 py-0.5 font-mono text-[9px] font-bold tracking-wider text-slate-400 uppercase dark:bg-slate-900">
+                        Dokumentasi Program Kerja Resmi
+                    </p>
+                </div>
+            </footer>
         </div>
     );
 };

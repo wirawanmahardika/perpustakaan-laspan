@@ -8,7 +8,7 @@ on:
 jobs:
     deploy:
         runs-on: ubuntu-latest
-
+        environment: vps-wirawan
         steps:
             - name: Deploy via SSH Script
               uses: appleboy/ssh-action@v1.0.3

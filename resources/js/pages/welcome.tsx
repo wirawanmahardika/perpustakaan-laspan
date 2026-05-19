@@ -121,10 +121,11 @@ const Welcome: React.FC<Props> = ({
                         transition={{ delay: 0.2 }}
                         className="mx-auto max-w-2xl text-sm leading-relaxed font-medium text-slate-500 dark:text-slate-400"
                     >
-                        Pusat sumber informasi, literasi, dan kegiatan
+                        {/* Pusat sumber informasi, literasi, dan kegiatan
                         masyarakat desa. Terus berkomitmen untuk meningkatkan
                         indeks literasi masyarakat melalui keberagaman koleksi
-                        dan layanan.
+                        dan layanan. */}
+                        Tulisan ini untuk testing CI/CD
                     </motion.p>
                 </div>
             </header>
